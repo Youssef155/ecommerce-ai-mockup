@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ECommerceAIMockUp.Domain\ECommerceAIMockUp.Domain.csproj" />
+    <ProjectReference Include="..\ECommerceAIMockUp.Infrastructure\ECommerceAIMockUp.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

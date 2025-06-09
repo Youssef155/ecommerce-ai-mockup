@@ -18,4 +18,10 @@
     <Folder Include="Middlewares\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ECommerceAIMockUp.Application\ECommerceAIMockUp.Application.csproj" />
+    <ProjectReference Include="..\ECommerceAIMockUp.Infrastructure\ECommerceAIMockUp.Infrastructure.csproj" />
+    <ProjectReference Include="..\ECommerceAIMockUp.Persistence\ECommerceAIMockUp.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>
