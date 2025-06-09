@@ -1,0 +1,6 @@
+@ECommerceAIMockUp.API_HostAddress = http://localhost:5298
+
+GET {{ECommerceAIMockUp.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

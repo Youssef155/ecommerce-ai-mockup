@@ -3,9 +3,40 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35919.96 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{497469DF-3D20-4FCC-8A72-0831ADF473F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{EBCDBE9F-6C29-4384-B2E7-79EF019E8AA3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{A7A24FC8-264D-402D-A02E-6845FD65A1A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{719F8362-9000-4D87-913B-9668F3E7B781}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{A5690437-D70C-473F-B415-F569FC2B4516}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceAIMockUp.API", "ECommerceAIMockUp.API\ECommerceAIMockUp.API.csproj", "{54A52C14-EF96-4972-87C8-36211662F03A}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54A52C14-EF96-4972-87C8-36211662F03A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54A52C14-EF96-4972-87C8-36211662F03A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54A52C14-EF96-4972-87C8-36211662F03A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54A52C14-EF96-4972-87C8-36211662F03A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EBCDBE9F-6C29-4384-B2E7-79EF019E8AA3} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A7A24FC8-264D-402D-A02E-6845FD65A1A4} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{719F8362-9000-4D87-913B-9668F3E7B781} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{A5690437-D70C-473F-B415-F569FC2B4516} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{54A52C14-EF96-4972-87C8-36211662F03A} = {EBCDBE9F-6C29-4384-B2E7-79EF019E8AA3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C1F0EAC1-D4B6-46EA-83E5-4AE320416B3D}
