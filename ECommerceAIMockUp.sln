@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceAIMockUp.API", "EC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceAIMockUp.Domain", "ECommerceAIMockUp.Domain\ECommerceAIMockUp.Domain.csproj", "{D800FC51-76B6-44C8-9590-A0C9D2D9FFBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerceAIMockUp.Application", "ECommerceAIMockUp.Application\ECommerceAIMockUp.Application.csproj", "{C0DBD4B9-005D-4F90-8FBB-BB1DE0E3FB46}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{D800FC51-76B6-44C8-9590-A0C9D2D9FFBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D800FC51-76B6-44C8-9590-A0C9D2D9FFBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D800FC51-76B6-44C8-9590-A0C9D2D9FFBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0DBD4B9-005D-4F90-8FBB-BB1DE0E3FB46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0DBD4B9-005D-4F90-8FBB-BB1DE0E3FB46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0DBD4B9-005D-4F90-8FBB-BB1DE0E3FB46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0DBD4B9-005D-4F90-8FBB-BB1DE0E3FB46}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{A5690437-D70C-473F-B415-F569FC2B4516} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{54A52C14-EF96-4972-87C8-36211662F03A} = {EBCDBE9F-6C29-4384-B2E7-79EF019E8AA3}
 		{D800FC51-76B6-44C8-9590-A0C9D2D9FFBB} = {A7A24FC8-264D-402D-A02E-6845FD65A1A4}
+		{C0DBD4B9-005D-4F90-8FBB-BB1DE0E3FB46} = {A7A24FC8-264D-402D-A02E-6845FD65A1A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C1F0EAC1-D4B6-46EA-83E5-4AE320416B3D}
