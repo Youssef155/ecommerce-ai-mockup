@@ -15,6 +15,13 @@ namespace ECommerceAIMockUp.API.Controllers
             _authService = authService;
         }
 
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] UserRegisterDto model)
+        {
+            var response = await _authService.RegisterAsync(model);
+            return StatusCode((int)response.StatusCode, response);
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
@@ -23,11 +30,6 @@ namespace ECommerceAIMockUp.API.Controllers
             return StatusCode((int)response.StatusCode, response);
         }
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDto model)
-        {
-            var response = await _authService.RegisterAsync(model);
-            return StatusCode((int)response.StatusCode, response);
-        }
+
     }
 }
