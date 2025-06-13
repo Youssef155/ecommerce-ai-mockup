@@ -12,6 +12,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +22,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ECommerceAIMockUp.Application\ECommerceAIMockUp.Application.csproj" />
     <ProjectReference Include="..\ECommerceAIMockUp.Infrastructure\ECommerceAIMockUp.Infrastructure.csproj" />
-    <ProjectReference Include="..\ECommerceAIMockUp.Persistence\ECommerceAIMockUp.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
