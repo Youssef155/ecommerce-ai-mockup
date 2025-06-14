@@ -13,7 +13,7 @@ namespace ECommerceAIMockUp.Application.DTOs.Auth
         public string LastName { get; set; }
 
         [Required]
-        [RegularExpression("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", ErrorMessage = "Invalid email address")]
+        [RegularExpression("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\r\n", ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
 
         [Required]
