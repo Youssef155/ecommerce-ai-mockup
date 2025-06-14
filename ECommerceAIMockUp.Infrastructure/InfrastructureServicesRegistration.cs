@@ -1,8 +1,8 @@
 ﻿using ECommerceAIMockUp.Application.Contracts.Authentication;
 using ECommerceAIMockUp.Application.Settings;
-using ECommerceAIMockUp.Infrastructure.Contracts.Authentication;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using ECommerceAIMockUp.Infrastructure.Identity.Models;
+using ECommerceAIMockUp.Infrastructure.Persistence.Contracts.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,7 @@ namespace ECommerceAIMockUp.Infrastructure
             });
 
 
-            services.AddIdentityCore<User>(opt =>
+            services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequiredLength = 6;
                 opt.Password.RequireDigit = true;
@@ -43,8 +43,8 @@ namespace ECommerceAIMockUp.Infrastructure
                 .AddRoles<IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddSignInManager<SignInManager<User>>()
-                .AddUserManager<UserManager<User>>()
+                .AddSignInManager<SignInManager<AppUser>>()
+                .AddUserManager<UserManager<AppUser>>()
                 .AddDefaultTokenProviders();
 
 

@@ -2,7 +2,7 @@
 
 namespace ECommerceAIMockUp.Infrastructure.Identity.Models
 {
-    public class User : IdentityUser
+    public class AppUser : IdentityUser
     {
         public string FirstName { get; set; } = default!;
 

@@ -8,5 +8,7 @@ namespace ECommerceAIMockUp.Application.Contracts.Authentication
         public Task<Response<AuthResponseDto>> LoginAsync(LoginDto model);
 
         public Task<bool> RegisterAsync(UserRegisterDto model);
+
+        public Task<AuthResponseDto> RefreshTokenAsync(string userEmail);
     }
 }

@@ -20,6 +20,7 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
             return response;
         }
 
+
         public async Task<Response<string>> RegisterAsync(UserRegisterDto model)
         {
             var response = await _authRepository.RegisterAsync(model);
@@ -27,6 +28,13 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
             if (response == true)
                 return new Response<string>(data: "User successful creation", statusCode: HttpStatusCode.Created, isSucceeded: true);
             return new Response<string>(data: "Creation failed", statusCode: HttpStatusCode.BadRequest, isSucceeded: false);
+        }
+
+        public async Task<Response<AuthResponseDto>> RefreshTokenAsync(string Email)
+        {
+            var authResponse = await _authRepository.RefreshTokenAsync(userEmail: Email);
+
+            return new Response<AuthResponseDto>(data: authResponse, statusCode: HttpStatusCode.OK, isSucceeded: false);
         }
     }
 }
