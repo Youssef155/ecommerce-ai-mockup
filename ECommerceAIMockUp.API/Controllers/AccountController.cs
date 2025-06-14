@@ -1,6 +1,8 @@
 ﻿using ECommerceAIMockUp.Application.DTOs.Auth;
 using ECommerceAIMockUp.Application.Services.Interfaces.Authentication;
+using ECommerceAIMockUp.Application.Wrappers;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Security.Claims;
 
 namespace ECommerceAIMockUp.API.Controllers
@@ -34,11 +36,22 @@ namespace ECommerceAIMockUp.API.Controllers
         [HttpGet("Refresh-Token")]
         public async Task<IActionResult> RefreshToken()
         {
-            var userEmail = User.FindFirst(ClaimTypes.Email)!.Value;
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (string.IsNullOrWhiteSpace(userEmail))
+            {
+                return Unauthorized(new Response<AuthResponseDto>(
+                    data: null,
+                    statusCode: HttpStatusCode.Unauthorized,
+                    message: "User email not found in token",
+                    isSucceeded: false
+                ));
+            }
 
             var response = await _authService.RefreshTokenAsync(userEmail);
 
             return StatusCode((int)response.StatusCode, response);
         }
+
     }
 }
