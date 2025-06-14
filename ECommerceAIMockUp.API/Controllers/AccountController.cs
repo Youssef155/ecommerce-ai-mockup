@@ -1,6 +1,7 @@
 ﻿using ECommerceAIMockUp.Application.DTOs.Auth;
 using ECommerceAIMockUp.Application.Services.Interfaces.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ECommerceAIMockUp.API.Controllers
 {
@@ -30,6 +31,14 @@ namespace ECommerceAIMockUp.API.Controllers
             return StatusCode((int)response.StatusCode, response);
         }
 
+        [HttpGet("Refresh-Token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var userEmail = User.FindFirst(ClaimTypes.Email)!.Value;
 
+            var response = await _authService.RefreshTokenAsync(userEmail);
+
+            return StatusCode((int)response.StatusCode, response);
+        }
     }
 }

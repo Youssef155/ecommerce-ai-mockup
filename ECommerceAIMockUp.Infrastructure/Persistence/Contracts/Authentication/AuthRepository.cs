@@ -6,16 +6,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
-namespace ECommerceAIMockUp.Infrastructure.Contracts.Authentication
+namespace ECommerceAIMockUp.Infrastructure.Persistence.Contracts.Authentication
 {
     public class AuthRepository : IAuthRepository
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
 
         public AuthRepository(IJwtTokenGenerator jwtTokenGenerator,
-            SignInManager<User> signInManager, UserManager<User> userManager)
+            SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _signInManager = signInManager;
@@ -58,7 +58,7 @@ namespace ECommerceAIMockUp.Infrastructure.Contracts.Authentication
             if (await CheckEmailExistsAsync(model.Email))
                 return false;
 
-            var newUser = new User
+            var newUser = new AppUser
             {
                 Email = model.Email,
                 UserName = model.Email,
@@ -75,8 +75,29 @@ namespace ECommerceAIMockUp.Infrastructure.Contracts.Authentication
         }
 
 
+        public async Task<AuthResponseDto> RefreshTokenAsync(string userEmail)
+        {
+            var currentUser = await _userManager.FindByEmailAsync(userEmail);
+
+            var Tokendata = await MapToJwtUserData(currentUser!);
+
+            var TokenGenerated = _jwtTokenGenerator.CreateJwt(Tokendata);
+
+            var response = new AuthResponseDto()
+            {
+                FirstName = Tokendata.FirstName,
+                LastName = Tokendata.LastName,
+                Email = Tokendata.Email,
+                Token = TokenGenerated
+            };
+
+            return response;
+        }
+
+
         #region Helping Methods
-        public AuthResponseDto Authenticate(User user)
+
+        public AuthResponseDto Authenticate(AppUser user)
         {
             var jwtUserData = new JwtUserData
             {
@@ -96,6 +117,16 @@ namespace ECommerceAIMockUp.Infrastructure.Contracts.Authentication
             return await _userManager.Users.AnyAsync(x => x.Email == Email.ToLower());
         }
 
+        private async Task<JwtUserData> MapToJwtUserData(AppUser user)
+        {
+            return new JwtUserData
+            {
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserId = user.Id
+            };
+        }
 
         #endregion
     }
