@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ECommerceAIMockUp.Infrastructure.Persistence.Contracts.Authentication
+namespace ECommerceAIMockUp.Infrastructure.Services.Authentication
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {

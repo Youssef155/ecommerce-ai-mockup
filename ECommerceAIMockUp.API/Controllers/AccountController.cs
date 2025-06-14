@@ -1,6 +1,5 @@
 ﻿using ECommerceAIMockUp.Application.DTOs.Auth;
 using ECommerceAIMockUp.Application.Services.Interfaces.Authentication;
-using ECommerceAIMockUp.Application.Wrappers;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
@@ -19,39 +18,50 @@ namespace ECommerceAIMockUp.API.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] UserRegisterDto model)
+        public async Task<IActionResult> Register(UserRegisterDto model)
         {
             var response = await _authService.RegisterAsync(model);
-            return StatusCode((int)response.StatusCode, response);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return Ok(response);
+            }
+
+            return BadRequest(response);
         }
 
+
         [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        public async Task<IActionResult> Login(LoginDto model)
         {
             var response = await _authService.LoginAsync(model);
 
-            return StatusCode((int)response.StatusCode, response);
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return Ok(response);
+            }
+
+            return Unauthorized(response);
         }
+
 
         [HttpGet("Refresh-Token")]
         public async Task<IActionResult> RefreshToken()
         {
             var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
-            if (string.IsNullOrWhiteSpace(userEmail))
+            if (!string.IsNullOrWhiteSpace(userEmail))
             {
-                return Unauthorized(new Response<AuthResponseDto>(
-                    data: null,
-                    statusCode: HttpStatusCode.Unauthorized,
-                    message: "User email not found in token",
-                    isSucceeded: false
-                ));
+                var response = await _authService.RefreshTokenAsync(userEmail);
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return Ok(response);
+                }
+
+                return Unauthorized(response);
             }
-
-            var response = await _authService.RefreshTokenAsync(userEmail);
-
-            return StatusCode((int)response.StatusCode, response);
+            return BadRequest("Invalid Token");
         }
-
     }
 }

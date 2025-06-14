@@ -1,5 +1,6 @@
-﻿using ECommerceAIMockUp.Domain.Common;
-using ECommerceAIMockUp.Infrastructure.Identity.Models;
+﻿using ECommerceAIMockUp.Domain;
+using ECommerceAIMockUp.Domain.Common;
+using ECommerceAIMockUp.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace ECommerceAIMockUp.Infrastructure.DatabaseContext
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
+            modelBuilder.ApplyConfiguration(new AppUserConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
