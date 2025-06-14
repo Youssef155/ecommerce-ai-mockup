@@ -1,10 +1,9 @@
 ﻿using ECommerceAIMockUp.Application.Contracts.Authentication;
 using ECommerceAIMockUp.Application.DTOs.Auth;
-using ECommerceAIMockUp.Application.Wrappers;
+using ECommerceAIMockUp.Application.Exceptions;
 using ECommerceAIMockUp.Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace ECommerceAIMockUp.Infrastructure.Persistence.Contracts.Authentication
 {
@@ -22,36 +21,21 @@ namespace ECommerceAIMockUp.Infrastructure.Persistence.Contracts.Authentication
             _userManager = userManager;
         }
 
-        public async Task<Response<AuthResponseDto>> LoginAsync(LoginDto model)
+        public async Task<AuthResponseDto> LoginAsync(LoginDto model)
         {
             var user = await _userManager.FindByNameAsync(model.Email);
 
-            if (user is null /* ||  user.EmailConfirmed == false */)
-                return new Response<AuthResponseDto>(data: null, statusCode: HttpStatusCode.Unauthorized,
-                    message: "Invalid user or password"
-                    , isSucceeded: false);
+            if (user is null)
+                throw new UnAuthorizedException();
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
 
             if (!result.Succeeded)
-                return new Response<AuthResponseDto>(data: null, statusCode: HttpStatusCode.Unauthorized,
-                    "Invalid user or password",
-                    isSucceeded: false);
+                throw new UnAuthorizedException();
 
-            var TokenData = new JwtUserData
-            {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                UserId = user.Id
-            };
-
-            var Token = _jwtTokenGenerator.CreateJwt(TokenData);
-
-            var response = new AuthResponseDto { FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, Token = Token };
-
-            return new Response<AuthResponseDto>(response, HttpStatusCode.OK, "Login Successful", isSucceeded: true);
+            return Authenticate(user);
         }
+
 
         public async Task<bool> RegisterAsync(UserRegisterDto model)
         {
@@ -79,20 +63,12 @@ namespace ECommerceAIMockUp.Infrastructure.Persistence.Contracts.Authentication
         {
             var currentUser = await _userManager.FindByEmailAsync(userEmail);
 
-            var Tokendata = await MapToJwtUserData(currentUser!);
+            if (currentUser is null)
+                throw new NotFoundException(nameof(AppUser), userEmail);
 
-            var TokenGenerated = _jwtTokenGenerator.CreateJwt(Tokendata);
-
-            var response = new AuthResponseDto()
-            {
-                FirstName = Tokendata.FirstName,
-                LastName = Tokendata.LastName,
-                Email = Tokendata.Email,
-                Token = TokenGenerated
-            };
-
-            return response;
+            return Authenticate(currentUser);
         }
+
 
 
         #region Helping Methods
