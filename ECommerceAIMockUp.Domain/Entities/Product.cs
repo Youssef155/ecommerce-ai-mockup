@@ -14,6 +14,6 @@ public class Product : BaseEntity
     public string Gender { get; set; }
     public string Season { get; set; }
     public double Price { get; set; }
-    public int ProductDetailsId { get; set; }
     public ICollection<ProductDetails> ProductDetails { get; set; }
+    public ICollection<Category> Categories { get; set; }
 }
