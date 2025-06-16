@@ -8,7 +8,7 @@ public class Order : BaseEntity
     public string AppUserId { get; set; }
     public AppUser AppUser { get; set; }
 
-    public string Status { get; set; }
+    //public OrderStatus Status { get; set; }
 
     public string PaymentStatus { get; set; }
     public DateTime? PaymentDate { get; set; }
