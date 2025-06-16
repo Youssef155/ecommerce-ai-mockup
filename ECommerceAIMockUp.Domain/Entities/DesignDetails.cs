@@ -11,7 +11,4 @@ public class DesignDetails : BaseEntity
 
     public int DesignId { get; set; }
     public Design Design { get; set; }
-
-    public int OrderItemId { get; set; }
-    public OrderItem OrderItem { get; set; }
 }
