@@ -12,5 +12,6 @@ public class OrderItem : BaseEntity
     public int ProductDetailsId { get; set; }
     public ProductDetails ProductDetails { get; set; }
 
-    public ICollection<DesignDetails> DesignDetails { get; set; }
+    public int DesignDetailsId { get; set; }
+    public DesignDetails DesignDetails { get; set; }
 }
