@@ -1,0 +1,6 @@
+@ECommerceAIMockUp.Frontend_HostAddress = http://localhost:5208
+
+GET {{ECommerceAIMockUp.Frontend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
