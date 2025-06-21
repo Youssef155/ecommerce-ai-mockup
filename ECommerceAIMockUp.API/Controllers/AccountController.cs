@@ -22,7 +22,7 @@ namespace ECommerceAIMockUp.API.Controllers
         {
             var response = await _authService.RegisterAsync(model);
 
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.Created)
             {
                 return Ok(response);
             }

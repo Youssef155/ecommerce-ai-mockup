@@ -1,1 +1,15 @@
-<p>product-list works!</p>
+<div class="product-info" *ngIf="user">
+  <h2>Welcome, {{ user?.given_name }} {{ user?.family_name }}</h2>
+  <p>Your email: {{ user?.email }}</p>
+  <p>id: {{ user?.nameid }}</p>
+</div>
+
+<p *ngIf="message" style="color: red;">
+  {{ message }}
+</p>
+
+<ul *ngIf="products.length > 0">
+  <li *ngFor="let product of products">
+    {{ product.name }} 
+  </li>
+</ul>
