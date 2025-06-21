@@ -21,6 +21,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(op => op.SwaggerEndpoint("/openapi/v1.json", "v1"));
 }
 
+app.UseClientCors();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
