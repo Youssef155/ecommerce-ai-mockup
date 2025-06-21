@@ -26,7 +26,6 @@ namespace ECommerceAIMockUp.Infrastructure.DatabaseContext
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-            modelBuilder.ApplyConfiguration(new AppUserConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
