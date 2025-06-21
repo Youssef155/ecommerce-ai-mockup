@@ -21,9 +21,11 @@ public static class CategorySeedings
         if (!context.Categories.Any())
         {
             context.Categories.AddRange(
-                new Category { Id = 1, Name = "Hoodie", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) },
-                new Category { Id = 2, Name = "T-Shirt", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) }
+                new Category { Name = "Hoodie", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) },
+                new Category { Name = "T-Shirt", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) }
             );
+
+            context.SaveChanges();
         }
     }
 }

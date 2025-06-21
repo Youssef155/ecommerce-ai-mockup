@@ -22,8 +22,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(op => op.SwaggerEndpoint("/openapi/v1.json", "v1"));
 
     #region Add Data Seeding For Development Env
-    app.Services.CreateProducts();
     app.Services.CreateCategories();
+    app.Services.CreateProducts();
     app.Services.CreateProductDetails();
     #endregion
 }

@@ -13,34 +13,34 @@ public static class ProductDetailsSeeding
 
         if (!context.ProductDetails.Any())
         {
+            var tshirtProduct = context.Products.FirstOrDefault(c => c.Gender == "Unisex");
+            var hoodieProduct = context.Products.FirstOrDefault(c => c.Gender == "Male");
+
             context.ProductDetails.AddRange(
                 new ProductDetails
                 {
-                    Id = 1,
                     Color = "White",
                     Size = "M",
                     Amount = 50,
-                    ProductId = 1,
+                    ProductId = tshirtProduct.Id,
                     CreatedAt = new DateTime(2025, 6, 1),
                     UpdatedAt = new DateTime(2025, 6, 8)
                 },
                 new ProductDetails
                 {
-                    Id = 2,
                     Color = "Black",
                     Size = "L",
                     Amount = 30,
-                    ProductId = 1,
+                    ProductId = tshirtProduct.Id,
                     CreatedAt = new DateTime(2025, 6, 1),
                     UpdatedAt = new DateTime(2025, 6, 8)
                 },
                 new ProductDetails
                 {
-                    Id = 3,
                     Color = "Gray",
                     Size = "XL",
                     Amount = 20,
-                    ProductId = 2,
+                    ProductId = hoodieProduct.Id,
                     CreatedAt = new DateTime(2025, 6, 1),
                     UpdatedAt = new DateTime(2025, 6, 8)
                 }
