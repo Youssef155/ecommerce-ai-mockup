@@ -1,6 +1,7 @@
 using ECommerceAIMockUp.API;
 using ECommerceAIMockUp.Application;
 using ECommerceAIMockUp.Infrastructure;
+using ECommerceAIMockUp.Infrastructure.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,12 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwaggerUI(op => op.SwaggerEndpoint("/openapi/v1.json", "v1"));
+
+    #region Add Data Seeding For Development Env
+    app.Services.CreateCategories();
+    app.Services.CreateProducts();
+    app.Services.CreateProductDetails();
+    #endregion
 }
 
 app.UseHttpsRedirection();
