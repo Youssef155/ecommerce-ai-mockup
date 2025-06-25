@@ -1,9 +1,4 @@
 ﻿using ECommerceAIMockUp.Domain.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerceAIMockUp.Domain.Entities;
 
@@ -14,7 +9,11 @@ public class Product : BaseEntity
     public string Gender { get; set; }
     public string Season { get; set; }
     public double Price { get; set; }
+
+    // no table referencing
     public int CategoryId { get; set; }
     public Category Category { get; set; }
-    public ICollection<ProductDetails> ProductDetails { get; set; }
+
+    // Naming the same type
+    public ICollection<ProductDetails> productDetails { get; set; }
 }

@@ -39,7 +39,6 @@ namespace ECommerceAIMockUp.Infrastructure
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequireNonAlphanumeric = false;
 
-                //opt.SignIn.RequireConfirmedEmail = true;
             })
                 .AddRoles<IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
@@ -60,7 +59,7 @@ namespace ECommerceAIMockUp.Infrastructure
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
                         ValidIssuer = jwtOptions.Issuer,
-                        ValidateIssuer = true,
+                        ValidateIssuer = false,
                         ValidateAudience = false,
                     };
                 });

@@ -75,13 +75,6 @@ namespace ECommerceAIMockUp.Infrastructure.Services.Authentication
                 UserName = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Address = new Domain.ValueObjects.Address
-                {
-                    City = model.City,
-                    Governorate = model.Governorate,
-                    Street = model.Street,
-                    Zip = model.Zip
-                },
                 PhoneNumber = model.PhoneNumber
             };
 

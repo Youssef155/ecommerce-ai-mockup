@@ -16,8 +16,7 @@ namespace ECommerceAIMockUp.Infrastructure.Configurations
                 Email = "omar@gmail.com",
                 EmailConfirmed = true,
                 FirstName = "Omar",
-                LastName = "Mehanna",
-                Address = new Address() { Governorate = "Alexadria", City = "Camp shezar", Street = "Hehya"}
+                LastName = "Mehanna"
             };
 
             var result = await userManager.CreateAsync(user, "Omar@123");

@@ -24,9 +24,11 @@ if (app.Environment.IsDevelopment())
     #region Add Data Seeding For Development Env
     app.Services.CreateCategories();
     app.Services.CreateProducts();
-    app.Services.CreateProductDetails();
+    //app.Services.CreateProductDetails();
     #endregion
 }
+
+app.UseClientCors();
 
 app.UseHttpsRedirection();
 

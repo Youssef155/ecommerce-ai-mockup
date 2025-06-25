@@ -11,6 +11,6 @@ public class AILog : BaseEntity
     public int DesignId { get; set; }
     public Design Design { get; set; }
 
-    public int AppUserId { get; set; }
+    public string AppUserId { get; set; }
     public AppUser AppUser { get; set; }
 }

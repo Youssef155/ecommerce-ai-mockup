@@ -1,1 +1,98 @@
-<p>register works!</p>
+<div class="container">
+  <div class="image-side"></div>
+  <div class="signup-side">
+    <h1>Sign Up</h1>
+    <p class="subtitle">Sign up for free to access any of our products</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
+      
+      <div class="name-group">
+        <div class="form-group">
+          <label for="first-name">First Name</label>
+          <input type="text" id="first-name" formControlName="FirstName" placeholder="Mostafa"
+          [class.is-invalid]="submitted && registerForm.get('FirstName')?.errors" />
+
+          <span class="text-danger" *ngIf="submitted && registerForm.get('FirstName')?.hasError('required')">
+            First Name is required
+          </span>
+
+           <span class="text-danger" *ngIf="submitted && registerForm.get('FirstName')?.hasError('minlength')">
+            First Name has minimum 3 characters
+          </span>
+
+        </div>
+        <div class="form-group">
+          <label for="last-name">Last Name</label>
+          <input type="text" id="last-name" formControlName="LastName" placeholder="Hamed" 
+          [class.is-invalid]="submitted && registerForm.get('LastName')?.errors"/>
+        </div>
+
+           <span class="text-danger" *ngIf="submitted && registerForm.get('LastName')?.hasError('required')">
+            Last Name is required
+          </span>
+
+           <span class="text-danger" *ngIf="submitted && registerForm.get('LastName')?.hasError('minlength')">
+            Last Name has minimum 3 characters
+          </span>
+
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" formControlName="Email"  
+        [class.is-invalid]="submitted && registerForm.get('Email')?.errors"/>
+      </div>
+
+          <span class="text-danger" *ngIf="submitted && registerForm.get('Email')?.hasError('required')">
+            Email is required
+          </span>
+
+           <span class="text-danger" *ngIf="submitted && registerForm.get('Email')?.hasError('pattern')">
+            Invalid email matching
+          </span>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="Password" 
+         [class.is-invalid]="submitted && registerForm.get('Password')?.errors"/>
+      </div>
+
+          <span class="text-danger" *ngIf="submitted && registerForm.get('Password')?.hasError('required')">
+            Password is required
+          </span>
+
+           <span class="text-danger" *ngIf="submitted && registerForm.get('Password')?.hasError('minlength')">
+            Password has minimum 3 characters
+          </span> 
+      <p class="password-hint">
+        Use 8 or more characters with a mix of letters, numbers & symbols
+      </p>
+
+      <div class="name-group">
+        <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" formControlName="City" placeholder="optional" />
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" id="address" formControlName="Address" placeholder="optional" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" formControlName="PhoneNumber"/>
+      </div>
+
+      <p class="password-hint">
+        Use 8 or more characters with a mix of letters, numbers & symbols
+      </p>
+
+      <button class="signup-btn" type="submit">Sign Up</button>
+    </form>
+
+    <p class="login-link">
+      Already have an account? <a href="#">Login</a>
+    </p>
+  </div>
+</div>
