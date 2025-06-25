@@ -20,9 +20,10 @@ namespace ECommerceAIMockUp.Application.DTOs.Auth
         [StringLength(15, MinimumLength = 6, ErrorMessage = "Minimum length of first name is {2} and maximum is {1}")]
         public string Password { get; set; }
 
+        public string Street { get; set; }
         public string City { get; set; }
-
-        public string Address { get; set; }
+        public string Governorate { get; set; }
+        public string Zip { get; set; }
 
         public string PhoneNumber { get; set; }
     }

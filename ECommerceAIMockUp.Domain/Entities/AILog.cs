@@ -1,4 +1,6 @@
-﻿namespace ECommerceAIMockUp.Domain.Entities;
+﻿using ECommerceAIMockUp.Domain.Common;
+
+namespace ECommerceAIMockUp.Domain.Entities;
 
 public class AILog : BaseEntity
 {
