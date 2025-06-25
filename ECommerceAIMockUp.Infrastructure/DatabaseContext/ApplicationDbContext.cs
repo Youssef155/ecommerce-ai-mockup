@@ -1,6 +1,5 @@
 ﻿using ECommerceAIMockUp.Domain;
 using ECommerceAIMockUp.Domain.Common;
-using ECommerceAIMockUp.Domain.Entities;
 using ECommerceAIMockUp.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +12,7 @@ namespace ECommerceAIMockUp.Infrastructure.DatabaseContext
         {
         }
 
-        public DbSet<AILog> aiLogs { get; set; }
-        public DbSet<Category> categories { get; set; }
-        public DbSet<Design> designs { get; set; }
-        public DbSet<Order> orders { get; set; }
-        public DbSet<OrderItem> orderItems { get; set; }
-        public DbSet<Product> products { get; set; }
-        public DbSet<ProductDetails> productDetails { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
