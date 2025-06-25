@@ -9,7 +9,7 @@ namespace ECommerceAIMockUp.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.HasOne(p => p.Category)
-                .WithMany(c => c.products)
+                .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
 
             builder.HasMany(p => p.productDetails)

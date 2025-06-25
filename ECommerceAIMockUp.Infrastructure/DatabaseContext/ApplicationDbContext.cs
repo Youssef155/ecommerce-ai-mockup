@@ -35,14 +35,6 @@ namespace ECommerceAIMockUp.Infrastructure.DatabaseContext
                 a.Property(p => p.Governorate).HasColumnName("ShippingGovernorate");
                 a.Property(p => p.Zip).HasColumnName("ShippingZip");
             });
-
-            modelBuilder.Entity<AppUser>().OwnsOne(o => o.Address, a =>
-            {
-                a.Property(p => p.Street).HasColumnName("Street");
-                a.Property(p => p.City).HasColumnName("City");
-                a.Property(p => p.Governorate).HasColumnName("Governorate");
-                a.Property(p => p.Zip).HasColumnName("Zip");
-            });
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

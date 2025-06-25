@@ -11,8 +11,6 @@ public class AILog : BaseEntity
     public int DesignId { get; set; }
     public Design Design { get; set; }
 
-    // Not identifying the table referencing
-    // Appuser is Identity sooooooo it's id is string
     public string AppUserId { get; set; }
     public AppUser AppUser { get; set; }
 }
