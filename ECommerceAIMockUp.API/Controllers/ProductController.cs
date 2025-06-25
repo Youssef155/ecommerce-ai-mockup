@@ -13,6 +13,5 @@ namespace ECommerceAIMockUp.API.Controllers
         {
             return Ok(new { message = "You can view our products." });
         }
-
     }
 }
