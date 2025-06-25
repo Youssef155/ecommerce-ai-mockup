@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ECommerceAIMockUp.Application.Wrappers;
+using Microsoft.EntityFrameworkCore;
 
-namespace School.Core.Wrapper
+namespace ECommerceAIMockUp.Infrastructure.Extensions
 {
     public static class QueryableExtensions
     {

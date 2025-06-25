@@ -1,4 +1,4 @@
-﻿namespace School.Core.Wrapper
+﻿namespace ECommerceAIMockUp.Application.Wrappers
 {
     public class PaginatedResult<T>
     {

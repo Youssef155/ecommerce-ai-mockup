@@ -56,7 +56,7 @@ namespace ECommerceAIMockUp.Infrastructure
                 {
                     opt.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuerSigningKey = false,
+                        ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
                         ValidIssuer = jwtOptions.Issuer,
                         ValidateIssuer = false,

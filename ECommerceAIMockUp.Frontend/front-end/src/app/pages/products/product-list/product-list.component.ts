@@ -1,41 +1,34 @@
+// src/app/pages/product/product-list/product.component.ts
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
-import { ProductService } from '../../../core/services/product.service';
-import { DecodedToken } from '../../../core/models/TokenData';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ProductService } from '../../../core/services/product.service';
 
 @Component({
   selector: 'app-product',
-  templateUrl: './product-list.component.html',
+  standalone: true,
   imports: [CommonModule],
+  templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
 export class ProductComponent implements OnInit {
-  user: DecodedToken | null = null;
-  message: string = '';
-  products: any[] = [];
+  message: any = '';
 
-  constructor(
-    private authService: AuthService,
-    private productService: ProductService
-  ) {}
+  constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit(): void {
-    this.authService.user$.subscribe(user => {
-      this.user = user;
-    });
+    this.loadProducts();
+  }
 
-    this.authService.token$.subscribe(token => {
-      if (token) {
-        this.productService.getProducts().subscribe({
-          next: (res: any) => {
-            this.products = res;
-            this.message = '';
-          },
-          error: (err) => {
-            this.message = err.status === 401 ? 'Unauthorized' : 'Error loading products';
-          }
-        });
+  loadProducts(): void {
+    this.productService.getProducts().subscribe({
+      next: (res: any) => {
+        this.message = res.message;
+        console.log("fucking success")
+      },
+      error: (err) => {
+        console.error('Error loading products', err);
+        this.message = 'Unauthorized or error occurred.';
       }
     });
   }

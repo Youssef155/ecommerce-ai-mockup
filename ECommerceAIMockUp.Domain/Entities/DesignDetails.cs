@@ -9,6 +9,7 @@ public class DesignDetails : BaseEntity
     public float YAxis { get; set; }
     public string Position { get; set; }
 
+    // NO table referencing
     public int DesignId { get; set; }
     public Design Design { get; set; }
 }

@@ -8,10 +8,11 @@ namespace ECommerceAIMockUp.API.Controllers
     [Authorize]
     public class ProductController : ControllerBase
     {
-        [HttpGet("Products")]
+        [HttpGet("products")]
         public IActionResult Product()
         {
-            return Ok(new JsonResult(new { Message = "Only authorized users can view players." }));
+            return Ok(new { message = "You can view our products." });
         }
+
     }
 }

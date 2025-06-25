@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; // Optional if you use ngIf or similar
 import { AuthService } from '../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,8 @@ export class RegisterComponent implements OnInit {
   errorMessages : string[] = [];
   constructor(
     private authService: AuthService,
-    private formbuilder: FormBuilder
+    private formbuilder: FormBuilder,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
@@ -44,6 +46,7 @@ export class RegisterComponent implements OnInit {
       this.authService.register(this.registerForm.value).subscribe({
         next: (response) =>{
           console.log(response);
+          this.router.navigateByUrl('/Products');
         },
         error: error=>{
           console.log(error);

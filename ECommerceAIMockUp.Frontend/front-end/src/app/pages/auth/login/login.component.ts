@@ -3,13 +3,15 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router, RouterModule } from '@angular/router';
+import { LoginDto } from '../../../core/models/LoginDto';
+import { JwtUserData } from '../../../core/models/TokenData';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'] // ✅ Fixed property name
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
   LoginForm: FormGroup = new FormGroup({});
@@ -28,32 +30,17 @@ export class LoginComponent implements OnInit {
 
   initializeForm() {
     this.LoginForm = this.formbuilder.group({
-      Email: ['', Validators.required],
+      Email: ['', [Validators.required, Validators.email]],
       Password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   login() {
-    this.submitted = true;
-    this.errorMessages = [];
-
-    if (this.LoginForm.valid) {
-      this.authService.login(this.LoginForm.value).subscribe({
-        next: (response) => {
-          if (response?.token) {
-            console.log('✅ Token received:', response.token);
-            this.router.navigate(['/products']);
-          } else {
-            this.errorMessages.push('Login failed: invalid response');
-          }
-        },
-        error: (error) => {
-          console.log('❌ Login error:', error);
-          this.errorMessages.push('Login failed: server error');
-        }
-      });
-
-      console.log('📤 Login form submitted:', this.LoginForm.value);
-    }
+   this.authService.Login(this.LoginForm.value).subscribe((result : any) => {
+    console.log('Form', result);
+    localStorage.setItem('angular19Token', result.data.token);
+    console.log("the token",result.data.token);
+    this.router.navigateByUrl('/products');
+   })
   }
 }
