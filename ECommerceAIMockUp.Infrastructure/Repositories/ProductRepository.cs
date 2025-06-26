@@ -2,23 +2,29 @@
 using ECommerceAIMockUp.Domain.Entities;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ECommerceAIMockUp.Infrastructure.Repositories
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly DbSet<Product> _products;
 
-        public ProductRepository(ApplicationDbContext context)
+        public ProductRepository(ApplicationDbContext db) : base(db)
         {
-            _context = context;
+            _products = db.Set<Product>();
         }
 
-        public async Task<Product?> GetByIdWithVariantsAsync(int productId)
+        public async Task<List<Product>> GetProductAysnc()
         {
-            return await _context.Products
-                .Include(p => p.ProductDetails)
-                .FirstOrDefaultAsync(p => p.Id == productId);
+            var products = await GetAllAsync(
+                tracking: false,
+                includes: new Expression<Func<Product, object>>[]
+                {
+                  p => p.Category
+                });
+
+            return products.ToList();
         }
 
     }
