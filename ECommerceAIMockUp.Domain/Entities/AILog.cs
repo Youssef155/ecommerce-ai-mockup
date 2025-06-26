@@ -8,8 +8,8 @@ public class AILog : BaseEntity
     public string PromptText { get; set; }
     public bool IsSuccesed { get; set; }
 
-    public int DesignId { get; set; }
-    public Design Design { get; set; }
+    public int? DesignId { get; set; }
+    public Design? Design { get; set; }
 
     public string AppUserId { get; set; }
     public AppUser AppUser { get; set; }

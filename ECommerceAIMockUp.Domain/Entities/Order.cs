@@ -8,9 +8,9 @@ public class Order : BaseEntity
     public string AppUserId { get; set; }
     public AppUser AppUser { get; set; }
 
-    // public OrderStatus Status { get; set; }
+    public OrderStatus Status { get; set; }
 
-    public string PaymentStatus { get; set; }
+    public PaymentStatus PaymentStatus { get; set; }
     public DateTime? PaymentDate { get; set; }
 
     public double OrderTotal { get; set; }
@@ -21,9 +21,7 @@ public class Order : BaseEntity
 
     public string PhoneNumber { get; set; }
 
-    //  No foreign key
     public Address ShippingAddress { get; set; }
-    public int AddressId { get; set; }
 
     public ICollection<OrderItem> OrderItems { get; set; }
 }

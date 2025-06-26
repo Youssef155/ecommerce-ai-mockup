@@ -8,7 +8,8 @@ public class ProductDetails : BaseEntity
     public string Size { get; set; }
     public int Amount { get; set; }
 
-    // no table referecing
     public int ProductId { get; set; }
     public Product Product { get; set; }
+
+    public ICollection<OrderItem> OrderItem { get; set; }
 }
