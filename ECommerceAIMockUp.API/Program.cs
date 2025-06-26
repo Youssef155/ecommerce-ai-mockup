@@ -2,6 +2,7 @@ using ECommerceAIMockUp.API;
 using ECommerceAIMockUp.Application;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
+using ECommerceAIMockUp.Infrastructure.OpenAI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddPresentationServices()
     .AddApplicationServices(builder.Configuration)
     .AddInfrastructureServices(builder.Configuration);
+
+builder.Services.Configure<DalleImageOptions>(
+    builder.Configuration.GetSection("OpenAI:ImageOptions"));
 
 builder.Services.AddOpenApi();
 
