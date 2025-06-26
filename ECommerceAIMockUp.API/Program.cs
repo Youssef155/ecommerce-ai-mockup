@@ -1,3 +1,4 @@
+using Betalgo.Ranul.OpenAI.Extensions;
 using ECommerceAIMockUp.API;
 using ECommerceAIMockUp.Application;
 using ECommerceAIMockUp.Infrastructure;
@@ -12,6 +13,11 @@ builder.Services.AddControllers();
 builder.Services.AddPresentationServices()
     .AddApplicationServices(builder.Configuration)
     .AddInfrastructureServices(builder.Configuration);
+
+builder.Services.AddOpenAIService(settings =>
+{
+    settings.ApiKey = builder.Configuration["OpenAI:ApiKey"];
+});
 
 builder.Services.Configure<DalleImageOptions>(
     builder.Configuration.GetSection("OpenAI:ImageOptions"));
