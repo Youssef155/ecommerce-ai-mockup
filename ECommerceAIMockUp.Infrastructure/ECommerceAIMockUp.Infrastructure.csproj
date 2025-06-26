@@ -23,8 +23,4 @@
     <ProjectReference Include="..\ECommerceAIMockUp.Application\ECommerceAIMockUp.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Configurations\" />
-  </ItemGroup>
-
 </Project>
