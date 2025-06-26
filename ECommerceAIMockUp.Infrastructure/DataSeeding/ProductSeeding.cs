@@ -1,4 +1,5 @@
 ﻿using ECommerceAIMockUp.Domain.Entities;
+using ECommerceAIMockUp.Domain.ValueObjects;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -25,8 +26,8 @@ public static class ProductSeeding
                 {
                     Name = "Classic White T-Shirt",
                     Description = "A timeless classic for all genders.",
-                    Gender = "Unisex",
-                    Season = "All Seasons",
+                    Gender = Gender.Unisex,
+                    Season = Season.Summer,
                     Price = 29.99,
                     CategoryId = tshirtCategory.Id,
                     CreatedAt = new DateTime(2025, 6, 1),
@@ -36,8 +37,8 @@ public static class ProductSeeding
                 {
                     Name = "Hoodie",
                     Description = "Stay warm during the coldest days.",
-                    Gender = "Male",
-                    Season = "Winter",
+                    Gender = Gender.Male,
+                    Season = Season.Winter,
                     Price = 39.99,
                     CategoryId = hoodieCategory.Id,
                     CreatedAt = new DateTime(2025, 6, 1),

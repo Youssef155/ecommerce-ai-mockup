@@ -10,6 +10,6 @@ public class AILogConfiguration : IEntityTypeConfiguration<AILog>
         builder.HasOne(a => a.Design)
             .WithOne(a => a.AILog)
             .HasForeignKey<AILog>(a => a.DesignId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -30,9 +30,9 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -203,19 +203,19 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PaymentStatus = table.Column<int>(type: "int", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     OrderTotal = table.Column<double>(type: "float", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SessionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShippingStreet = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ShippingCity = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ShippingGovernorate = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ShippingZip = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false),
+                    ShippingAddress_Street = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ShippingAddress_City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ShippingAddress_Governorate = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ShippingAddress_Zip = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -227,7 +227,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -238,8 +238,8 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Season = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    Season = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -265,8 +265,8 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                     RequestType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PromptText = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsSuccesed = table.Column<bool>(type: "bit", nullable: false),
-                    DesignId = table.Column<int>(type: "int", nullable: false),
-                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DesignId = table.Column<int>(type: "int", nullable: true),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -278,7 +278,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_AILogs_Designs_DesignId",
                         column: x => x.DesignId,
@@ -321,6 +321,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
+                    ImgUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -380,7 +381,9 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AILogs_DesignId",
                 table: "AILogs",
-                column: "DesignId");
+                column: "DesignId",
+                unique: true,
+                filter: "[DesignId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -445,8 +448,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_ProductDetailsId",
                 table: "OrderItems",
-                column: "ProductDetailsId",
-                unique: true);
+                column: "ProductDetailsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_AppUserId",

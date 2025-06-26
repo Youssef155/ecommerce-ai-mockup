@@ -5,8 +5,8 @@ namespace ECommerceAIMockUp.Domain.Entities;
 
 public class Order : BaseEntity
 {
-    public string AppUserId { get; set; }
-    public AppUser AppUser { get; set; }
+    public string? AppUserId { get; set; }
+    public AppUser? AppUser { get; set; }
 
     public OrderStatus Status { get; set; }
 

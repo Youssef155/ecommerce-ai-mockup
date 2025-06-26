@@ -1,4 +1,5 @@
 ﻿using ECommerceAIMockUp.Domain.Entities;
+using ECommerceAIMockUp.Domain.ValueObjects;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,8 +14,8 @@ public static class ProductDetailsSeeding
 
         if (!context.ProductDetails.Any())
         {
-            var tshirtProduct = context.Products.FirstOrDefault(c => c.Gender == "Unisex");
-            var hoodieProduct = context.Products.FirstOrDefault(c => c.Gender == "Male");
+            var tshirtProduct = context.Products.FirstOrDefault(c => c.Gender == Gender.Unisex);
+            var hoodieProduct = context.Products.FirstOrDefault(c => c.Gender == Gender.Male);
 
             context.ProductDetails.AddRange(
                 new ProductDetails

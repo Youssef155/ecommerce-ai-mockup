@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerceAIMockUp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250625194255_init")]
+    [Migration("20250626120617_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -35,8 +35,8 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -56,13 +56,13 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -119,13 +119,12 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AppUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DesignId")
+                    b.Property<int?>("DesignId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsSuccesed")
@@ -146,7 +145,9 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("DesignId");
+                    b.HasIndex("DesignId")
+                        .IsUnique()
+                        .HasFilter("[DesignId] IS NOT NULL");
 
                     b.ToTable("AILogs");
                 });
@@ -248,11 +249,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AppUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -270,9 +267,8 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                     b.Property<string>("PaymentIntentId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -280,6 +276,9 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
                     b.Property<string>("SessionId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -324,8 +323,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductDetailsId")
-                        .IsUnique();
+                    b.HasIndex("ProductDetailsId");
 
                     b.ToTable("OrderItems");
                 });
@@ -348,9 +346,8 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -359,9 +356,8 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<string>("Season")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Season")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -390,6 +386,10 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -546,14 +546,12 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                     b.HasOne("ECommerceAIMockUp.Domain.AppUser", "AppUser")
                         .WithMany("AILogs")
                         .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("ECommerceAIMockUp.Domain.Entities.Design", "Design")
-                        .WithMany()
-                        .HasForeignKey("DesignId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .WithOne("AILog")
+                        .HasForeignKey("ECommerceAIMockUp.Domain.Entities.AILog", "DesignId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("AppUser");
 
@@ -587,8 +585,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                     b.HasOne("ECommerceAIMockUp.Domain.AppUser", "AppUser")
                         .WithMany("Orders")
                         .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.OwnsOne("ECommerceAIMockUp.Domain.ValueObjects.Address", "ShippingAddress", b1 =>
                         {
@@ -598,26 +595,22 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                             b1.Property<string>("City")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("ShippingCity");
+                                .HasColumnType("nvarchar(50)");
 
                             b1.Property<string>("Governorate")
                                 .IsRequired()
                                 .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)")
-                                .HasColumnName("ShippingGovernorate");
+                                .HasColumnType("nvarchar(50)");
 
                             b1.Property<string>("Street")
                                 .IsRequired()
                                 .HasMaxLength(100)
-                                .HasColumnType("nvarchar(100)")
-                                .HasColumnName("ShippingStreet");
+                                .HasColumnType("nvarchar(100)");
 
                             b1.Property<string>("Zip")
                                 .IsRequired()
                                 .HasMaxLength(10)
-                                .HasColumnType("nvarchar(10)")
-                                .HasColumnName("ShippingZip");
+                                .HasColumnType("nvarchar(10)");
 
                             b1.HasKey("OrderId");
 
@@ -636,7 +629,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
             modelBuilder.Entity("ECommerceAIMockUp.Domain.Entities.OrderItem", b =>
                 {
                     b.HasOne("ECommerceAIMockUp.Domain.Entities.DesignDetails", "DesignDetails")
-                        .WithOne()
+                        .WithOne("OrderItem")
                         .HasForeignKey("ECommerceAIMockUp.Domain.Entities.OrderItem", "DesignDetailsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -647,9 +640,9 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ECommerceAIMockUp.Domain.Entities.ProductDetails", "productDetails")
-                        .WithOne()
-                        .HasForeignKey("ECommerceAIMockUp.Domain.Entities.OrderItem", "ProductDetailsId")
+                    b.HasOne("ECommerceAIMockUp.Domain.Entities.ProductDetails", "ProductDetails")
+                        .WithMany("OrderItem")
+                        .HasForeignKey("ProductDetailsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -657,7 +650,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
                     b.Navigation("Order");
 
-                    b.Navigation("productDetails");
+                    b.Navigation("ProductDetails");
                 });
 
             modelBuilder.Entity("ECommerceAIMockUp.Domain.Entities.Product", b =>
@@ -674,7 +667,7 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
             modelBuilder.Entity("ECommerceAIMockUp.Domain.Entities.ProductDetails", b =>
                 {
                     b.HasOne("ECommerceAIMockUp.Domain.Entities.Product", "Product")
-                        .WithMany("productDetails")
+                        .WithMany("ProductDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -749,7 +742,16 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
             modelBuilder.Entity("ECommerceAIMockUp.Domain.Entities.Design", b =>
                 {
+                    b.Navigation("AILog")
+                        .IsRequired();
+
                     b.Navigation("DesignDetails");
+                });
+
+            modelBuilder.Entity("ECommerceAIMockUp.Domain.Entities.DesignDetails", b =>
+                {
+                    b.Navigation("OrderItem")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ECommerceAIMockUp.Domain.Entities.Order", b =>
@@ -759,7 +761,12 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
 
             modelBuilder.Entity("ECommerceAIMockUp.Domain.Entities.Product", b =>
                 {
-                    b.Navigation("productDetails");
+                    b.Navigation("ProductDetails");
+                });
+
+            modelBuilder.Entity("ECommerceAIMockUp.Domain.Entities.ProductDetails", b =>
+                {
+                    b.Navigation("OrderItem");
                 });
 #pragma warning restore 612, 618
         }
