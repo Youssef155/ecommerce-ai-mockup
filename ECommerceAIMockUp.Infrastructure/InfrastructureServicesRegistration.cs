@@ -1,9 +1,11 @@
 ﻿using ECommerceAIMockUp.Application.Contracts.Authentication;
 using ECommerceAIMockUp.Application.Services.Interfaces.Authentication;
+using ECommerceAIMockUp.Application.Services.Interfaces.Caching;
 using ECommerceAIMockUp.Application.Settings;
 using ECommerceAIMockUp.Domain;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using ECommerceAIMockUp.Infrastructure.Services.Authentication;
+using ECommerceAIMockUp.Infrastructure.Services.Caching;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +26,16 @@ namespace ECommerceAIMockUp.Infrastructure
             services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
             // logger service and email service
 
+
+            var RedistOptions = configuration.GetSection("Redis").Get<RedisSettings>();
+
+            services.Configure<RedisSettings>(configuration.GetSection("Redis"));
+
+            services.AddStackExchangeRedisCache(opt =>
+            {
+                opt.Configuration = RedistOptions.host;
+                opt.InstanceName = RedistOptions.InstanceName;
+            });
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -66,6 +78,8 @@ namespace ECommerceAIMockUp.Infrastructure
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IRedisService, RedisService>();
+
             return services;
         }
     }
