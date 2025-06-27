@@ -63,5 +63,30 @@ public class ProductService : IProductService
             AvailableColors = colors
         };
     }
+
+    public async Task<ProductVariantDto> GetVariantAsync(int productId, string size, string color)
+    {
+        var product = await _productRepository.GetByIdWithVariantsAsync(productId);
+
+        if (product == null)
+            throw new KeyNotFoundException("Product not found.");
+
+        var variant = product.Variants
+            .FirstOrDefault(v =>
+                v.Size.Equals(size, StringComparison.OrdinalIgnoreCase) &&
+                v.Color.Equals(color, StringComparison.OrdinalIgnoreCase));
+
+        if (variant == null)
+            throw new InvalidOperationException("Variant not found for the given size and color.");
+
+        return new ProductVariantDto
+        {
+            ProductId = productId,
+            Size = variant.Size,
+            Color = variant.Color,
+            Price = variant.Price,
+            Stock = variant.Stock
+        };
+    }
 }
 
