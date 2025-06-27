@@ -5,6 +5,8 @@ using ECommerceAIMockUp.Application;
 using ECommerceAIMockUp.Application.Cases.DesignCases;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Application.Contracts.Repositories;
+using ECommerceAIMockUp.Application.Services.Implementations;
+using ECommerceAIMockUp.Application.Services.Interfaces;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
 using ECommerceAIMockUp.Infrastructure.Repositories;
@@ -71,6 +73,7 @@ if (app.Environment.IsDevelopment())
     app.Services.CreateProducts();
     await app.Services.SeedAppUserAsync();
     //app.Services.CreateProductDetails();
+    app.Services.CreateProductDetails();
     #endregion
 }
 
