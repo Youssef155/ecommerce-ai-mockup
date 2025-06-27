@@ -11,6 +11,7 @@ namespace ECommerceAIMockUp.Application.Services.Interfaces
     {
         Task<ProductBasicDto> GetProductBasicAsync(int productId);
         Task<ColorOptionsDto> GetAvailableColorsAsync(int productId, string size);
+        Task<ProductVariantDto> GetVariantAsync(Guid productId, string size, string color);
     }
 
 }
