@@ -36,6 +36,7 @@ public class ProductService : IProductService
             Id = product.Id,
             Name = product.Name,
             Description = product.Description,
+            Price = product.Price,
             AvailableSizes = sizes
         };
     }
