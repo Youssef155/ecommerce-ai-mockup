@@ -43,7 +43,7 @@ namespace ECommerceAIMockUp.API
 
             services.AddOpenTelemetry().ConfigureResource(resource => resource.AddService(serverName, serviceVersion))
                 .WithTracing(tracing => tracing
-                .AddAspNetCoreInstrumentation()
+                // .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddSqlClientInstrumentation()
                 .AddConsoleExporter()
