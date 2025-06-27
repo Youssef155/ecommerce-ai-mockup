@@ -23,8 +23,8 @@ export class ProductComponent implements OnInit {
   loadProducts(): void {
     this.productService.getProducts().subscribe({
       next: (res: any) => {
-        this.message = res.message;
-        console.log("fucking success")
+        console.log(res);
+        
       },
       error: (err) => {
         console.error('Error loading products', err);

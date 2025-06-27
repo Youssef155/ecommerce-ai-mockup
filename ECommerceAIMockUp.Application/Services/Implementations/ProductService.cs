@@ -1,93 +1,46 @@
-﻿using ECommerceAIMockUp.Application.Contracts.Repositories;
+﻿using AutoMapper;
+using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.DTOs.Product;
-using ECommerceAIMockUp.Application.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ECommerceAIMockUp.Application.Services.Interfaces.Caching;
+using ECommerceAIMockUp.Application.Services.Interfaces.Services;
+using ECommerceAIMockUp.Application.Wrappers;
+using System.Net;
 
-namespace ECommerceAIMockUp.Application.Services.Implementations;
-
-public class ProductService : IProductService
+namespace ECommerceAIMockUp.Application.Services.Implementations
 {
-    private readonly IProductRepository _productRepository;
-
-    public ProductService(IProductRepository productRepository)
+    public class ProductService : IProductService
     {
-        _productRepository = productRepository;
-    }
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _Mapper;
+        private readonly IRedisService _redisService;
 
-    public async Task<ProductBasicDto> GetProductBasicAsync(int productId)
-    {
-        var product = await _productRepository.GetByIdWithVariantsAsync(productId);
-
-        if (product == null)
-            throw new KeyNotFoundException("Product not found.");
-
-        var sizes = product.ProductDetails
-            .Select(v => v.Size)
-            .Distinct()
-            .OrderBy(s => s)
-            .ToList();
-
-        return new ProductBasicDto
+        public ProductService(IProductRepository productRepository, IMapper Mapper, IRedisService redisService)
         {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Price = product.Price,
-            AvailableSizes = sizes
-        };
-    }
+            _productRepository = productRepository;
+            _Mapper = Mapper;
+            _redisService = redisService;
+        }
 
-    public async Task<ColorOptionsDto> GetAvailableColorsAsync(int productId, string size)
-    {
-        var product = await _productRepository.GetByIdWithVariantsAsync(productId);
-
-        if (product == null)
-            throw new KeyNotFoundException("Product not found.");
-
-        var colors = product.ProductDetails
-            .Where(v => v.Size.Equals(size, StringComparison.OrdinalIgnoreCase))
-            .Select(v => v.Color)
-            .Distinct()
-            .OrderBy(c => c)
-            .ToList();
-
-        if (!colors.Any())
-            throw new InvalidOperationException("No colors found for the specified size.");
-
-        return new ColorOptionsDto
+        public async Task<Response<PaginatedResult<GetAllProductsDto>>> GetAllProductsService(int pageNumber = 1, int pageSize = 10)
         {
-            Size = size,
-            AvailableColors = colors
-        };
-    }
+            var cachedKey = $"product_page: {pageNumber} product_size: {pageSize}";
 
-    public async Task<ProductVariantDto> GetVariantAsync(int productId, string size, string color)
-    {
-        var product = await _productRepository.GetByIdWithVariantsAsync(productId);
+            var cachedData = _redisService.GetData<PaginatedResult<GetAllProductsDto>>(cachedKey);
 
-        if (product == null)
-            throw new KeyNotFoundException("Product not found.");
+            if (cachedData != null)
+                return new Response<PaginatedResult<GetAllProductsDto>>(data: cachedData, HttpStatusCode.OK, isSucceeded: true);
 
-        var variant = product.ProductDetails
-            .FirstOrDefault(v =>
-                v.Size.Equals(size, StringComparison.OrdinalIgnoreCase) &&
-                v.Color.Equals(color, StringComparison.OrdinalIgnoreCase));
 
-        if (variant == null)
-            throw new InvalidOperationException("Variant not found for the given size and color.");
+            var productResult = await _productRepository.GetAllProductsAysnc(pageNumber, pageSize);
 
-        return new ProductVariantDto
-        {
-            ProductId = product.Id,
-            Size = variant.Size,
-            Color = variant.Color,
-            Price = variant.Product.Price,
-            Stock = variant.Amount
-        };
+            var mappedData = _Mapper.Map<List<GetAllProductsDto>>(productResult.Data);
+
+            var paginatedDto = PaginatedResult<GetAllProductsDto>.Success(mappedData, productResult.TotalCount,
+                productResult.CurrentPage, productResult.PageSize);
+
+            var response = new Response<PaginatedResult<GetAllProductsDto>>(paginatedDto, HttpStatusCode.OK, true);
+
+            return response;
+        }
     }
 }
-

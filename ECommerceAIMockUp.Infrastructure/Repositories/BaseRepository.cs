@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using ECommerceAIMockUp.Application.Contracts.Repositories;
+﻿using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Linq.Expressions;
 
 namespace ECommerceAIMockUp.Infrastructure.Repositories
 {
@@ -78,6 +72,20 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
         {
             _dbSet.Update(entity);
             return entity;
+        }
+
+        public IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            if (includes != null && includes.Any())
+                query = AddIncludes(includes);
+
+            return query;
+
         }
 
         public async Task SaveChangesAsync()

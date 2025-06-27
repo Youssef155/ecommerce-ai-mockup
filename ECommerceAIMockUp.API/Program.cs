@@ -59,6 +59,8 @@ builder.Services.AddScoped<AddDesignDetailsCase>();
 
 
 
+builder.AddCutomLoggin();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
