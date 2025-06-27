@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
+using ECommerceAIMockUp.Application.DTOs;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
@@ -23,19 +24,20 @@ namespace ECommerceAIMockUp.Infrastructure.HuggingFaceServices
             _configuration = configuration; 
         }
 
-        public async Task<Response<string>> ImageGenerator(string prompt)
+        public async Task<Response<object>> ImageGenerator(string prompt)
         {
             var model = _configuration["HuggingFace:Model"];
-            var requestUri = $"models/{model}";
+            //var requestUri = $"{model}";
 
             var payload = new
             {
-                inputs = prompt,
-                options = new { wait_for_model = true }
+                response_format = "b64_json",
+                prompt = prompt,
+                model = "stability-ai/sdxl",
             };
 
             var content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(requestUri, content);
+            var response = await _httpClient.PostAsync("",content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -43,17 +45,28 @@ namespace ECommerceAIMockUp.Infrastructure.HuggingFaceServices
                 throw new Exception($"Hugging Face API Error: {error}");
             }
 
-            var imageBytes = await response.Content.ReadAsByteArrayAsync();
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<HuggingFaceImageResponse>(jsonString);
+
+            string base64Image = result.Base64;
+            string mimeType = result.MimeType;
+            var extension = mimeType switch
+            {
+                "image/jpeg" => ".jpg",
+                "image/webp" => ".webp",
+                _ => ".png"
+            };
+            var imageBytes = Convert.FromBase64String(base64Image);
             var rootPath = ProjectRootPathService.ProjectRootPath();
             var imagesDir = Path.Combine(rootPath, "images");
             Directory.CreateDirectory(imagesDir);
 
-            var fileName = $"image_{Guid.NewGuid()}.png";
+            var fileName = $"image_{Guid.NewGuid()}{extension}";
             var filePath = Path.Combine(imagesDir, fileName);
 
             await File.WriteAllBytesAsync(filePath, imageBytes);
 
-            return new Response<string>(filePath, HttpStatusCode.OK, true);
+            return new Response<object>(result, HttpStatusCode.OK, true);
 
         }
     }

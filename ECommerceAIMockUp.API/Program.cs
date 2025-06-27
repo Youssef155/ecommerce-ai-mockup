@@ -26,13 +26,14 @@ builder.Services.AddOpenAIService(settings =>
 
 builder.Services.AddHttpClient<IImageGenerator, HuggingFaceImageGenerationService>(client =>
 {
-    client.BaseAddress = new Uri("https://api-inference.huggingface.co/");
+    client.BaseAddress = new Uri("https://router.huggingface.co/nebius/v1/images/generations");
     client.DefaultRequestHeaders.Authorization =
     new AuthenticationHeaderValue("Bearer", builder.Configuration["HuggingFace:ApiKey"]);
 });
 
 builder.Services.Configure<DalleImageOptions>(
     builder.Configuration.GetSection("OpenAI:ImageOptions"));
+
 
 builder.Services.AddOpenApi();
 
