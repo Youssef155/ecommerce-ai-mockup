@@ -6,6 +6,8 @@ using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
 using ECommerceAIMockUp.Infrastructure.OpenAI;
+using ECommerceAIMockUp.Infrastructure.HuggingFaceServices;
+
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);

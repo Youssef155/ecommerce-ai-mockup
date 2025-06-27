@@ -24,7 +24,7 @@ namespace ECommerceAIMockUp.Infrastructure.OpenAI
             _openAI = openAI;
         }
 
-        public async Task<Response<List<string>>> ImageGenerator(string prompt)
+        public async Task<Response<string>> ImageGenerator(string prompt)
         {
             var response = await _openAI.Image.CreateImage(new ImageCreateRequest
             {
@@ -34,9 +34,9 @@ namespace ECommerceAIMockUp.Infrastructure.OpenAI
             });
             if (!response.Successful)
             {
-                return new Response<List<string>>(response.Error?.Messages, HttpStatusCode.BadRequest, false);
+                return new Response<string>(response.Error?.Message, HttpStatusCode.BadRequest, false);
             }
-            return new Response<List<string>>(response.Results.Select(r => r.Url).ToList(), HttpStatusCode.OK, true);
+            return new Response<string>(response.Results.Select(r => r.Url).FirstOrDefault(), HttpStatusCode.OK, true);
         }
     }
 }
