@@ -71,7 +71,7 @@ public class ProductService : IProductService
         if (product == null)
             throw new KeyNotFoundException("Product not found.");
 
-        var variant = product.Variants
+        var variant = product.ProductDetails
             .FirstOrDefault(v =>
                 v.Size.Equals(size, StringComparison.OrdinalIgnoreCase) &&
                 v.Color.Equals(color, StringComparison.OrdinalIgnoreCase));
@@ -81,11 +81,11 @@ public class ProductService : IProductService
 
         return new ProductVariantDto
         {
-            ProductId = productId,
+            ProductId = product.Id,
             Size = variant.Size,
             Color = variant.Color,
-            Price = variant.Price,
-            Stock = variant.Stock
+            Price = variant.Product.Price,
+            Stock = variant.Amount
         };
     }
 }
