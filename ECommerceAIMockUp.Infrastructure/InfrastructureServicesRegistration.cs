@@ -1,8 +1,10 @@
 ﻿using ECommerceAIMockUp.Application.Contracts.Authentication;
+using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.Services.Interfaces.Authentication;
 using ECommerceAIMockUp.Application.Settings;
 using ECommerceAIMockUp.Domain;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
+using ECommerceAIMockUp.Infrastructure.Repositories;
 using ECommerceAIMockUp.Infrastructure.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -66,6 +68,7 @@ namespace ECommerceAIMockUp.Infrastructure
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             return services;
         }
     }
