@@ -1,9 +1,12 @@
+using System.Net.Http.Headers;
 using Betalgo.Ranul.OpenAI.Extensions;
 using ECommerceAIMockUp.API;
 using ECommerceAIMockUp.Application;
+using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
 using ECommerceAIMockUp.Infrastructure.OpenAI;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,13 @@ builder.Services.AddPresentationServices()
 builder.Services.AddOpenAIService(settings =>
 {
     settings.ApiKey = builder.Configuration["OpenAI:ApiKey"];
+});
+
+builder.Services.AddHttpClient<IImageGenerator, HuggingFaceImageGenerationService>(client =>
+{
+    client.BaseAddress = new Uri("https://api-inference.huggingface.co/");
+    client.DefaultRequestHeaders.Authorization =
+    new AuthenticationHeaderValue("Bearer", builder.Configuration["HuggingFace:ApiKey"]);
 });
 
 builder.Services.Configure<DalleImageOptions>(
