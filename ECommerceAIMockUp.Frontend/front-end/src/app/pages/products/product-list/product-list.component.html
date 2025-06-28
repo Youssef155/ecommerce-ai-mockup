@@ -1,3 +1,87 @@
-<div *ngIf="message">
-  <h3>{{ message }}</h3>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Women's Clothing - Euphoria</title>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">Euphoria</div>
+    <div class="nav-links">
+      <a href="#">Shop</a>
+      <a href="#">Men</a>
+      <a href="#">Women</a>
+      <a href="#">Combos</a>
+      <a href="#">Joggers</a>
+    </div>
+    <div class="search-bar">
+      <input type="text" placeholder="Search">
+    </div>
+    <div class="icons">
+      <i>♡</i>
+      <i>👤</i>
+      <i>🛒</i>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="main">
+    <!-- Sidebar Filters -->
+    <aside class="sidebar">
+      <div class="filter-group">
+        <h3>Filter</h3>
+        <label><input type="checkbox"> Tops</label>
+        <label><input type="checkbox"> Printed T-shirts</label>
+        <label><input type="checkbox"> Plain T-shirts</label>
+        <label><input type="checkbox"> Kurti</label>
+        <label><input type="checkbox"> Boxers</label>
+        <label><input type="checkbox"> Full sleeve T-shirts</label>
+        <label><input type="checkbox"> Joggers</label>
+        <label><input type="checkbox"> Pajamas</label>
+        <label><input type="checkbox"> Jeans</label>
+      </div>
+      <div class="filter-group">
+        <h3>Price</h3>
+        <label><input type="checkbox"> Under $20</label>
+        <label><input type="checkbox"> $20 - $50</label>
+        <label><input type="checkbox"> Over $50</label>
+      </div>
+    </aside>
+
+    <!-- Product Grid -->
+    <section class="products">
+      <div class="products-header">
+        <h2>Women's Clothing</h2>
+        <div class="tabs">
+          <span>New</span>
+          <span>Recommended</span>
+        </div>
+      </div>
+
+      <div class="products-grid">
+        <div class="product-card">
+          <img src="https://via.placeholder.com/300x300.png?text=Hoodie" alt="Hoodie">
+          <h4>Black Hoodie</h4>
+          <p>$29.99</p>
+        </div>
+
+        <div class="product-card">
+          <img src="https://via.placeholder.com/300x300.png?text=T-shirt" alt="T-shirt">
+          <h4>White T-shirt</h4>
+          <p>$19.99</p>
+        </div>
+
+        <div class="product-card">
+          <img src="https://via.placeholder.com/300x300.png?text=Hoodie" alt="Hoodie">
+          <h4>Pink Hoodie</h4>
+          <p>$34.99</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</body>
+</html>

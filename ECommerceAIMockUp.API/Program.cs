@@ -12,6 +12,8 @@ builder.Services.AddPresentationServices()
     .AddApplicationServices(builder.Configuration)
     .AddInfrastructureServices(builder.Configuration);
 
+builder.AddCutomLoggin();
+
 builder.Services.AddOpenApi();
 
 var app = builder.Build();

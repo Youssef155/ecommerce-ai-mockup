@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ECommerceAIMockUp.Application.Services.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Net;
 namespace ECommerceAIMockUp.API.Controllers
 {
     [Route("api/[controller]")]
@@ -8,10 +9,22 @@ namespace ECommerceAIMockUp.API.Controllers
     [Authorize]
     public class ProductController : ControllerBase
     {
-        [HttpGet("products")]
-        public IActionResult Product()
+        private readonly IProductService _productService;
+
+        public ProductController(IProductService productService)
         {
-            return Ok(new { message = "You can view our products." });
+            _productService = productService;
+        }
+
+        [HttpGet("products")]
+        public async Task<IActionResult> Product(int pageNumber = 1, int pageSize = 10)
+        {
+            var result = await _productService.GetAllProductsService(pageNumber, pageSize);
+
+            if (result.StatusCode == HttpStatusCode.OK)
+                return Ok(result);
+
+            return BadRequest(result);
         }
     }
 }
