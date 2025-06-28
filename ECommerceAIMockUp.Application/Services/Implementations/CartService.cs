@@ -1,16 +1,17 @@
-﻿
+﻿using AutoMapper;
 using ECommerceAIMockUp.Application.Contracts.Repositories;
+using ECommerceAIMockUp.Application.DTOs.Shopping_Cart;
 using ECommerceAIMockUp.Application.Services.Interfaces.Cart_Service;
 using ECommerceAIMockUp.Domain;
 using ECommerceAIMockUp.Domain.Entities;
 using ECommerceAIMockUp.Domain.ValueObjects;
 using System.Threading.Tasks;
 
-namespace ECommerceAIMockUp.Application.Services.Implementation;
+namespace ECommerceAIMockUp.Application.Services.Implementations;
 
-public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository<OrderItem> orderItemRepo) : ICartService
+public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository<OrderItem> orderItemRepo, IMapper mapper) : ICartService
 {
-    private async Task<Order?> GetOrCreateCartAsync (string userId)
+    private async Task<Order?> GetCartAsync (string userId)
     {
         var cart = (await orderRepository.GetAllAsync(tracking: true, o => o.OrderItems,
             o => o.OrderItems.Select(i=>i.DesignDetails),
@@ -26,11 +27,12 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
         
     public async Task<IEnumerable<OrderItem>> GetAllItems(string UserId)
     {
-        var cart = await GetOrCreateCartAsync (UserId);
+        var cart = await GetCartAsync (UserId);
         if (cart == null)
             throw new Exception("Your Cart is empty, Start adding items to display them in the cart");
 
-        var items =  cart.OrderItems.ToList();
+        var items = cart.OrderItems.ToList();
+        //var items = await orderItemRepo.GetAllAsync(tracking: true, o => o.ProductDetails, o => o.DesignDetails);
 
         //if (items == null)
         //    throw new Exception("The Cart is Empty");
@@ -40,7 +42,7 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
 
     public async Task<OrderItem> GetItemById(string UserId, int itemId)
     {
-        var cart = await GetOrCreateCartAsync(UserId);
+        var cart = await GetCartAsync(UserId);
         if (cart == null)
             throw new Exception("Start adding items to display them in the cart");
 
@@ -52,9 +54,9 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
         return item;
     }
 
-    public async Task AddItem(OrderItem item,string UserId)
+    public async Task AddItem(OrderItemDTO item,string UserId)
     {
-        var cart = await GetOrCreateCartAsync(UserId);
+        var cart = await GetCartAsync(UserId);
         if(cart == null)
         {
             cart = new Order
@@ -64,16 +66,26 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
                 OrderDate = DateTime.Now,
                 AppUserId = UserId
             };
-            cart.OrderItems.Add(item);
+            await orderRepository.CreateAsync(cart);
+
         }
+
         cart.OrderDate = DateTime.Now;
         cart.AppUserId = UserId;
-        cart.OrderItems.Add(item);
+
+        var orderitem = new OrderItem
+        {
+            Quantity = item.Quantity,
+            DesignDetailsId = item.DesignDetailsId,
+            ProductDetailsId = item.ProductDetailsId,
+            OrderId = cart.Id,
+        };
+        cart.OrderItems.Add(orderitem);
     }
 
     public async Task Remove(string userId, OrderItem orderItem)
     {
-        var cart = await GetOrCreateCartAsync(userId);
+        var cart = await GetCartAsync(userId);
         if (cart == null)
             throw new Exception("Your cart is empty");
 
@@ -87,7 +99,7 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
 
     public async Task RemoveRange(string userId, List<OrderItem> items)
     {
-        var cart = await GetOrCreateCartAsync(userId);
+        var cart = await GetCartAsync(userId);
         if (cart == null)
             throw new Exception("Your cart is empty");
 
@@ -95,7 +107,8 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
 
         foreach (var item in items)
         {
-
+            Orderitems.Remove(item);
+            await orderItemRepo.DeleteAsync(item.Id);
         }
     }
 }
