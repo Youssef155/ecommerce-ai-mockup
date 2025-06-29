@@ -10,6 +10,6 @@ namespace ECommerceAIMockUp.Application.Contracts.ImageGenerators
 {
     public interface IImageGenerator
     {
-        Task<ImageGenerationResult> GenerateImageAsync(string prompt);
+        Task<Image> GenerateImageAsync(string prompt);
     }
 }

@@ -20,7 +20,7 @@ namespace ECommerceAIMockUp.Application.Cases
             _imageGenerator = imageGenerator;
         }
 
-        public async Task<Response<ImageGenerationResult>> GenerateImageAsync(string prompt, string userId)
+        public async Task<Response<Image>> GenerateImageAsync(string prompt, string userId)
         {
             AILog aILog = new AILog { PromptText = prompt, AppUserId = userId };
 
@@ -29,13 +29,13 @@ namespace ECommerceAIMockUp.Application.Cases
             {
                 aILog.IsSuccesed = false;
                 //Save the aiLog to the database
-                return new Response<ImageGenerationResult> { IsSucceeded = false, Error = promptValidationResult.Error };
+                return new Response<Image> { IsSucceeded = false, Error = promptValidationResult.Error };
             }
-            ImageGenerationResult imageGenerationResult = await _imageGenerator.GenerateImageAsync(prompt);
+            Image image = await _imageGenerator.GenerateImageAsync(prompt);
             aILog.IsSuccesed = true;
             //Add reference to the design in aiLog
             //Save the aiLog to the database
-            return new Response<ImageGenerationResult> { Data = imageGenerationResult, IsSucceeded = true };
+            return new Response<Image> { Data = image, IsSucceeded = true };
             
         }
 

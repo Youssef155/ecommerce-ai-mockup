@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace ECommerceAIMockUp.Application.DTOs
 {
-    public class ImageGenerationResult
+    public class Image
     {
         public string Base64Image { get; set; } = "";
+        public string ImageFormat { get; set; } = "";
     }
 }
