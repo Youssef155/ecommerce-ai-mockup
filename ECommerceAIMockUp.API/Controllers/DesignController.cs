@@ -19,6 +19,8 @@ namespace ECommerceAIMockUp.API.Controllers
         [HttpPost("Generate")]
         public async Task<IActionResult> GenerateDesign(ImagePromptRequest request)
         {
+            if (string.IsNullOrEmpty(request.Prompt))
+                return BadRequest(new {"Error" : "Prompt is empty"});
             var response = await _imageGenerationService.ImageGenerator(request.Prompt);
             return Ok(response);
         }
