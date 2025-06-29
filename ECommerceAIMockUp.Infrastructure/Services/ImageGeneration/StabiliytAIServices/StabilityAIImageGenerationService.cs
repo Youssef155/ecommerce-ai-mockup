@@ -22,7 +22,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIS
             _httpClient = httpClient;
         }
 
-        public async Task<ImageGenerationResult> ImageGenerator(string prompt)
+        public async Task<ImageGenerationResult> GenerateImageAsync(string prompt)
         {
             var form = new MultipartFormDataContent();
             form.Add(new StringContent(prompt), "\"prompt\"");

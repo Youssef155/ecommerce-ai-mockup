@@ -34,6 +34,8 @@ builder.Services.AddHttpClient<IImageGenerator, StabilityAIImageGenerationServic
 builder.Services.Configure<DalleImageOptions>(
     builder.Configuration.GetSection("OpenAI:ImageOptions"));
 
+builder.Services.AddScoped<IPromptValidator, IPromptValidator>();
+
 
 builder.Services.AddOpenApi();
 

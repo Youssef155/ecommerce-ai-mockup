@@ -26,7 +26,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
             _openAI = openAI;
         }
 
-        public async Task<ImageGenerationResult> ImageGenerator(string prompt)
+        public async Task<ImageGenerationResult> GenerateImageAsync(string prompt)
         {
             var response = await _openAI.Image.CreateImage(new ImageCreateRequest
             {

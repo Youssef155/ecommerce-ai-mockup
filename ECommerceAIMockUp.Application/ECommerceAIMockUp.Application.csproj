@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="MappingProfiles\" />
-    <Folder Include="Cases\" />
     <Folder Include="Services\Implementations\" />
   </ItemGroup>
 
