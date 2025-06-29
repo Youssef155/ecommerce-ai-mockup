@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
+using Microsoft.AspNetCore.Http;
 
 namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
 {
-    public static class ImageFileCreator
+    public class ImageFileCreator : IImageFileCreator
     {
-        private static byte[] ConvertFromBase64ToByteArray(string base64Image)
+        private byte[] ConvertFromBase64ToByteArray(string base64Image)
         {
             byte[] imageData = Convert.FromBase64String(base64Image);
             return imageData;
         }
-        private static string GetProjectRootPath()
+        private string GetProjectRootPath()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
             while (directory != null && !directory.GetFiles("*.sln").Any())
@@ -27,7 +29,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             return directory?.FullName!;
         }
 
-        private static string CreateImagesFolder()
+        private string CreateImagesFolder()
         {
             string rootPath = GetProjectRootPath();
             string imagesFolderPath = Path.Combine(rootPath, "Images");
@@ -42,7 +44,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             return imagesFolderPath;
         }
 
-        public static async Task<string> CreateImageFile(string base64Image, string extension)
+        public async Task<string> CreateImageFile(string base64Image, string extension)
         {
             string imagesFolderPath = CreateImagesFolder();
             string fileName = $"image_{Guid.NewGuid()}.{extension}";
@@ -57,6 +59,25 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             {
                 throw new Exception("Can not write image file");
             }
+        }
+
+        public async Task<string> CreateImageFile(IFormFile image, string extension)
+        {
+            string imagesFolderPath = CreateImagesFolder();
+            string fileName = $"image_{Guid.NewGuid()}.{extension}";
+            string filePath = Path.Combine(imagesFolderPath, fileName);
+            try
+            {
+                using (var file = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(file);
+                }
+            }
+            catch
+            {
+                throw new Exception("Can not write image file");
+            }
+            return filePath;
         }
     }
 }
