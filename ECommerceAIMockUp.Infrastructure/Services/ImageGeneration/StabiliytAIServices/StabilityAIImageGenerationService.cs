@@ -35,16 +35,13 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIS
                 var error = await response.Content.ReadAsStringAsync();
                 throw new Exception($"Stability AI API Error: {error}");
             }
-
-            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync();
-            if (imageBytes == null || imageBytes.Length == 0)
+            var base64Image = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(base64Image))
             {
-                throw new Exception("Stability AI response content is empty");
+                throw new Exception("Stability AI respone is empty");
             }
-
-            string imageUrl = await ImageFileCreator.CreateImageFile(imageBytes, "png");
-
-            return new ImageGenerationResult { ImageUrl = imageUrl, ImageBytes = imageBytes};
+            //string imageUrl = await ImageFileCreator.CreateImageFile(base64Image, "png");
+            return new ImageGenerationResult { Base64Image = base64Image};
         }
     }
 }

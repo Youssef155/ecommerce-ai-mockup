@@ -8,7 +8,6 @@ namespace ECommerceAIMockUp.Application.DTOs
 {
     public class ImageGenerationResult
     {
-        public string ImageUrl { get; set; }
-        public byte[] ImageBytes { get; set; }
+        public string Base64Image { get; set; } = "";
     }
 }

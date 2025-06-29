@@ -8,6 +8,11 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
 {
     public static class ImageFileCreator
     {
+        private static byte[] ConvertFromBase64ToByteArray(string base64Image)
+        {
+            byte[] imageData = Convert.FromBase64String(base64Image);
+            return imageData;
+        }
         private static string GetProjectRootPath()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -37,11 +42,12 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             return imagesFolderPath;
         }
 
-        public static async Task<string> CreateImageFile(byte[] image, string extension)
+        public static async Task<string> CreateImageFile(string base64Image, string extension)
         {
             string imagesFolderPath = CreateImagesFolder();
             string fileName = $"image_{Guid.NewGuid()}.{extension}";
             string filePath = Path.Combine(imagesFolderPath, fileName);
+            byte[] image = ConvertFromBase64ToByteArray(base64Image);
             try
             {
                 await File.WriteAllBytesAsync(filePath, image);

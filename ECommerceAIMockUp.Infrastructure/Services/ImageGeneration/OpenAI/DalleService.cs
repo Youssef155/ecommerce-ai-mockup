@@ -39,14 +39,14 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
             {
                 throw new Exception(response.Error?.Message ?? "DALL-E failed to generate image");
             }
-            string b64 = response.Results.First().B64;
-            byte[] imageBytes = Convert.FromBase64String(b64);
-            if (imageBytes == null || imageBytes.Length == 0)
+            string base64Image = response.Results.First().B64;
+
+            if (string.IsNullOrEmpty(base64Image))
             {
-                throw new Exception("Stability AI response content is empty");
+                throw new Exception("DALL-E response content is empty");
             }
-            string imageUrl = await ImageFileCreator.CreateImageFile(imageBytes, "png");
-            return new ImageGenerationResult { ImageUrl = imageUrl, ImageBytes = imageBytes};
+            //string imageUrl = await ImageFileCreator.CreateImageFile(base64Image, "png");
+            return new ImageGenerationResult { Base64Image = base64Image};
         }
     }
 }
