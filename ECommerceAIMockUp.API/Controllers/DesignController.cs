@@ -15,10 +15,12 @@ namespace ECommerceAIMockUp.API.Controllers
     {
 
         private readonly GenerateImageCase _generateImageCase;
+        private readonly UploadDesignCase _uploadDesignCase;
 
-        public DesignController(GenerateImageCase generateImageCase)
+        public DesignController(GenerateImageCase generateImageCase, UploadDesignCase uploadDesignCase)
         {
             _generateImageCase = generateImageCase;
+            _uploadDesignCase = uploadDesignCase;
         }
 
         [HttpPost("Generate")]
@@ -26,11 +28,23 @@ namespace ECommerceAIMockUp.API.Controllers
         {
             if (string.IsNullOrEmpty(request.Prompt))
                 return BadRequest(new {Error = "Prompt is empty"});
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "123";
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
             var response = await _generateImageCase.GenerateImageAsync(request.Prompt, userId);
             if (!response.IsSucceeded)
                 return BadRequest(response.Error);
             return Ok(response.Data);
+        }
+
+        [HttpPost("Upload")]
+        public async Task<IActionResult> UploadDesign(IFormFile imageFile)
+        {
+            if (imageFile == null || imageFile.Length == 0)
+                return BadRequest(new { Error = "Invalid file" });
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
+            var respone = await _uploadDesignCase.SaveUploadedImage(imageFile, userId);
+            if (!respone.IsSucceeded)
+                return BadRequest(respone.Error);
+            return Ok(respone.Data);
         }
     }
 }
