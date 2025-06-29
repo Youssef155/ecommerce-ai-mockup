@@ -22,7 +22,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIS
             _httpClient = httpClient;
         }
 
-        public async Task<byte[]> ImageGenerator(string prompt)
+        public async Task<ImageGenerationResult> ImageGenerator(string prompt)
         {
             var form = new MultipartFormDataContent();
             form.Add(new StringContent(prompt), "\"prompt\"");
@@ -42,9 +42,9 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIS
                 throw new Exception("Stability AI response content is empty");
             }
 
-            await ImageFileCreator.CreateImageFile(imageBytes, "png");
+            string imageUrl = await ImageFileCreator.CreateImageFile(imageBytes, "png");
 
-            return imageBytes;
+            return new ImageGenerationResult { ImageUrl = imageUrl, ImageBytes = imageBytes};
         }
     }
 }

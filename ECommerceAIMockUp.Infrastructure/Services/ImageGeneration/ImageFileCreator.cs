@@ -37,7 +37,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             return imagesFolderPath;
         }
 
-        public static async Task CreateImageFile(byte[] image, string extension)
+        public static async Task<string> CreateImageFile(byte[] image, string extension)
         {
             string imagesFolderPath = CreateImagesFolder();
             string fileName = $"image_{Guid.NewGuid()}.{extension}";
@@ -45,6 +45,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             try
             {
                 await File.WriteAllBytesAsync(filePath, image);
+                return filePath;
             }
             catch
             {
