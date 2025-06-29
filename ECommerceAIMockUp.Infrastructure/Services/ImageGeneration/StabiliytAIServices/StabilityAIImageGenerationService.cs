@@ -40,7 +40,6 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIS
             {
                 throw new Exception("Stability AI respone is empty");
             }
-            //string imageUrl = await ImageFileCreator.CreateImageFile(base64Image, "png");
             return new Image { Base64Image = base64Image, ImageFormat = "png"};
         }
     }

@@ -44,7 +44,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             return imagesFolderPath;
         }
 
-        public async Task<string> CreateImageFile(string base64Image, string extension)
+        public async Task<string> CreateImageFileAsync(string base64Image, string extension)
         {
             string imagesFolderPath = CreateImagesFolder();
             string fileName = $"image_{Guid.NewGuid()}.{extension}";
@@ -61,7 +61,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             }
         }
 
-        public async Task<string> CreateImageFile(IFormFile image, string extension)
+        public async Task<string> CreateImageFileAsync(IFormFile image, string extension)
         {
             string imagesFolderPath = CreateImagesFolder();
             string fileName = $"image_{Guid.NewGuid()}.{extension}";

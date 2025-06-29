@@ -9,7 +9,7 @@ namespace ECommerceAIMockUp.Application.Contracts.ImageGenerators
 {
     public interface IImageFileCreator
     {
-        Task<string> CreateImageFile(string base64Image, string extension);
-        Task<string> CreateImageFile(IFormFile image, string extension);
+        Task<string> CreateImageFileAsync(string base64Image, string extension);
+        Task<string> CreateImageFileAsync(IFormFile image, string extension);
     }
 }
