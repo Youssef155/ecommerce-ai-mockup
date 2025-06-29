@@ -5,9 +5,8 @@ using ECommerceAIMockUp.Application;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
-using ECommerceAIMockUp.Infrastructure.OpenAI;
-using ECommerceAIMockUp.Infrastructure.HuggingFaceServices;
-
+using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI;
+using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIServices;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,11 +23,12 @@ builder.Services.AddOpenAIService(settings =>
     settings.ApiKey = builder.Configuration["OpenAI:ApiKey"];
 });
 
-builder.Services.AddHttpClient<IImageGenerator, HuggingFaceImageGenerationService>(client =>
+builder.Services.AddHttpClient<IImageGenerator, StabilityAIImageGenerationService>(client =>
 {
-    client.BaseAddress = new Uri("https://router.huggingface.co/nebius/v1/images/generations");
+    client.BaseAddress = new Uri("https://api.stability.ai/v2beta/stable-image/generate/ultra");
     client.DefaultRequestHeaders.Authorization =
-    new AuthenticationHeaderValue("Bearer", builder.Configuration["HuggingFace:ApiKey"]);
+    new AuthenticationHeaderValue("Bearer", builder.Configuration["StabilityAI:ApiKey"]);
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("image/*"));
 });
 
 builder.Services.Configure<DalleImageOptions>(

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceAIMockUp.Infrastructure.OpenAI
+namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
 {
     public class DalleImageOptions
     {

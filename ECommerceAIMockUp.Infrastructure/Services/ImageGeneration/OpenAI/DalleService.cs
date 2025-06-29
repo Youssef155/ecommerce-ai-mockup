@@ -5,13 +5,14 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Betalgo.Ranul.OpenAI.Interfaces;
+using Betalgo.Ranul.OpenAI.ObjectModels;
 using Betalgo.Ranul.OpenAI.ObjectModels.RequestModels;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Application.Wrappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
-namespace ECommerceAIMockUp.Infrastructure.OpenAI
+namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
 {
     public class DalleService : IImageGenerator
     {
@@ -24,19 +25,27 @@ namespace ECommerceAIMockUp.Infrastructure.OpenAI
             _openAI = openAI;
         }
 
-        public async Task<Response<object>> ImageGenerator(string prompt)
+        public async Task<byte[]> ImageGenerator(string prompt)
         {
             var response = await _openAI.Image.CreateImage(new ImageCreateRequest
             {
                 Prompt = prompt,
                 N = _options.NumberOfImages,
-                Size = _options.Size
+                Size = _options.Size,
+                ResponseFormat = StaticValues.ImageStatics.ResponseFormat.Base64
             });
-            if (!response.Successful)
+            if (!response.Successful || !response.Results.Any())
             {
-                return new Response<object>(response.Error?.Message, HttpStatusCode.BadRequest, false);
+                throw new Exception(response.Error?.Message ?? "DALL-E failed to generate image");
             }
-            return new Response<object>(response.Results.Select(r => r.Url).FirstOrDefault(), HttpStatusCode.OK, true);
+            string b64 = response.Results.First().B64;
+            byte[] imageBytes = Convert.FromBase64String(b64);
+            if (imageBytes == null || imageBytes.Length == 0)
+            {
+                throw new Exception("Stability AI response content is empty");
+            }
+            await ImageFileCreator.CreateImageFile(imageBytes, "png");
+            return imageBytes;
         }
     }
 }

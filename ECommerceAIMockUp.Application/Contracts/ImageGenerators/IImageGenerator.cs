@@ -9,6 +9,6 @@ namespace ECommerceAIMockUp.Application.Contracts.ImageGenerators
 {
     public interface IImageGenerator
     {
-        Task<Response<object>> ImageGenerator(string prompt);
+        Task<byte[]> ImageGenerator(string prompt);
     }
 }
