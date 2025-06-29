@@ -14,11 +14,13 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
     public class PromptValidator : IPromptValidator
     {
         private readonly int _maxLength;
+        private readonly int _minLength;
         private readonly HashSet<string> _blookedTerms;
 
         public PromptValidator(IConfiguration config)
         {
             _maxLength = config.GetValue<int>("PromptSettings:MaxLength");
+            _minLength = config.GetValue<int>("PromptSettings:MinLength");
             _blookedTerms = new HashSet<string>(
             config.GetSection("PromptSettings:BlockedTerms").Get<string[]>() ?? Array.Empty<string>(),
             StringComparer.OrdinalIgnoreCase);
@@ -27,8 +29,8 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
         public PromptValidationResult ValidatePrompt(string prompt)
         {
             prompt = Regex.Replace(prompt.Trim(), @"\s+", " ");
-            if (prompt.Length < 3)
-                return new PromptValidationResult{ IsValid = false, Error = "Prompt must be more that 2 characters" };
+            if (prompt.Length < _minLength)
+                return new PromptValidationResult{ IsValid = false, Error = $"Prompt must be more that {_minLength} characters" };
      
             if (prompt.Length > _maxLength)
                 return new PromptValidationResult{ IsValid = false, Error = $"Prompt must be less than {_maxLength} characters" };

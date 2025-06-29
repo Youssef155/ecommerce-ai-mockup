@@ -2,9 +2,11 @@ using System.Net.Http.Headers;
 using Betalgo.Ranul.OpenAI.Extensions;
 using ECommerceAIMockUp.API;
 using ECommerceAIMockUp.Application;
+using ECommerceAIMockUp.Application.Cases;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
+using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration;
 using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI;
 using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIServices;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +36,8 @@ builder.Services.AddHttpClient<IImageGenerator, StabilityAIImageGenerationServic
 builder.Services.Configure<DalleImageOptions>(
     builder.Configuration.GetSection("OpenAI:ImageOptions"));
 
-builder.Services.AddScoped<IPromptValidator, IPromptValidator>();
+builder.Services.AddScoped<IPromptValidator, PromptValidator>();
+builder.Services.AddScoped<GenerateImageCase>();
 
 
 builder.Services.AddOpenApi();
