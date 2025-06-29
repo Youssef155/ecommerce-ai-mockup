@@ -8,6 +8,7 @@ using Betalgo.Ranul.OpenAI.Interfaces;
 using Betalgo.Ranul.OpenAI.ObjectModels;
 using Betalgo.Ranul.OpenAI.ObjectModels.RequestModels;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
+using ECommerceAIMockUp.Application.DTOs;
 using ECommerceAIMockUp.Application.Wrappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -25,7 +26,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
             _openAI = openAI;
         }
 
-        public async Task<byte[]> ImageGenerator(string prompt)
+        public async Task<ImageGenerationResult> ImageGenerator(string prompt)
         {
             var response = await _openAI.Image.CreateImage(new ImageCreateRequest
             {
@@ -44,8 +45,8 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
             {
                 throw new Exception("Stability AI response content is empty");
             }
-            await ImageFileCreator.CreateImageFile(imageBytes, "png");
-            return imageBytes;
+            string imageUrl = await ImageFileCreator.CreateImageFile(imageBytes, "png");
+            return new ImageGenerationResult { ImageUrl = imageUrl, ImageBytes = imageBytes};
         }
     }
 }
