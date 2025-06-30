@@ -1,6 +1,5 @@
 ﻿using ECommerceAIMockUp.Application.DTOs.Auth;
 using ECommerceAIMockUp.Application.Services.Interfaces.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
@@ -9,7 +8,6 @@ namespace ECommerceAIMockUp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AccountController : ControllerBase
     {
         private readonly IAuthService _authService;
