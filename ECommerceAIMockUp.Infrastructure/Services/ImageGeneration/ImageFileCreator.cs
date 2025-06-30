@@ -10,11 +10,6 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
 {
     public class ImageFileCreator : IImageFileCreator
     {
-        private byte[] ConvertFromBase64ToByteArray(string base64Image)
-        {
-            byte[] imageData = Convert.FromBase64String(base64Image);
-            return imageData;
-        }
         private string GetProjectRootPath()
         {
             var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
@@ -44,15 +39,14 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
             return imagesFolderPath;
         }
 
-        public async Task<string> CreateImageFileAsync(string base64Image, string extension)
+        public async Task<string> CreateImageFileAsync(byte[] imageBytes, string extension)
         {
             string imagesFolderPath = CreateImagesFolder();
             string fileName = $"image_{Guid.NewGuid()}.{extension}";
             string filePath = Path.Combine(imagesFolderPath, fileName);
-            byte[] image = ConvertFromBase64ToByteArray(base64Image);
             try
             {
-                await File.WriteAllBytesAsync(filePath, image);
+                await File.WriteAllBytesAsync(filePath, imageBytes);
                 return filePath;
             }
             catch

@@ -15,12 +15,12 @@ namespace ECommerceAIMockUp.API.Controllers
     {
 
         private readonly GenerateImageCase _generateImageCase;
-        private readonly UploadDesignCase _uploadDesignCase;
+        private readonly SaveDesignCase _saveDesignCase;
 
-        public DesignController(GenerateImageCase generateImageCase, UploadDesignCase uploadDesignCase)
+        public DesignController(GenerateImageCase generateImageCase, SaveDesignCase saveDesignCase)
         {
             _generateImageCase = generateImageCase;
-            _uploadDesignCase = uploadDesignCase;
+            _saveDesignCase = saveDesignCase;
         }
 
         [HttpPost("Generate")]
@@ -41,7 +41,7 @@ namespace ECommerceAIMockUp.API.Controllers
             if (imageFile == null || imageFile.Length == 0)
                 return BadRequest(new { Error = "Invalid file" });
             string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var respone = await _uploadDesignCase.SaveUploadedImage(imageFile, userId);
+            var respone = await _saveDesignCase.SaveUploadedImage(imageFile, userId);
             if (!respone.IsSucceeded)
                 return BadRequest(respone.Error);
             return Ok(respone.Data);
