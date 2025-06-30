@@ -57,7 +57,6 @@ public static class ProductSeeding
                     ProductDetails = new List<ProductDetails>
                     {
                         new ProductDetails { Color = "White", Size = "M", Amount = 50, ImgUrl = "/images/products/white-tshirt-m.jpg" },
-                        new ProductDetails { Color = "White", Size = "L", Amount = 30, ImgUrl = "/images/products/white-tshirt-l.jpg" }
                     }
                 },
                 new Product
@@ -72,7 +71,7 @@ public static class ProductSeeding
                     UpdatedAt = new DateTime(2025, 6, 8),
                     ProductDetails = new List<ProductDetails>
                     {
-                        new ProductDetails { Color = "Black", Size = "M", Amount = 25, ImgUrl = "/images/products/black-hoodie.jpg" }
+                        new ProductDetails { Color = "Black", Size = "M", Amount = 25, ImgUrl = "/uploads/products/black-hoodie.jpg" }
                     }
                 },
                 new Product
@@ -87,7 +86,7 @@ public static class ProductSeeding
                     UpdatedAt = new DateTime(2025, 6, 8),
                     ProductDetails = new List<ProductDetails>
                     {
-                        new ProductDetails { Color = "Blue", Size = "S", Amount = 20, ImgUrl = "/images/products/denim-jacket-s.jpg" },
+                        new ProductDetails { Color = "Blue", Size = "S", Amount = 20, ImgUrl = "/uploads/products/denim-jacket-s.jpg" },
                     }
                 },
                 new Product
@@ -102,7 +101,7 @@ public static class ProductSeeding
                     UpdatedAt = new DateTime(2025, 6, 8),
                     ProductDetails = new List<ProductDetails>
                     {
-                        new ProductDetails { Color = "Dark Blue", Size = "34", Amount = 35, ImgUrl = "/images/products/jeans-34.jpg" }
+                        new ProductDetails { Color = "Dark Blue", Size = "34", Amount = 35, ImgUrl = "/uploads/products/jeans-34.jpg" }
                     }
                 },
                 new Product
@@ -117,7 +116,7 @@ public static class ProductSeeding
                     UpdatedAt = new DateTime(2025, 6, 8),
                     ProductDetails = new List<ProductDetails>
                     {
-                        new ProductDetails { Color = "White", Size = "9", Amount = 45, ImgUrl = "/images/products/sneakers-9.jpg"},
+                        new ProductDetails { Color = "White", Size = "9", Amount = 45, ImgUrl = "/uploads/products/sneakers-9.jpg"},
                     }
                 }
 
