@@ -4,8 +4,10 @@ using ECommerceAIMockUp.API;
 using ECommerceAIMockUp.Application;
 using ECommerceAIMockUp.Application.Cases;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
+using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
+using ECommerceAIMockUp.Infrastructure.Repositories;
 using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration;
 using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI;
 using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIServices;
@@ -40,6 +42,7 @@ builder.Services.AddScoped<IPromptValidator, PromptValidator>();
 builder.Services.AddScoped<GenerateImageCase>();
 builder.Services.AddScoped<IImageFileCreator, ImageFileCreator>();
 builder.Services.AddScoped<SaveDesignCase>();
+builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 builder.Services.AddOpenApi();
 

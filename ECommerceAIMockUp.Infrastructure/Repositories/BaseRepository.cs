@@ -79,5 +79,10 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             _dbSet.Update(entity);
             return entity;
         }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
