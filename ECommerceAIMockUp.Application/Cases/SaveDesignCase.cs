@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
+using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.DTOs;
 using ECommerceAIMockUp.Application.Wrappers;
+using ECommerceAIMockUp.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace ECommerceAIMockUp.Application.Cases
@@ -14,12 +16,14 @@ namespace ECommerceAIMockUp.Application.Cases
     public class SaveDesignCase
     {
         private readonly IImageFileCreator _imageFileCreator;
+        private readonly IBaseRepository<Design> _designRepository;
 
-        public SaveDesignCase(IImageFileCreator imageFileCreator)
+        public SaveDesignCase(IImageFileCreator imageFileCreator, IBaseRepository<Design> designRepository)
         {
             _imageFileCreator = imageFileCreator;
+            _designRepository = designRepository;
         }
-        private async Task<string> GetImageExtensionAsync(byte[] signatureBuffer)
+        private string GetImageExtensionAsync(byte[] signatureBuffer)
         {
             
             string fileSignature = BitConverter.ToString(signatureBuffer).Replace("-","").ToUpperInvariant();
@@ -47,16 +51,30 @@ namespace ECommerceAIMockUp.Application.Cases
             }
             return buffer;
         }
+
+        private async Task AddImageToDataBaseAsync(string userId, string imagePath)
+        {
+            try
+            {
+                Design design = new Design { AppUserId = userId, ImageUrl = imagePath };
+                await _designRepository.CreateAsync(design);
+                await _designRepository.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new Exception("Can not add to database");
+            }
+        }
         public async Task<Response<string>> SaveUploadedImage(IFormFile imageFile, string userId)
         {
             byte[] signatureBuffer = await GetSignatureBytes(imageFile);
-            string extension = await GetImageExtensionAsync(signatureBuffer);
+            string extension = GetImageExtensionAsync(signatureBuffer);
             if (!string.IsNullOrEmpty(extension))
             {
                 return new Response<string> { IsSucceeded = false, Error = "Unsupported format, supported format PNG, JPG, JPEG" };
             }
             string imagePath = await _imageFileCreator.CreateImageFileAsync(imageFile, extension);
-            //save to database
+            await AddImageToDataBaseAsync(userId, imagePath);
             return new Response<string> { IsSucceeded = true, Data = "Uploaded" };
         }
 
@@ -65,9 +83,9 @@ namespace ECommerceAIMockUp.Application.Cases
             byte[] imageBytes = Convert.FromBase64String(image.Base64Image);
             if (imageBytes.Length == 0)
                 return new Response<string> { IsSucceeded = false, Error = "No image data" };
-            string extension = await GetImageExtensionAsync(imageBytes.Take(4).ToArray());
+            string extension = GetImageExtensionAsync(imageBytes.Take(4).ToArray());
             string imagePath = await _imageFileCreator.CreateImageFileAsync(imageBytes, extension);
-            //save to database
+            await AddImageToDataBaseAsync(userId, imagePath);
             return new Response<string> { IsSucceeded = true, Data = "Saved" };
         }
     }
