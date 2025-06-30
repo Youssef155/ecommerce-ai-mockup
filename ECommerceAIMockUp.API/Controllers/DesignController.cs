@@ -46,5 +46,17 @@ namespace ECommerceAIMockUp.API.Controllers
                 return BadRequest(respone.Error);
             return Ok(respone.Data);
         }
+
+        [HttpPost("SaveGeneratedDesign")]
+        public async Task<IActionResult> SaveGeneratedDesign(Image image)
+        {
+            if (string.IsNullOrEmpty(image.Base64Image))
+                return BadRequest(new { Error = "No image data" });
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
+            var respose = await _saveDesignCase.SaveGeneratedImage(image, userId);
+            if (!respose.IsSucceeded)
+                return BadRequest(respose.Error);
+            return Ok(respose.Data);
+        }
     }
 }
