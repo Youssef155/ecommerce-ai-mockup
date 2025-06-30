@@ -2,12 +2,14 @@
 using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.Services.Interfaces.Authentication;
 using ECommerceAIMockUp.Application.Services.Interfaces.Caching;
+using ECommerceAIMockUp.Application.Services.Interfaces.FileServices;
 using ECommerceAIMockUp.Application.Settings;
 using ECommerceAIMockUp.Domain;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using ECommerceAIMockUp.Infrastructure.Repositories;
 using ECommerceAIMockUp.Infrastructure.Services.Authentication;
 using ECommerceAIMockUp.Infrastructure.Services.Caching;
+using ECommerceAIMockUp.Infrastructure.Services.FileServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -82,6 +84,8 @@ namespace ECommerceAIMockUp.Infrastructure
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IRedisService, RedisService>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IFileService, FileService>();
             return services;
         }
     }

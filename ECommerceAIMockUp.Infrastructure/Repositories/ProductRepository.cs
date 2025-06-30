@@ -17,6 +17,8 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             _products = db.Set<Product>();
         }
 
+
+
         public async Task<PaginatedResult<Product>> GetAllProductsAysnc(int pageNumber, int pageSize)
         {
             var products = GetAllQueryable(tracking: false, includes: new Expression<Func<Product, object>>[] { p => p.Category });
@@ -26,6 +28,27 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             var paginatedResult = await OrderedProducts.ToPaginatedListAsync(pageNumber, pageSize);
 
             return paginatedResult;
+        }
+
+        public async Task<PaginatedResult<Product>> GetFilterProductCategory(int categoryId, int pageNumber, int pageSize)
+        {
+            var products = GetAllQueryable(tracking: false, includes: new Expression<Func<Product, object>>[] { p => p.Category });
+
+            var filteredProducts = products.Where(p => p.CategoryId == categoryId)
+                                           .OrderBy(p => p.CreatedAt);
+
+            var paginatedResult = await filteredProducts.ToPaginatedListAsync(pageNumber, pageSize);
+
+            return paginatedResult;
+        }
+
+
+        public async Task<Product> CreateProductManuallyAsync(Product product, ProductDetails details)
+        {
+            product.ProductDetails = new List<ProductDetails> { details };
+            await CreateAsync(product);
+            return product;
+
         }
     }
 }
