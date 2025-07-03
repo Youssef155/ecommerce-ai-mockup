@@ -22,7 +22,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIS
             _httpClient = httpClient;
         }
 
-        public async Task<Image> GenerateImageAsync(string prompt)
+        public async Task<byte[]> GenerateImageAsync(string prompt)
         {
             var form = new MultipartFormDataContent();
             form.Add(new StringContent(prompt), "\"prompt\"");
@@ -35,12 +35,8 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIS
                 var error = await response.Content.ReadAsStringAsync();
                 throw new Exception($"Stability AI API Error: {error}");
             }
-            var base64Image = await response.Content.ReadAsStringAsync();
-            if (string.IsNullOrWhiteSpace(base64Image))
-            {
-                throw new Exception("Stability AI respone is empty");
-            }
-            return new Image { Base64Image = base64Image, ImageFormat = "png"};
+            var imageBytes = await response.Content.ReadAsByteArrayAsync();
+            return imageBytes;
         }
     }
 }

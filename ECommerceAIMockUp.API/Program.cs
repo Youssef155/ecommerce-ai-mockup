@@ -32,7 +32,7 @@ builder.Services.AddHttpClient<IImageGenerator, StabilityAIImageGenerationServic
     client.BaseAddress = new Uri("https://api.stability.ai/v2beta/stable-image/generate/ultra");
     client.DefaultRequestHeaders.Authorization =
     new AuthenticationHeaderValue("Bearer", builder.Configuration["StabilityAI:ApiKey"]);
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("image/*"));
 });
 
 builder.Services.Configure<DalleImageOptions>(

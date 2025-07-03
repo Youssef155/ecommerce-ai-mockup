@@ -26,7 +26,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
             _openAI = openAI;
         }
 
-        public async Task<Image> GenerateImageAsync(string prompt)
+        public async Task<GeneratedDesign> GenerateImageAsync(string prompt)
         {
             var response = await _openAI.Image.CreateImage(new ImageCreateRequest
             {
@@ -46,7 +46,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
                 throw new Exception("DALL-E response content is empty");
             }
             //string imageUrl = await ImageFileCreator.CreateImageFile(base64Image, "png");
-            return new Image { Base64Image = base64Image, ImageFormat = "png"};
+            return new GeneratedDesign { Base64Image = base64Image, ImageFormat = "png"};
         }
     }
 }

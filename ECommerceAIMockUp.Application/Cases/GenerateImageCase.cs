@@ -8,6 +8,7 @@ using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.DTOs;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
+using Microsoft.Extensions.Configuration;
 
 namespace ECommerceAIMockUp.Application.Cases
 {
@@ -16,32 +17,75 @@ namespace ECommerceAIMockUp.Application.Cases
         private readonly IPromptValidator _promptValidator;
         private readonly IImageGenerator _imageGenerator;
         private readonly IBaseRepository<AILog> _logRepository;
-        public GenerateImageCase(IPromptValidator promptValidator, IImageGenerator imageGenerator, IBaseRepository<AILog> logRepository)
+        private readonly IImageStorageService _imageStorageService;
+        private readonly IBaseRepository<Design> _designRepository;
+        private readonly IConfiguration _config;
+
+        public GenerateImageCase(IPromptValidator promptValidator, IImageGenerator imageGenerator, IBaseRepository<AILog> logRepository,
+            IImageStorageService imageStorageService, IBaseRepository<Design> designRepository, IConfiguration config)
         {
             _promptValidator = promptValidator;
             _imageGenerator = imageGenerator;
             _logRepository = logRepository;
+            _imageStorageService = imageStorageService;
+            _designRepository = designRepository;
+            _config = config;
         }
 
-        public async Task<Response<Image>> GenerateImageAsync(string prompt, string userId)
+        private async Task AddDesignToDataBaseAsync(string userId, string imageName, int aiLogId)
         {
-            AILog aILog = new AILog { PromptText = prompt, AppUserId = userId };
+            try
+            {
+                Design design = new Design { AppUserId = userId, ImageUrl = imageName };
+                await _designRepository.CreateAsync(design);
+                AILog aiLog = await _logRepository.GetByIdAsunc(aiLogId, true);
+                if (aiLog != null)
+                {
+                    aiLog.DesignId = aiLogId;
+                }
+                await _designRepository.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new Exception("Can not add to database");
+            }
+        }
+
+        public async Task<Response<GeneratedDesign>> GenerateImageAsync(string prompt, string userId)
+        {
+            AILog aiLog = new AILog { PromptText = prompt, AppUserId = userId };
 
             PromptValidationResult promptValidationResult = _promptValidator.ValidatePrompt(prompt);
             if (!promptValidationResult.IsValid)
             {
-                aILog.IsSuccesed = false;
-                await _logRepository.CreateAsync(aILog);
+                aiLog.IsSuccesed = false;
+                await _logRepository.CreateAsync(aiLog);
                 await _logRepository.SaveChangesAsync();
-                return new Response<Image> { IsSucceeded = false, Error = promptValidationResult.Error };
+                return new Response<GeneratedDesign> { IsSucceeded = false, Error = promptValidationResult.Error };
             }
-            Image image = await _imageGenerator.GenerateImageAsync(prompt);
-            aILog.IsSuccesed = true;
-            //Add reference to the design in aiLog
-            await _logRepository.CreateAsync(aILog);
+            byte[] imagebytes = await _imageGenerator.GenerateImageAsync(prompt);
+            if (imagebytes.Length == 0)
+            {
+                aiLog.IsSuccesed = false;
+                await _logRepository.CreateAsync(aiLog);
+                await _logRepository.SaveChangesAsync();
+                return new Response<GeneratedDesign> { IsSucceeded = false, Error = "Sorry could not generate image now, try again later" };
+            }
+            string imageName = await _imageStorageService.SaveAsync(imagebytes, "PNG", "designs");
+            aiLog.IsSuccesed = true;
+            await _logRepository.CreateAsync(aiLog);
             await _logRepository.SaveChangesAsync();
-            return new Response<Image> { Data = image, IsSucceeded = true };
+            string baseUrl = _config["ImageUrlSetting:BaseUrl"]!;
+            string imageUrl = Path.Combine(baseUrl, "designs", imageName);
+            GeneratedDesign generatedDesign = new GeneratedDesign() { ImageURL = imageUrl, PromptId = aiLog.Id};
+            return new Response<GeneratedDesign> { Data = generatedDesign, IsSucceeded = true };
             
+        }
+        public async Task<Response<string>> SaveGeneratedImage(GeneratedDesign image, string userId)
+        {
+            string imageName = new Uri(image.ImageURL).Segments.Last();
+            await AddDesignToDataBaseAsync(userId, imageName, image.PromptId);
+            return new Response<string> { IsSucceeded = true, Data = "Saved" };
         }
 
     }

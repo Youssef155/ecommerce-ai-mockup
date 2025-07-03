@@ -15,12 +15,12 @@ namespace ECommerceAIMockUp.Application.Cases
 {
     public class SaveImageCase
     {
-        private readonly IImageStorageService _imageFileCreator;
+        private readonly IImageStorageService _imageStorageService;
         private readonly IBaseRepository<Design> _designRepository;
 
-        public SaveImageCase(IImageStorageService imageFileCreator, IBaseRepository<Design> designRepository)
+        public SaveImageCase(IImageStorageService imageStorageService, IBaseRepository<Design> designRepository)
         {
-            _imageFileCreator = imageFileCreator;
+            _imageStorageService = imageStorageService;
             _designRepository = designRepository;
         }
         private string GetImageExtensionAsync(byte[] signatureBuffer)
@@ -73,20 +73,10 @@ namespace ECommerceAIMockUp.Application.Cases
             {
                 return new Response<string> { IsSucceeded = false, Error = "Unsupported format, supported format PNG, JPG, JPEG" };
             }
-            string imagePath = await _imageFileCreator.SaveAsync(imageFile, extension, "designs");
+            string imagePath = await _imageStorageService.SaveAsync(imageFile, extension, "designs");
             await AddImageToDataBaseAsync(userId, imagePath);
             return new Response<string> { IsSucceeded = true, Data = "Uploaded" };
         }
 
-        public async Task<Response<string>> SaveGeneratedImage(Image image, string userId)
-        {
-            byte[] imageBytes = Convert.FromBase64String(image.Base64Image);
-            if (imageBytes.Length == 0)
-                return new Response<string> { IsSucceeded = false, Error = "No image data" };
-            string extension = GetImageExtensionAsync(imageBytes.Take(4).ToArray());
-            string imagePath = await _imageFileCreator.SaveAsync(imageBytes, extension, "designs");
-            await AddImageToDataBaseAsync(userId, imagePath);
-            return new Response<string> { IsSucceeded = true, Data = "Saved" };
-        }
     }
 }

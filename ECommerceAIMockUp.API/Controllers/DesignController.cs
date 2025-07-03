@@ -48,12 +48,12 @@ namespace ECommerceAIMockUp.API.Controllers
         }
 
         [HttpPost("SaveGeneratedDesign")]
-        public async Task<IActionResult> SaveGeneratedDesign(Image image)
+        public async Task<IActionResult> SaveGeneratedDesign(GeneratedDesign image)
         {
-            if (string.IsNullOrEmpty(image.Base64Image))
-                return BadRequest(new { Error = "No image data" });
+            if (image == null)
+                return BadRequest(new { Error = "Invalid request body" });
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var respose = await _saveDesignCase.SaveGeneratedImage(image, userId);
+            var respose = await _generateImageCase.SaveGeneratedImage(image, userId);
             if (!respose.IsSucceeded)
                 return BadRequest(respose.Error);
             return Ok(respose.Data);
