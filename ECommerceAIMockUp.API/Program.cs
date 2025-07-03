@@ -41,7 +41,7 @@ builder.Services.Configure<DalleImageOptions>(
 builder.Services.AddScoped<IPromptValidator, PromptValidator>();
 builder.Services.AddScoped<GenerateImageCase>();
 builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
-builder.Services.AddScoped<SaveDesignCase>();
+builder.Services.AddScoped<SaveImageCase>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 builder.Services.AddOpenApi();

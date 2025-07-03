@@ -15,9 +15,9 @@ namespace ECommerceAIMockUp.API.Controllers
     {
 
         private readonly GenerateImageCase _generateImageCase;
-        private readonly SaveDesignCase _saveDesignCase;
+        private readonly SaveImageCase _saveDesignCase;
 
-        public DesignController(GenerateImageCase generateImageCase, SaveDesignCase saveDesignCase)
+        public DesignController(GenerateImageCase generateImageCase, SaveImageCase saveDesignCase)
         {
             _generateImageCase = generateImageCase;
             _saveDesignCase = saveDesignCase;

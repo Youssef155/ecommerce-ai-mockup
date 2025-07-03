@@ -13,12 +13,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace ECommerceAIMockUp.Application.Cases
 {
-    public class SaveDesignCase
+    public class SaveImageCase
     {
         private readonly IImageStorageService _imageFileCreator;
         private readonly IBaseRepository<Design> _designRepository;
 
-        public SaveDesignCase(IImageStorageService imageFileCreator, IBaseRepository<Design> designRepository)
+        public SaveImageCase(IImageStorageService imageFileCreator, IBaseRepository<Design> designRepository)
         {
             _imageFileCreator = imageFileCreator;
             _designRepository = designRepository;
