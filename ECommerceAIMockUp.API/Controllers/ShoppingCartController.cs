@@ -11,14 +11,30 @@ using System.Security.Claims;
 
 namespace ECommerceAIMockUp.API.Controllers
 {
-    [Route("api/{UserId}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles ="user")]
     public class ShoppingCartController(ICartService cartService,UserManager<AppUser> userManager) : ControllerBase
     {
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderItem>>> GetAll([FromRoute] string UserId)
+        private string? UserId
         {
+            get
+            {
+                var Id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (Id == null)
+                {
+                    return null;
+                }
+                return Id;
+            }
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderItem>>> GetAll()
+        {
+            if (UserId == null)
+            {
+                return Unauthorized();
+            }
             var user = await userManager.FindByIdAsync(UserId);
             if (user == null)
             {
@@ -27,22 +43,37 @@ namespace ECommerceAIMockUp.API.Controllers
             var items = await cartService.GetAllItems(user.Id);
             return Ok(items);
         }
-        [HttpGet]
-        public async Task<ActionResult<OrderItem>> GetById([FromRoute] string UserId, [FromRoute] int ItemId)
+
+        [HttpGet("{ItemId}")]
+        public async Task<ActionResult<OrderItem>> GetById([FromRoute] int ItemId)
         {
+            if (UserId == null)
+            {
+                return Unauthorized();
+            }
             var item = await cartService.GetItemById(UserId,ItemId);
             return Ok(item);
         }
         [HttpPost]
         public async Task<IActionResult> AddItem([FromBody] OrderItemDTO orderItem)
         {
-            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (UserId == null)
             {
                 return Unauthorized();
             }
             await cartService.AddItem(orderItem,UserId);
-            return Created();
+            return CreatedAtAction(nameof(GetAll),null);
+        }
+
+        [HttpDelete("{ItemId}")]
+        public async Task<IActionResult> DeleteItem([FromRoute] int ItemId)
+        {
+            if (UserId == null)
+                return Unauthorized();
+            var item = await cartService.GetItemById(UserId, ItemId);
+            await cartService.Remove(UserId, item);
+            return CreatedAtAction(nameof(GetAll), null);
         }
     }
 }
