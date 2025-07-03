@@ -15,10 +15,10 @@ namespace ECommerceAIMockUp.Application.Cases
 {
     public class SaveDesignCase
     {
-        private readonly IImageFileCreator _imageFileCreator;
+        private readonly IImageStorageService _imageFileCreator;
         private readonly IBaseRepository<Design> _designRepository;
 
-        public SaveDesignCase(IImageFileCreator imageFileCreator, IBaseRepository<Design> designRepository)
+        public SaveDesignCase(IImageStorageService imageFileCreator, IBaseRepository<Design> designRepository)
         {
             _imageFileCreator = imageFileCreator;
             _designRepository = designRepository;
@@ -73,7 +73,7 @@ namespace ECommerceAIMockUp.Application.Cases
             {
                 return new Response<string> { IsSucceeded = false, Error = "Unsupported format, supported format PNG, JPG, JPEG" };
             }
-            string imagePath = await _imageFileCreator.CreateImageFileAsync(imageFile, extension);
+            string imagePath = await _imageFileCreator.SaveAsync(imageFile, extension, "designs");
             await AddImageToDataBaseAsync(userId, imagePath);
             return new Response<string> { IsSucceeded = true, Data = "Uploaded" };
         }
@@ -84,7 +84,7 @@ namespace ECommerceAIMockUp.Application.Cases
             if (imageBytes.Length == 0)
                 return new Response<string> { IsSucceeded = false, Error = "No image data" };
             string extension = GetImageExtensionAsync(imageBytes.Take(4).ToArray());
-            string imagePath = await _imageFileCreator.CreateImageFileAsync(imageBytes, extension);
+            string imagePath = await _imageFileCreator.SaveAsync(imageBytes, extension, "designs");
             await AddImageToDataBaseAsync(userId, imagePath);
             return new Response<string> { IsSucceeded = true, Data = "Saved" };
         }
