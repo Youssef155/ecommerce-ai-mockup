@@ -88,5 +88,12 @@ namespace ECommerceAIMockUp.Application.Cases
             return new Response<string> { IsSucceeded = true, Data = "Saved" };
         }
 
+        public async Task<Response<string>> DeleteGeneratedImageFile(GeneratedDesign image)
+        {
+            string imageName = new Uri(image.ImageURL).Segments.Last();
+            await _imageStorageService.DeleteAsync(imageName, "images", "designs");
+            return new Response<string> { IsSucceeded = true, Data = "Done" };
+        }
+
     }
 }
