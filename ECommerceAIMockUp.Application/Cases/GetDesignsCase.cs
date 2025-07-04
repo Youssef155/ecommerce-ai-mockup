@@ -31,7 +31,7 @@ namespace ECommerceAIMockUp.Application.Cases
             {
                 DesignDTO designDTO = new DesignDTO();
                 designDTO.Id = design.Id;
-                designDTO.ImageUrl = $"{imageBaseUrl.TrimEnd('/')}/design/{design.ImageUrl.TrimStart('/')}";
+                designDTO.ImageUrl = $"{imageBaseUrl.TrimEnd('/')}/designs/{design.ImageUrl.TrimStart('/')}";
                 designDTOs.Add(designDTO);
             }
             var respone = new Response<List<DesignDTO>> { IsSucceeded = true, Data = designDTOs };

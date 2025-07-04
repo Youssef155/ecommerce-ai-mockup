@@ -30,10 +30,10 @@ namespace ECommerceAIMockUp.API.Controllers
         public async Task<IActionResult> GetDesigns()
         {
             //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var response = await _getDesignCase.GetDesignsAsync("omar");
+            var response = await _getDesignCase.GetDesignsAsync("11843043-9d54-4a0e-a527-6f4fcc6c2425");
             if (!response.IsSucceeded)
-                return BadRequest(response.Error);
-            return Ok(response);
+                return BadRequest(new { result = response.Error });
+            return Ok(new { result = response.Data });
         }
 
         [HttpPost("Generate")]
@@ -42,7 +42,7 @@ namespace ECommerceAIMockUp.API.Controllers
             if (string.IsNullOrEmpty(request.Prompt))
                 return BadRequest(new {Error = "Prompt is empty"});
             //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var response = await _generateImageCase.GenerateImageAsync(request.Prompt, "omar");
+            var response = await _generateImageCase.GenerateImageAsync(request.Prompt, "11843043-9d54-4a0e-a527-6f4fcc6c2425");
             if (!response.IsSucceeded)
                 return BadRequest(response.Error);
             return Ok(response.Data);
@@ -54,10 +54,10 @@ namespace ECommerceAIMockUp.API.Controllers
             if (imageFile == null || imageFile.Length == 0)
                 return BadRequest(new { Error = "Invalid file" });
             //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var respone = await _saveDesignCase.SaveUploadedImage(imageFile, "omar");
-            if (!respone.IsSucceeded)
-                return BadRequest(respone.Error);
-            return Ok(respone.Data);
+            var response = await _saveDesignCase.SaveUploadedImage(imageFile, "11843043-9d54-4a0e-a527-6f4fcc6c2425");
+            if (!response.IsSucceeded)
+                return BadRequest(new { result = response.Error });
+            return Ok(new { result = response.Data });
         }
 
         [HttpPost("SaveGeneratedDesign")]
@@ -66,10 +66,10 @@ namespace ECommerceAIMockUp.API.Controllers
             if (design == null)
                 return BadRequest(new { Error = "Invalid request body" });
             //var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var respose = await _generateImageCase.SaveGeneratedImage(design, "omar");
-            if (!respose.IsSucceeded)
-                return BadRequest(respose.Error);
-            return Ok(respose.Data);
+            var response = await _generateImageCase.SaveGeneratedImage(design, "11843043-9d54-4a0e-a527-6f4fcc6c2425");
+            if (!response.IsSucceeded)
+                return BadRequest(new { result = response.Data });
+            return Ok(new { result = response.Data });
         }
 
         [HttpPost("DiscardGeneratedDesign")]
@@ -77,10 +77,10 @@ namespace ECommerceAIMockUp.API.Controllers
         {
             if (design == null)
                 return BadRequest(new { Error = "Invalid request body" });
-            var respone = await _generateImageCase.DeleteGeneratedImageFile(design);
-            if (!respone.IsSucceeded)
-                return BadRequest(respone.Error);
-            return Ok(respone.Data);
+            var response = await _generateImageCase.DeleteGeneratedImageFile(design);
+            if (!response.IsSucceeded)
+                return BadRequest(new { result = response.Data });
+            return Ok(new { result = response.Data });
         }
     }
 }

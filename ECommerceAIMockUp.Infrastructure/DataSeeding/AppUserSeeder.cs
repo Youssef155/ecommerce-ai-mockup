@@ -3,29 +3,48 @@ using ECommerceAIMockUp.Domain.ValueObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ECommerceAIMockUp.Infrastructure.Configurations
 {
     public static class AppUserSeeder
     {        
-        public static async Task SeedAppUserAsync(UserManager<AppUser> userManager)
+        public static async Task SeedAppUserAsync(this IServiceProvider service)
         {
-            var user = new AppUser
-            {
-                UserName = "omar@gmail.com",
-                Email = "omar@gmail.com",
-                EmailConfirmed = true,
-                FirstName = "Omar",
-                LastName = "Mehanna"
-            };
+            using var scope = service.CreateScope();
 
-            var result = await userManager.CreateAsync(user, "Omar@123");
-            if (!result.Succeeded)
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            string role = "Customer";
+            string email = "omar@gmail.com";
+
+            if (!await roleManager.RoleExistsAsync(role))
             {
-                throw new Exception("Failed to create  user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                await roleManager.CreateAsync(new IdentityRole(role));
             }
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                 user = new AppUser
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = false,
+                    FirstName = "Omar",
+                    LastName = "Mehanna",
+                    Address = "Camp shezar",
+                    City = "Alexandria"
+                };
 
-            await userManager.AddToRoleAsync(user, "Customer");
+                var result = await userManager.CreateAsync(user, "Omar@123");
+                if (!result.Succeeded)
+                {
+                    throw new Exception("Failed to create user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                }
+
+                await userManager.AddToRoleAsync(user, "Customer");
+            }
             
         }
     }

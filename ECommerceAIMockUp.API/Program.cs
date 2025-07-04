@@ -58,6 +58,7 @@ if (app.Environment.IsDevelopment())
     #region Add Data Seeding For Development Env
     app.Services.CreateCategories();
     app.Services.CreateProducts();
+    await app.Services.SeedAppUserAsync();
     //app.Services.CreateProductDetails();
     #endregion
 }
