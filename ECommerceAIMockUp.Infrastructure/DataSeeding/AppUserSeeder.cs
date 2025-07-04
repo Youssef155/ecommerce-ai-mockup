@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace ECommerceAIMockUp.Infrastructure.Configurations
 {
     public static class AppUserSeeder
-    {
-        public static async Task SeedAppUserAsync(UserManager<IdentityUser> userManager)
+    {        
+        public static async Task SeedAppUserAsync(UserManager<AppUser> userManager)
         {
             var user = new AppUser
             {
@@ -22,7 +22,7 @@ namespace ECommerceAIMockUp.Infrastructure.Configurations
             var result = await userManager.CreateAsync(user, "Omar@123");
             if (!result.Succeeded)
             {
-                throw new Exception("Failed to create admin user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                throw new Exception("Failed to create  user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
             }
 
             await userManager.AddToRoleAsync(user, "Customer");

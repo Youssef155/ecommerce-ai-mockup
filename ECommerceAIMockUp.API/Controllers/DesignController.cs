@@ -3,6 +3,7 @@ using ECommerceAIMockUp.Application.Cases;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Application.DTOs;
 using ECommerceAIMockUp.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,8 +29,8 @@ namespace ECommerceAIMockUp.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetDesigns()
         {
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var response = await _getDesignCase.GetDesignsAsync(userId);
+            //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
+            var response = await _getDesignCase.GetDesignsAsync("omar");
             if (!response.IsSucceeded)
                 return BadRequest(response.Error);
             return Ok(response);
@@ -40,8 +41,8 @@ namespace ECommerceAIMockUp.API.Controllers
         {
             if (string.IsNullOrEmpty(request.Prompt))
                 return BadRequest(new {Error = "Prompt is empty"});
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var response = await _generateImageCase.GenerateImageAsync(request.Prompt, userId);
+            //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
+            var response = await _generateImageCase.GenerateImageAsync(request.Prompt, "omar");
             if (!response.IsSucceeded)
                 return BadRequest(response.Error);
             return Ok(response.Data);
@@ -52,8 +53,8 @@ namespace ECommerceAIMockUp.API.Controllers
         {
             if (imageFile == null || imageFile.Length == 0)
                 return BadRequest(new { Error = "Invalid file" });
-            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var respone = await _saveDesignCase.SaveUploadedImage(imageFile, userId);
+            //string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
+            var respone = await _saveDesignCase.SaveUploadedImage(imageFile, "omar");
             if (!respone.IsSucceeded)
                 return BadRequest(respone.Error);
             return Ok(respone.Data);
@@ -64,8 +65,8 @@ namespace ECommerceAIMockUp.API.Controllers
         {
             if (design == null)
                 return BadRequest(new { Error = "Invalid request body" });
-            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
-            var respose = await _generateImageCase.SaveGeneratedImage(design, userId);
+            //var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
+            var respose = await _generateImageCase.SaveGeneratedImage(design, "omar");
             if (!respose.IsSucceeded)
                 return BadRequest(respose.Error);
             return Ok(respose.Data);

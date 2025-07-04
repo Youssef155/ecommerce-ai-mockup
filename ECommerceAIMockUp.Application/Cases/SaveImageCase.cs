@@ -23,7 +23,7 @@ namespace ECommerceAIMockUp.Application.Cases
             _imageStorageService = imageStorageService;
             _designRepository = designRepository;
         }
-        private string GetImageExtensionAsync(byte[] signatureBuffer)
+        private string GetImageExtension(byte[] signatureBuffer)
         {
             
             string fileSignature = BitConverter.ToString(signatureBuffer).Replace("-","").ToUpperInvariant();
@@ -68,8 +68,8 @@ namespace ECommerceAIMockUp.Application.Cases
         public async Task<Response<string>> SaveUploadedImage(IFormFile imageFile, string userId)
         {
             byte[] signatureBuffer = await GetSignatureBytes(imageFile);
-            string extension = GetImageExtensionAsync(signatureBuffer);
-            if (!string.IsNullOrEmpty(extension))
+            string extension = GetImageExtension(signatureBuffer);
+            if (string.IsNullOrEmpty(extension))
             {
                 return new Response<string> { IsSucceeded = false, Error = "Unsupported format, supported format PNG, JPG, JPEG" };
             }

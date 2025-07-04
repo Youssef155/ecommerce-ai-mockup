@@ -26,7 +26,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
             _openAI = openAI;
         }
 
-        public async Task<GeneratedDesign> GenerateImageAsync(string prompt)
+        public async Task<byte[]> GenerateImageAsync(string prompt)
         {
             var response = await _openAI.Image.CreateImage(new ImageCreateRequest
             {
@@ -40,13 +40,12 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI
                 throw new Exception(response.Error?.Message ?? "DALL-E failed to generate image");
             }
             string base64Image = response.Results.First().B64;
-
-            if (string.IsNullOrEmpty(base64Image))
+            byte[] imageBytes = Convert.FromBase64String(base64Image);
+            if (imageBytes.Length == 0)
             {
                 throw new Exception("DALL-E response content is empty");
             }
-            //string imageUrl = await ImageFileCreator.CreateImageFile(base64Image, "png");
-            return new GeneratedDesign { Base64Image = base64Image, ImageFormat = "png"};
+            return imageBytes;
         }
     }
 }
