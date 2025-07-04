@@ -1,87 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Women's Clothing - Euphoria</title>
-</head>
-<body>
+<!-- Navbar -->
+<div class="navbar">
+  <div class="logo">Ecommerce</div>
+  <div class="nav-links">
+    <a href="#">Men</a>
+    <a href="#">Women</a>
+    <a href="#">Both</a>
+  </div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search" />
+  </div>
+  <div class="icons">
+    <i>♡</i>
+    <i>👤</i>
+    <i>🛒</i>
+  </div>
+</div>
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <div class="logo">Euphoria</div>
-    <div class="nav-links">
-      <a href="#">Shop</a>
-      <a href="#">Men</a>
-      <a href="#">Women</a>
-      <a href="#">Combos</a>
-      <a href="#">Joggers</a>
+<!-- Main Layout -->
+<div class="main">
+  <!-- Sidebar Filters -->
+  <aside class="sidebar">
+    <!-- Gender Filter -->
+    <div class="filter-group">
+      <h3>Gender</h3>
+      <label *ngFor="let gender of ['Male', 'Female', 'Unisex']">
+        <input type="checkbox"
+               [checked]="selectedGenders.includes(gender)"
+               (change)="toggleGender(gender, $event)" />
+        {{ gender }}
+      </label>
     </div>
-    <div class="search-bar">
-      <input type="text" placeholder="Search">
+
+    <!-- Season Filter -->
+    <div class="filter-group">
+      <h3>Season</h3>
+      <label *ngFor="let season of ['Summer', 'Winter', 'Autumn', 'Spring']">
+        <input type="checkbox"
+               [checked]="selectedSeasons.includes(season)"
+               (change)="toggleSeason(season, $event)" />
+        {{ season }}
+      </label>
     </div>
-    <div class="icons">
-      <i>♡</i>
-      <i>👤</i>
-      <i>🛒</i>
+
+    <!-- Category Filter -->
+    <div class="filter-group">
+      <h3>Category</h3>
+      <label *ngFor="let cat of categories">
+        <input type="radio"
+               name="category"
+               [checked]="selectedCategoryId === cat.id"
+               (change)="selectCategory(cat.id)" />
+        {{ cat.name }}
+      </label>
+      <label>
+        <input type="radio"
+               name="category"
+               [checked]="selectedCategoryId === null"
+               (change)="selectCategory(null)" />
+        All
+      </label>
     </div>
+  </aside>
+
+  <!-- Product Section -->
+  <div class="products">
+   <div class="products-grid">
+    <a *ngFor="let product of products"
+      class="product-card"
+      [routerLink]="['/products', product.id]">
+      <img [src]="'https://localhost:7256' + product.image" />
+      <h4>{{ product.name }}</h4>
+      <p>${{ product.price.toFixed(2) }}</p>
+    </a>
   </div>
 
-  <!-- Main Layout -->
-  <div class="main">
-    <!-- Sidebar Filters -->
-    <aside class="sidebar">
-      <div class="filter-group">
-        <h3>Filter</h3>
-        <label><input type="checkbox"> Tops</label>
-        <label><input type="checkbox"> Printed T-shirts</label>
-        <label><input type="checkbox"> Plain T-shirts</label>
-        <label><input type="checkbox"> Kurti</label>
-        <label><input type="checkbox"> Boxers</label>
-        <label><input type="checkbox"> Full sleeve T-shirts</label>
-        <label><input type="checkbox"> Joggers</label>
-        <label><input type="checkbox"> Pajamas</label>
-        <label><input type="checkbox"> Jeans</label>
-      </div>
-      <div class="filter-group">
-        <h3>Price</h3>
-        <label><input type="checkbox"> Under $20</label>
-        <label><input type="checkbox"> $20 - $50</label>
-        <label><input type="checkbox"> Over $50</label>
-      </div>
-    </aside>
 
-    <!-- Product Grid -->
-    <section class="products">
-      <div class="products-header">
-        <h2>Women's Clothing</h2>
-        <div class="tabs">
-          <span>New</span>
-          <span>Recommended</span>
-        </div>
-      </div>
-
-      <div class="products-grid">
-        <div class="product-card">
-          <img src="https://via.placeholder.com/300x300.png?text=Hoodie" alt="Hoodie">
-          <h4>Black Hoodie</h4>
-          <p>$29.99</p>
-        </div>
-
-        <div class="product-card">
-          <img src="https://via.placeholder.com/300x300.png?text=T-shirt" alt="T-shirt">
-          <h4>White T-shirt</h4>
-          <p>$19.99</p>
-        </div>
-
-        <div class="product-card">
-          <img src="https://via.placeholder.com/300x300.png?text=Hoodie" alt="Hoodie">
-          <h4>Pink Hoodie</h4>
-          <p>$34.99</p>
-        </div>
-      </div>
-    </section>
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalpages > 1">
+      <button *ngFor="let page of pageNumbers"
+              [disabled]="page === currentPage"
+              (click)="loadFilteredProducts(page)">
+        {{ page }}
+      </button>
+    </div>
   </div>
+</div>
 
-</body>
-</html>
+
+<!-- Company Info Section -->
+<div class="company-info-section">
+  <h2>About Our Company</h2>
+  <p class="subtitle">Trusted by thousands, powered by passion.</p>
+  <p>
+    At Euphoria, we believe shopping should be as exciting as opening a gift.
+    That’s why we curate our collection with attention to detail, quality, and style.
+    From casual basics to standout statement pieces, we aim to be your one-stop destination for everyday fashion.
+  </p>
+  <p>
+    Since our launch, we've committed ourselves to offering the best online shopping experience—from fast delivery and easy returns to exceptional customer service.
+    Whether you're shopping for a special occasion or just updating your wardrobe, we’re here to make it effortless and enjoyable.
+  </p>
+  <p>
+    Join our growing community of fashion-forward shoppers and experience why Euphoria is more than just an online store—it's a lifestyle.
+  </p>
+</div>

@@ -1,5 +1,7 @@
 ﻿using ECommerceAIMockUp.Application.DTOs.Product;
 using ECommerceAIMockUp.Application.Services.Interfaces.Services;
+using ECommerceAIMockUp.Domain.ValueObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 namespace ECommerceAIMockUp.API.Controllers
@@ -27,16 +29,42 @@ namespace ECommerceAIMockUp.API.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("Category/Products")]
-        public async Task<IActionResult> CategoryProduct(int categoryId, int pageNumber = 1, int pageSize = 10)
+        [HttpGet("Filter/products")]
+        public async Task<IActionResult> GetFilteredProducts([FromQuery] string? seasons, [FromQuery] string? gender, [FromQuery] int? categoryId,
+                 int pageNumber = 1,
+                 int pageSize = 10)
         {
-            var result = await _productService.GetProductCategoryFilterService(categoryId, pageNumber, pageSize);
+            List<Season> parsedSeasons = new();
+            List<Gender>? parsedGender = null;
 
-            if (result.StatusCode == HttpStatusCode.OK)
-                return Ok(result);
+            if (!string.IsNullOrWhiteSpace(seasons))
+            {
+                parsedSeasons = seasons
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .Select(s => Enum.TryParse<Season>(s, true, out var result) ? (Season?)result : null)
+                    .Where(s => s.HasValue)
+                    .Select(s => s.Value)
+                    .ToList();
+            }
 
-            return BadRequest(result);
+            if (!string.IsNullOrWhiteSpace(gender))
+            {
+                parsedSeasons = gender
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.Trim())
+                    .Select(s => Enum.TryParse<Season>(s, true, out var result) ? (Season?)result : null)
+                    .Where(s => s.HasValue)
+                    .Select(s => s.Value)
+                    .ToList();
+            }
+
+
+            var result = await _productService.GetProductCategoryFilterService(parsedGender, parsedSeasons, categoryId, pageNumber, pageSize);
+            return Ok(result);
         }
+
+
 
         [HttpPost("Product")]
         public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto dto)

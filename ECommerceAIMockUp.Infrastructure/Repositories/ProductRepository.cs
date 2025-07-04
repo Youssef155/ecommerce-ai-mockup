@@ -1,6 +1,7 @@
 ﻿using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
+using ECommerceAIMockUp.Domain.ValueObjects;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using ECommerceAIMockUp.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
 
         public async Task<PaginatedResult<Product>> GetAllProductsAysnc(int pageNumber, int pageSize)
         {
-            var products = GetAllQueryable(tracking: false, includes: new Expression<Func<Product, object>>[] { p => p.Category });
+            var products = GetAllQueryable(tracking: false, includes: new Expression<Func<Product, object>>[] { p => p.Category, p => p.ProductDetails });
 
             var OrderedProducts = products.OrderBy(p => p.CreatedAt);
 
@@ -30,14 +31,29 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             return paginatedResult;
         }
 
-        public async Task<PaginatedResult<Product>> GetFilterProductCategory(int categoryId, int pageNumber, int pageSize)
+        public async Task<PaginatedResult<Product>> GetFilterProductCategory(List<Gender>? gender, List<Season>? season, int? categoryId, int pageNumber, int pageSize)
         {
-            var products = GetAllQueryable(tracking: false, includes: new Expression<Func<Product, object>>[] { p => p.Category });
+            var products = GetAllQueryable(tracking: false, includes: new Expression<Func<Product, object>>[] { p => p.Category, p => p.ProductDetails });
 
-            var filteredProducts = products.Where(p => p.CategoryId == categoryId)
-                                           .OrderBy(p => p.CreatedAt);
 
-            var paginatedResult = await filteredProducts.ToPaginatedListAsync(pageNumber, pageSize);
+            if (gender != null && gender.Any())
+            {
+                products = products.Where(p => gender.Contains(p.Gender));
+            }
+
+            if (season != null && season.Any())
+            {
+                products = products.Where(p => season.Contains(p.Season));
+            }
+
+
+            if (categoryId.HasValue)
+            {
+                products = products.Where(p => p.CategoryId == categoryId);
+
+            }
+
+            var paginatedResult = await products.ToPaginatedListAsync(pageNumber, pageSize);
 
             return paginatedResult;
         }
@@ -48,7 +64,8 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             product.ProductDetails = new List<ProductDetails> { details };
             await CreateAsync(product);
             return product;
-
         }
+
+
     }
 }
