@@ -1,13 +1,6 @@
 ﻿using ECommerceAIMockUp.Domain.Entities;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerceAIMockUp.Infrastructure.Configurations;
 
@@ -22,7 +15,11 @@ public static class CategorySeedings
         {
             context.Categories.AddRange(
                 new Category { Name = "Hoodie", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) },
-                new Category { Name = "T-Shirt", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) }
+                new Category { Name = "T-Shirt", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) },
+                new Category { Name = "Shoes", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) },
+                new Category { Name = "Jacket", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) },
+                new Category { Name = "Jeans", CreatedAt = new DateTime(2025, 3, 1), UpdatedAt = new DateTime(2025, 5, 1) }
+
             );
 
             context.SaveChanges();
