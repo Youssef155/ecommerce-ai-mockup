@@ -2,7 +2,7 @@ using System.Net.Http.Headers;
 using Betalgo.Ranul.OpenAI.Extensions;
 using ECommerceAIMockUp.API;
 using ECommerceAIMockUp.Application;
-using ECommerceAIMockUp.Application.Cases;
+using ECommerceAIMockUp.Application.Cases.DesignCases;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Infrastructure;
@@ -27,6 +27,9 @@ builder.Services.AddOpenAIService(settings =>
     settings.ApiKey = builder.Configuration["OpenAI:ApiKey"];
 });
 
+builder.Services.Configure<DalleImageOptions>(
+    builder.Configuration.GetSection("OpenAI:ImageOptions"));
+
 builder.Services.AddHttpClient<IImageGenerator, StabilityAIImageGenerationService>(client =>
 {
     client.BaseAddress = new Uri("https://api.stability.ai/v2beta/stable-image/generate/ultra");
@@ -35,16 +38,23 @@ builder.Services.AddHttpClient<IImageGenerator, StabilityAIImageGenerationServic
     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("image/*"));
 });
 
-builder.Services.Configure<DalleImageOptions>(
-    builder.Configuration.GetSection("OpenAI:ImageOptions"));
-
+#region Add Generate Design Infrastructure Serives DI
 builder.Services.AddScoped<IPromptValidator, PromptValidator>();
-builder.Services.AddScoped<GenerateImageCase>();
 builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
-builder.Services.AddScoped<SaveImageCase>();
+#endregion
+
+#region Add Repositories DI
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IDesignRepository, DesignRepository>();
+#endregion
+
+#region Add DesignCases DI
+builder.Services.AddScoped<GenerateImageCase>();
+builder.Services.AddScoped<SaveImageCase>();
 builder.Services.AddScoped<GetDesignsCase>();
+#endregion
+
+
 
 builder.Services.AddOpenApi();
 

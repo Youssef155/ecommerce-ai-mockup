@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Application.Contracts.Repositories;
-using ECommerceAIMockUp.Application.DTOs;
+using ECommerceAIMockUp.Application.DTOs.Design;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 
-namespace ECommerceAIMockUp.Application.Cases
+namespace ECommerceAIMockUp.Application.Cases.DesignCases
 {
     public class GenerateImageCase
     {
@@ -37,11 +37,12 @@ namespace ECommerceAIMockUp.Application.Cases
             try
             {
                 Design design = new Design { AppUserId = userId, ImageUrl = imageName };
-                await _designRepository.CreateAsync(design);
+                design = await _designRepository.CreateAsync(design);
+                await _designRepository.SaveChangesAsync();
                 AILog aiLog = await _logRepository.GetByIdAsunc(aiLogId, true);
                 if (aiLog != null)
                 {
-                    aiLog.DesignId = aiLogId;
+                    aiLog.DesignId = design.Id;
                 }
                 await _designRepository.SaveChangesAsync();
             }
@@ -63,34 +64,35 @@ namespace ECommerceAIMockUp.Application.Cases
                 await _logRepository.SaveChangesAsync();
                 return new Response<GeneratedDesign> { IsSucceeded = false, Error = promptValidationResult.Error };
             }
-            byte[] imagebytes = await _imageGenerator.GenerateImageAsync(prompt);
-            if (imagebytes.Length == 0)
-            {
-                aiLog.IsSuccesed = false;
-                await _logRepository.CreateAsync(aiLog);
-                await _logRepository.SaveChangesAsync();
-                return new Response<GeneratedDesign> { IsSucceeded = false, Error = "Sorry could not generate image now, try again later" };
-            }
-            string imageName = await _imageStorageService.SaveAsync(imagebytes, "PNG", "designs");
+            //byte[] imagebytes = await _imageGenerator.GenerateImageAsync(prompt);
+            //if (imagebytes.Length == 0)
+            //{
+            //    aiLog.IsSuccesed = false;
+            //    await _logRepository.CreateAsync(aiLog);
+            //    await _logRepository.SaveChangesAsync();
+            //    return new Response<GeneratedDesign> { IsSucceeded = false, Error = "Sorry could not generate image now, try again later" };
+            //}
+            //string imageName = await _imageStorageService.SaveAsync(imagebytes, "PNG", "designs");
             aiLog.IsSuccesed = true;
             await _logRepository.CreateAsync(aiLog);
             await _logRepository.SaveChangesAsync();
             string baseUrl = _config["ImageUrlSetting:BaseUrl"]!;
-            string imageUrl = $"{baseUrl.TrimEnd('/')}/designs/{imageName.TrimStart('/')}";
+            //string imageUrl = $"{baseUrl.TrimEnd('/')}/designs/{imageName.TrimStart('/')}";
+            string imageUrl = $"{baseUrl.TrimEnd('/')}/designs/image_31076f51-3f3e-44e7-8d04-a571eecb2e41 - Copy.png";
             GeneratedDesign generatedDesign = new GeneratedDesign() { ImageURL = imageUrl, PromptId = aiLog.Id};
             return new Response<GeneratedDesign> { Data = generatedDesign, IsSucceeded = true };
             
         }
         public async Task<Response<string>> SaveGeneratedImage(GeneratedDesign image, string userId)
         {
-            string imageName = new Uri(image.ImageURL).Segments.Last();
+            string imageName = Uri.UnescapeDataString(new Uri(image.ImageURL).Segments.Last());
             await AddDesignToDataBaseAsync(userId, imageName, image.PromptId);
             return new Response<string> { IsSucceeded = true, Data = "Saved" };
         }
 
         public async Task<Response<string>> DeleteGeneratedImageFile(GeneratedDesign image)
         {
-            string imageName = new Uri(image.ImageURL).Segments.Last();
+            string imageName = Uri.UnescapeDataString(new Uri(image.ImageURL).Segments.Last());
             await _imageStorageService.DeleteAsync(imageName, "images", "designs");
             return new Response<string> { IsSucceeded = true, Data = "Done" };
         }

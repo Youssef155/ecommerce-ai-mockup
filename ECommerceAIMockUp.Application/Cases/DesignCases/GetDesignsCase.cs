@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ECommerceAIMockUp.Application.Contracts.Repositories;
-using ECommerceAIMockUp.Application.DTOs;
+using ECommerceAIMockUp.Application.DTOs.Design;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 
-namespace ECommerceAIMockUp.Application.Cases
+namespace ECommerceAIMockUp.Application.Cases.DesignCases
 {
     public class GetDesignsCase
     {

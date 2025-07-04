@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
-using ECommerceAIMockUp.Application.DTOs;
+using ECommerceAIMockUp.Application.DTOs.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -29,7 +29,7 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
         public PromptValidationResult ValidatePrompt(string prompt)
         {
             prompt = Regex.Replace(prompt.Trim(), @"\s+", " ");
-            if (prompt.Length < _minLength)
+            if (Regex.Replace(prompt, " ", "").Length < _minLength)
                 return new PromptValidationResult{ IsValid = false, Error = $"Prompt must be more that {_minLength} characters" };
      
             if (prompt.Length > _maxLength)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerceAIMockUp.Application.DTOs
+namespace ECommerceAIMockUp.Application.DTOs.Design
 {
     public class GeneratedDesign
     {

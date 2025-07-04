@@ -76,11 +76,12 @@ namespace ECommerceAIMockUp.Infrastructure.Services.ImageGeneration
 
         public Task DeleteAsync(string fileName, params string[] folders)
         {
-            string filePath = Path.Combine(_env.WebRootPath, fileName);
+            string filePath = _env.WebRootPath;
             foreach (var folder in folders)
             {
                 filePath = Path.Combine(filePath, folder);
             }
+            filePath = Path.Combine(filePath, fileName);
             if (File.Exists(filePath))
             {
                 try

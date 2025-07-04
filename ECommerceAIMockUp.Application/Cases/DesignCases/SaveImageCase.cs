@@ -6,12 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Application.Contracts.Repositories;
-using ECommerceAIMockUp.Application.DTOs;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
-namespace ECommerceAIMockUp.Application.Cases
+namespace ECommerceAIMockUp.Application.Cases.DesignCases
 {
     public class SaveImageCase
     {
