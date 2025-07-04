@@ -12,6 +12,7 @@ namespace ECommerceAIMockUp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DesignController : ControllerBase
     {
 
