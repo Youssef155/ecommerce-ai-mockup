@@ -6,6 +6,7 @@ using ECommerceAIMockUp.Application.Services.Interfaces.FileServices;
 using ECommerceAIMockUp.Application.Services.Interfaces.Services;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
+using ECommerceAIMockUp.Domain.ValueObjects;
 using System.Net;
 
 namespace ECommerceAIMockUp.Application.Services.Implementations
@@ -51,20 +52,29 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
             return response;
         }
 
-        public async Task<Response<PaginatedResult<GetAllProductsDto>>> GetProductCategoryFilterService(int categoryId, int pageNumber = 1, int pageSize = 10)
+        public async Task<Response<PaginatedResult<GetAllProductsDto>>> GetProductCategoryFilterService(List<Gender>? gender, List<Season>? seasons, int? categoryId, int pageNumber = 1, int pageSize = 10)
         {
-            var cachedKey = $"product_page: {pageNumber} page_size: {pageSize} categoryid: {categoryId}";
+            var genderKey = (gender != null && gender.Any()) ? string.Join("-", gender.Select(s => s.ToString().ToLower())) : "any";
+
+            var seasonsKey = (seasons != null && seasons.Any())
+                ? string.Join("_", seasons.Select(s => s.ToString().ToLower()))
+                : "any";
+
+            var categoryKey = categoryId.HasValue ? categoryId.Value.ToString() : "any";
+
+
+            var cachedKey = $"product_category:{categoryKey} product_gender:{genderKey} product_season:{seasonsKey} product_page:{pageNumber} page_size:{pageSize}";
             var cachedData = _redisService.GetData<PaginatedResult<GetAllProductsDto>>(cachedKey);
 
             if (cachedData != null)
                 return new Response<PaginatedResult<GetAllProductsDto>>(data: cachedData, HttpStatusCode.OK, isSucceeded: true);
 
-            var productCategory = await _productRepository.GetFilterProductCategory(categoryId, pageNumber, pageSize);
+            var filteredProducts = await _productRepository.GetFilterProductCategory(gender, seasons, categoryId, pageNumber, pageSize);
 
-            var mappedData = _Mapper.Map<List<GetAllProductsDto>>(productCategory.Data);
+            var mappedData = _Mapper.Map<List<GetAllProductsDto>>(filteredProducts.Data);
 
-            var paginatedDto = PaginatedResult<GetAllProductsDto>.Success(mappedData, productCategory.TotalCount,
-                productCategory.CurrentPage, productCategory.PageSize);
+            var paginatedDto = PaginatedResult<GetAllProductsDto>.Success(mappedData, filteredProducts.TotalCount,
+                filteredProducts.CurrentPage, filteredProducts.PageSize);
 
             var response = new Response<PaginatedResult<GetAllProductsDto>>(paginatedDto, HttpStatusCode.OK, true);
 

@@ -31,7 +31,11 @@ public static class ProductSeeding
                     Price = 29.99,
                     CategoryId = tshirtCategory.Id,
                     CreatedAt = new DateTime(2025, 6, 1),
-                    UpdatedAt = new DateTime(2025, 6, 8)
+                    UpdatedAt = new DateTime(2025, 6, 8),
+                    ProductDetails = new List<ProductDetails>
+                    {
+                        new ProductDetails{Color = "white", Size = "M", Amount = 50, ImgUrl = "/uploads/products/white-tshirt-m.jpg" }
+                    }
                 },
                 new Product
                 {
@@ -42,7 +46,11 @@ public static class ProductSeeding
                     Price = 39.99,
                     CategoryId = hoodieCategory.Id,
                     CreatedAt = new DateTime(2025, 6, 1),
-                    UpdatedAt = new DateTime(2025, 6, 8)
+                    UpdatedAt = new DateTime(2025, 6, 8),
+                    ProductDetails = new List<ProductDetails>
+                    {
+                        new ProductDetails { Color = "Black", Size = "M", Amount = 25, ImgUrl = "/uploads/products/black-hoodie.jpg" }
+                    }
                 },
                 new Product
                 {
@@ -56,7 +64,7 @@ public static class ProductSeeding
                     UpdatedAt = new DateTime(2025, 6, 8),
                     ProductDetails = new List<ProductDetails>
                     {
-                        new ProductDetails { Color = "White", Size = "M", Amount = 50, ImgUrl = "/images/products/white-tshirt-m.jpg" },
+                        new ProductDetails { Color = "White", Size = "M", Amount = 50, ImgUrl = "/uploads/products/white-tshirt-m.jpg" },
                     }
                 },
                 new Product
@@ -119,7 +127,6 @@ public static class ProductSeeding
                         new ProductDetails { Color = "White", Size = "9", Amount = 45, ImgUrl = "/uploads/products/sneakers-9.jpg"},
                     }
                 }
-
             );
 
             context.SaveChanges();

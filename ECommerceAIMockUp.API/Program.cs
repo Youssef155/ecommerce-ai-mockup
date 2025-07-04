@@ -14,11 +14,16 @@ using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration;
 using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI;
 using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIServices;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(option =>
+    {
+        option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddPresentationServices()
     .AddApplicationServices(builder.Configuration)
