@@ -16,11 +16,23 @@ namespace ECommerceAIMockUp.API.Controllers
 
         private readonly GenerateImageCase _generateImageCase;
         private readonly SaveImageCase _saveDesignCase;
+        private readonly GetDesignsCase _getDesignCase;
 
-        public DesignController(GenerateImageCase generateImageCase, SaveImageCase saveDesignCase)
+        public DesignController(GenerateImageCase generateImageCase, SaveImageCase saveDesignCase, GetDesignsCase getDesignCase)
         {
             _generateImageCase = generateImageCase;
             _saveDesignCase = saveDesignCase;
+            _getDesignCase = getDesignCase;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetDesigns()
+        {
+            string userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value!;
+            var response = await _getDesignCase.GetDesignsAsync(userId);
+            if (!response.IsSucceeded)
+                return BadRequest(response.Error);
+            return Ok(response);
         }
 
         [HttpPost("Generate")]

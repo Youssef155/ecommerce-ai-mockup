@@ -43,6 +43,8 @@ builder.Services.AddScoped<GenerateImageCase>();
 builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
 builder.Services.AddScoped<SaveImageCase>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddScoped<IDesignRepository, DesignRepository>();
+builder.Services.AddScoped<GetDesignsCase>();
 
 builder.Services.AddOpenApi();
 
@@ -63,6 +65,8 @@ if (app.Environment.IsDevelopment())
 app.UseClientCors();
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 

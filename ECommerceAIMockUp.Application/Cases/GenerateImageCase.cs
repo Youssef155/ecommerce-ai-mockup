@@ -76,7 +76,7 @@ namespace ECommerceAIMockUp.Application.Cases
             await _logRepository.CreateAsync(aiLog);
             await _logRepository.SaveChangesAsync();
             string baseUrl = _config["ImageUrlSetting:BaseUrl"]!;
-            string imageUrl = Path.Combine(baseUrl, "designs", imageName);
+            string imageUrl = $"{baseUrl.TrimEnd('/')}/designs/{imageName.TrimStart('/')}";
             GeneratedDesign generatedDesign = new GeneratedDesign() { ImageURL = imageUrl, PromptId = aiLog.Id};
             return new Response<GeneratedDesign> { Data = generatedDesign, IsSucceeded = true };
             
