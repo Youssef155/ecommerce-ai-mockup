@@ -64,21 +64,20 @@ namespace ECommerceAIMockUp.Application.Cases.DesignCases
                 await _logRepository.SaveChangesAsync();
                 return new Response<GeneratedDesign> { IsSucceeded = false, Error = promptValidationResult.Error };
             }
-            //byte[] imagebytes = await _imageGenerator.GenerateImageAsync(prompt);
-            //if (imagebytes.Length == 0)
-            //{
-            //    aiLog.IsSuccesed = false;
-            //    await _logRepository.CreateAsync(aiLog);
-            //    await _logRepository.SaveChangesAsync();
-            //    return new Response<GeneratedDesign> { IsSucceeded = false, Error = "Sorry could not generate image now, try again later" };
-            //}
-            //string imageName = await _imageStorageService.SaveAsync(imagebytes, "PNG", "designs");
+            byte[] imagebytes = await _imageGenerator.GenerateImageAsync(prompt);
+            if (imagebytes.Length == 0)
+            {
+                aiLog.IsSuccesed = false;
+                await _logRepository.CreateAsync(aiLog);
+                await _logRepository.SaveChangesAsync();
+                return new Response<GeneratedDesign> { IsSucceeded = false, Error = "Sorry could not generate image now, try again later" };
+            }
+            string imageName = await _imageStorageService.SaveAsync(imagebytes, "PNG", "designs");
             aiLog.IsSuccesed = true;
             await _logRepository.CreateAsync(aiLog);
             await _logRepository.SaveChangesAsync();
             string baseUrl = _config["ImageUrlSetting:BaseUrl"]!;
-            //string imageUrl = $"{baseUrl.TrimEnd('/')}/designs/{imageName.TrimStart('/')}";
-            string imageUrl = $"{baseUrl.TrimEnd('/')}/designs/image_31076f51-3f3e-44e7-8d04-a571eecb2e41 - Copy.png";
+            string imageUrl = $"{baseUrl.TrimEnd('/')}/designs/{imageName.TrimStart('/')}";
             GeneratedDesign generatedDesign = new GeneratedDesign() { ImageURL = imageUrl, PromptId = aiLog.Id};
             return new Response<GeneratedDesign> { Data = generatedDesign, IsSucceeded = true };
             
