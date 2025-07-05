@@ -75,7 +75,9 @@ namespace ECommerceAIMockUp.Infrastructure.Services.Authentication
                 UserName = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = model.PhoneNumber,
+                City = model.City,
+                Address = model.Street
             };
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
