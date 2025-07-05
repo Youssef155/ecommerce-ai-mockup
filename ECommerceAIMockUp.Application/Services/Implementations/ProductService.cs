@@ -3,7 +3,7 @@ using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.DTOs.Product;
 using ECommerceAIMockUp.Application.Services.Interfaces.Caching;
 using ECommerceAIMockUp.Application.Services.Interfaces.FileServices;
-using ECommerceAIMockUp.Application.Services.Interfaces.Services;
+using ECommerceAIMockUp.Application.Services.Interfaces;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
 using ECommerceAIMockUp.Domain.ValueObjects;

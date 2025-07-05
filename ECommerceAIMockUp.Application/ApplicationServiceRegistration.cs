@@ -1,5 +1,5 @@
 ﻿using ECommerceAIMockUp.Application.Services.Implementations;
-using ECommerceAIMockUp.Application.Services.Interfaces.Services;
+using ECommerceAIMockUp.Application.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -13,6 +13,7 @@ namespace ECommerceAIMockUp.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IProductService, ProductService>();
+
             return services;
         }
     }
