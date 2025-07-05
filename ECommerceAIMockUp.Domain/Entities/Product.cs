@@ -1,5 +1,5 @@
 ﻿using ECommerceAIMockUp.Domain.Common;
-using ECommerceAIMockUp.Domain.ValueObjects;
+using ECommerceAIMockUp.Domain.Enums;
 
 namespace ECommerceAIMockUp.Domain.Entities;
 

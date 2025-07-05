@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ECommerceAIMockUp.Domain.ValueObjects;
+using ECommerceAIMockUp.Domain.Enums;
 
 namespace ECommerceAIMockUp.Application.Contracts.Repositories
 {

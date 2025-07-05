@@ -6,8 +6,8 @@ using ECommerceAIMockUp.Application.Services.Interfaces.FileServices;
 using ECommerceAIMockUp.Application.Services.Interfaces;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
-using ECommerceAIMockUp.Domain.ValueObjects;
 using System.Net;
+using ECommerceAIMockUp.Domain.Enums;
 
 namespace ECommerceAIMockUp.Application.Services.Implementations
 {

@@ -1,4 +1,4 @@
-﻿namespace ECommerceAIMockUp.Domain.ValueObjects;
+﻿namespace ECommerceAIMockUp.Domain.Enums;
 
 public enum OrderStatus
 {
