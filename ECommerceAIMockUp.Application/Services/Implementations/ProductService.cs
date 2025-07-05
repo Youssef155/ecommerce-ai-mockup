@@ -70,6 +70,9 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
+                ImgUrl = product.ProductDetails
+                    .Select(d => d.ImgUrl)
+                    .FirstOrDefault(img => !string.IsNullOrEmpty(img)),
                 AvailableSizes = sizes
             };
         }
