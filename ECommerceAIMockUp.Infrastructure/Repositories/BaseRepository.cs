@@ -35,6 +35,7 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
         public async Task<T> CreateAsync(T entity)
         {
             await _context.AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -56,6 +57,19 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
                 query = AddIncludes(includes);
 
             return await query.ToListAsync();
+        }
+
+        public IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            if (includes != null && includes.Any())
+                query = AddIncludes(includes);
+
+            return query;
         }
 
         public async Task<T> GetByIdAsunc(int id, bool tracking, params Expression<Func<T, object>>[] includes)

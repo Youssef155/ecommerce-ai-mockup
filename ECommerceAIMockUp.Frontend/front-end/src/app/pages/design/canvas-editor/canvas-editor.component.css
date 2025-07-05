@@ -1,0 +1,30 @@
+.canvas-container {
+  position: relative;
+  width: 400px;
+  height: 500px;
+  margin: auto;
+}
+
+.tshirt {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.fabric-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 500px;
+  z-index: 10;
+}
+
+button {
+  margin-top: 15px;
+  display: block;
+  position: relative;
+  left: 47%;
+}

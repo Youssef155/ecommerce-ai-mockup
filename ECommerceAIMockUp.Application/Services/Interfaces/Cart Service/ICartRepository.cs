@@ -4,11 +4,14 @@ using ECommerceAIMockUp.Domain.Entities;
 
 namespace ECommerceAIMockUp.Application.Services.Interfaces.Cart_Service;
 
-public interface ICartService
+public interface ICartRepository
 {
-    Task<IEnumerable<OrderItem>> GetAllItems(string UserId);
+    Task<IEnumerable<OrderItemDTO>> GetAllItems(string UserId);
     Task<OrderItem> GetItemById(string Id, int orderId);
-    Task AddItem (OrderItemDTO item,string userId);
+    Task AddItem (OrderDTO item,string userId);
     Task Remove (string userId, OrderItem orderItem);
     Task RemoveRange (string userId, List<OrderItem> items);
+    Task UpdateQuantity(string userId,int ItemId, int quantity);
+    Task AddOrderItem(OrderItemDTO item);
+
 }

@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="MappingProfiles\" />
+    <Folder Include="Services\Implementations\" />
   </ItemGroup>
 
 </Project>

@@ -5,18 +5,30 @@ using ECommerceAIMockUp.Application.Services.Interfaces.Cart_Service;
 using ECommerceAIMockUp.Domain;
 using ECommerceAIMockUp.Domain.Entities;
 using ECommerceAIMockUp.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace ECommerceAIMockUp.Application.Services.Implementations;
+namespace ECommerceAIMockUp.Infrastructure.Services;
 
-public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository<OrderItem> orderItemRepo, IMapper mapper) : ICartService
+public class CartRepository(IBaseRepository<Order> orderRepository, IBaseRepository<OrderItem> orderItemRepo, IMapper mapper) : ICartRepository
 {
     private async Task<Order?> GetCartAsync (string userId)
     {
-        var cart = (await orderRepository.GetAllAsync(tracking: true, o => o.OrderItems,
-            o => o.OrderItems.Select(i=>i.DesignDetails),
-            o => o.OrderItems.Select(i=>i.ProductDetails)))
-           .FirstOrDefault(order => order.AppUserId == userId && order.Status == OrderStatus.CartItem);
+        //var cart = orderRepository.GetAllQueryable(tracking: true)
+        //    .Include(o => o.OrderItems)
+        //        .ThenInclude(i => i.DesignDetails)
+        //    .Include(o => o.OrderItems)
+        //        .ThenInclude(i => i.ProductDetails)
+        //    .FirstOrDefault(order => order.AppUserId == userId && order.Status == OrderStatus.CartItem);
+
+        var cart = await orderRepository.GetAllQueryable(tracking: true)
+    .Where(o => o.AppUserId == userId && o.Status == OrderStatus.CartItem)
+    .Include(o => o.OrderItems)
+        .ThenInclude(i => i.DesignDetails)
+    .Include(o => o.OrderItems)
+        .ThenInclude(i => i.ProductDetails)
+    .FirstOrDefaultAsync();
+
 
         //if (cart == null) //the user has no cart yet
         //{
@@ -25,19 +37,28 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
         return cart;
     } //private method to use a repeated logic
         
-    public async Task<IEnumerable<OrderItem>> GetAllItems(string UserId)
+    public async Task<IEnumerable<OrderItemDTO>> GetAllItems(string UserId)
     {
         var cart = await GetCartAsync (UserId);
         if (cart == null)
             throw new Exception("Your Cart is empty, Start adding items to display them in the cart");
 
-        var items = cart.OrderItems.ToList();
+        var itemsDto = cart.OrderItems.Select(i => new OrderItemDTO
+        {
+            DesignDetailsId = i.DesignDetailsId,
+            ProductDetailsId = i.ProductDetailsId,
+            Quantity = i.Quantity,
+            OrderId = i.OrderId,
+            OrderTotal = cart.OrderTotal
+
+        }).ToList();
+
+        return itemsDto;
         //var items = await orderItemRepo.GetAllAsync(tracking: true, o => o.ProductDetails, o => o.DesignDetails);
 
         //if (items == null)
         //    throw new Exception("The Cart is Empty");
 
-        return items;
     }
 
     public async Task<OrderItem> GetItemById(string UserId, int itemId)
@@ -54,7 +75,7 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
         return item;
     }
 
-    public async Task AddItem(OrderItemDTO item,string UserId)
+    public async Task AddItem(OrderDTO item,string UserId)
     {
         var cart = await GetCartAsync(UserId);
         if(cart == null)
@@ -64,7 +85,15 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
                 Status = OrderStatus.CartItem,
                 OrderItems = new List<OrderItem>(),
                 OrderDate = DateTime.Now,
-                AppUserId = UserId
+                AppUserId = UserId,
+                PhoneNumber = item.PhoneNumber,
+                ShippingAddress = new Address()
+                {
+                    City = item.City,
+                    Governorate = item.Governorate,
+                    Street = item.Street,
+                    Zip = item.Zip
+                }
             };
             await orderRepository.CreateAsync(cart);
 
@@ -110,5 +139,29 @@ public class CartService(IBaseRepository<Order> orderRepository, IBaseRepository
             Orderitems.Remove(item);
             await orderItemRepo.DeleteAsync(item.Id);
         }
+    }
+
+    public async Task UpdateQuantity(string userId, int ItemId, int quantity)
+    {
+        var cart = await GetCartAsync(userId);
+        if (cart == null)
+            throw new Exception("User has no cart");
+        var item= await GetItemById(userId, ItemId);
+        item.Quantity = quantity;
+        cart.OrderDate = DateTime.Now;
+        //save changes
+    }
+
+    public async Task AddOrderItem(OrderItemDTO item)
+    {
+        var orderItem = new OrderItem()
+        {
+            DesignDetailsId = item.DesignDetailsId,
+            Quantity = item.Quantity,
+            ProductDetailsId = item.ProductDetailsId,
+            OrderId = item.OrderId,
+        };
+
+        await orderItemRepo.CreateAsync(orderItem);
     }
 }

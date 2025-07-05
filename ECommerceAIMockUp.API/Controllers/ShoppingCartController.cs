@@ -13,8 +13,8 @@ namespace ECommerceAIMockUp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="user")]
-    public class ShoppingCartController(ICartService cartService,UserManager<AppUser> userManager) : ControllerBase
+    [Authorize]
+    public class ShoppingCartController(ICartRepository cartService,UserManager<AppUser> userManager) : ControllerBase
     {
         private string? UserId
         {
@@ -55,15 +55,26 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(item);
         }
         [HttpPost]
-        public async Task<IActionResult> AddItem([FromBody] OrderItemDTO orderItem)
+        public async Task<IActionResult> AddOrder([FromBody] OrderDTO order)
         {
             //var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (UserId == null)
             {
                 return Unauthorized();
             }
-            await cartService.AddItem(orderItem,UserId);
+            await cartService.AddItem(order,UserId);
             return CreatedAtAction(nameof(GetAll),null);
+        }
+        [HttpPost("OrderItem")]
+        public async Task<IActionResult> AddOrderItem([FromBody] OrderItemDTO order)
+        {
+            //var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (UserId == null)
+            {
+                return Unauthorized();
+            }
+            await cartService.AddOrderItem(order);
+            return CreatedAtAction(nameof(GetAll), null);
         }
 
         [HttpDelete("{ItemId}")]
