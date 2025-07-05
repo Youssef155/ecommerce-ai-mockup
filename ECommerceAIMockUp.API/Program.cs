@@ -4,15 +4,22 @@ using ECommerceAIMockUp.Application.Services.Implementations;
 using ECommerceAIMockUp.Application.Services.Interfaces;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(option =>
+    {
+        option.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddPresentationServices()
     .AddApplicationServices(builder.Configuration)
     .AddInfrastructureServices(builder.Configuration);
+
+builder.AddCutomLoggin();
 
 builder.Services.AddOpenApi();
 
@@ -33,6 +40,8 @@ if (app.Environment.IsDevelopment())
 app.UseClientCors();
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 app.UseAuthentication();
 
