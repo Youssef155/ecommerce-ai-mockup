@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { DesignService } from '../../../core/services/design.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
@@ -16,7 +16,7 @@ import {
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule],
   templateUrl: './design-upload.component.html',
-  styleUrls: ['./design-upload.component.scss']
+  styleUrls: ['./design-upload.component.css']
 })
 export class DesignUploadComponent {
   selectedFile: File | null = null;
@@ -31,6 +31,7 @@ export class DesignUploadComponent {
 
   constructor(
     private designService: DesignService,
+    private router: Router,
   ) { }
 
   onFileSelected(event: Event): void {
@@ -50,14 +51,13 @@ export class DesignUploadComponent {
     this.error = null;
 
     this.designService.uploadDesign(this.selectedFile).subscribe({
-      next: () => {
+      next: (res) => {
         this.isUploading = false;
-        window.history.back();
+        this.router.navigate(['/designs']);
       },
       error: (err) => {
-        this.error = 'Failed to upload design. Please try again.';
+        this.error = `Failed to upload design, ` + (err.error || 'Please try again.');
         this.isUploading = false;
-        console.error(err);
       }
     });
   }

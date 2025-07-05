@@ -19,7 +19,7 @@ import {
   standalone: true,
   imports: [CommonModule, RouterModule, FontAwesomeModule],
   templateUrl: './design-list.component.html',
-  styleUrls: ['./design-list.component.scss']
+  styleUrls: ['./design-list.component.css']
 })
 export class DesignListComponent implements OnInit {
   designs: Design[] = [];
@@ -46,14 +46,13 @@ export class DesignListComponent implements OnInit {
     this.error = null;
     
     this.designService.getDesigns().subscribe({
-      next: (designs) => {
-        this.designs = designs;
+      next: (res) => {
+        this.designs = res.result || [];
         this.loading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load designs. Please try again later.';
+        this.error = 'Failed to load designs, ' + (err.error || 'Please try again.');
         this.loading = false;
-        console.error(err);
       }
     });
   }

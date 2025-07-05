@@ -16,5 +16,10 @@ export const routes: Routes = [
       { path: 'register', loadComponent: () => import('./pages/auth/register/register.component').then(c => c.RegisterComponent), title: 'Register' }
     ]
   },
+  { 
+    path: 'designs',
+    loadChildren: () => import('./pages/design/route').then(m => m.DESIGN_ROUTES),
+    title: 'Designs'
+  },
   { path: '**', redirectTo: 'auth/login' }
 ];

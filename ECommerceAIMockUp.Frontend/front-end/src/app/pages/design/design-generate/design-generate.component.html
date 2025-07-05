@@ -33,16 +33,16 @@
              style="width: 100%"></div>
       </div>
 
-      <div *ngIf="generatedImageUrl" class="border-top pt-4 mt-4">
+      <div *ngIf="generatedDesign.imageURL" class="border-top pt-4 mt-4">
         <h3><i class="far fa-image me-2"></i>Preview</h3>
         <div class="text-center">
-          <img [src]="generatedImageUrl" alt="Generated design" class="img-fluid rounded mb-4" style="max-height: 500px;">
+          <img [src]="generatedDesign.imageURL" alt="Generated design" class="img-fluid rounded mb-4" style="max-height: 500px;">
         </div>
 
         <div class="d-flex justify-content-end gap-2">
-          <a routerLink="/designs" class="btn btn-outline-secondary">
+          <button (click)="discardDesign()" class="btn btn-outline-danger">
             <i class="pi pi-trash me-2"></i>Discard
-          </a>
+          </button>
           <button (click)="saveDesign()" 
                   [disabled]="isSaving" 
                   class="btn btn-success">

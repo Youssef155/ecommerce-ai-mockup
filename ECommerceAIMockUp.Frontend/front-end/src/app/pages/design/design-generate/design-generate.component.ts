@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { DesignService } from '../../../core/services/design.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
@@ -12,19 +12,18 @@ import {
   faSave,
   faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
-import { Design } from '../../../core/models/design.model';
+import { GeneratedDesign } from '../../../core/models/generated-design.model';
 
 @Component({
   selector: 'app-design-generate',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule],
   templateUrl: './design-generate.component.html',
-  styleUrls: ['./design-generate.component.scss']
+  styleUrls: ['./design-generate.component.css']
 })
 export class DesignGenerateComponent {
-  design: Design = { id: 0, imageUrl: '' };
+  generatedDesign: GeneratedDesign = { imageURL: '', promptId: 0 };
   prompt = '';
-  generatedImageUrl: string | null = null;
   isGenerating = false;
   isSaving = false;
   error: string | null = null;
@@ -39,6 +38,7 @@ export class DesignGenerateComponent {
 
   constructor(
     private designService: DesignService,
+    private router: Router,
   ) { }
 
   generateDesign(): void {
@@ -49,36 +49,53 @@ export class DesignGenerateComponent {
 
     this.isGenerating = true;
     this.error = null;
-    this.generatedImageUrl = null;
 
     this.designService.generateDesign(this.prompt).subscribe({
       next: (response) => {
-        this.design = response.design;
+        console.log('Design generated successfully:', response);
+        this.generatedDesign.promptId = response.promptId;
+        this.generatedDesign.imageURL = response.imageURL;
+        console.log('Design object:', this.generatedDesign);
         this.isGenerating = false;
       },
       error: (err) => {
-        this.error = 'Failed to generate design. Please try again.';
+        this.error = 'Failed to generate design, ' + (err.error || 'Please try again.');
         this.isGenerating = false;
-        console.error(err);
       }
     });
   }
 
   saveDesign(): void {
-    if (!this.generatedImageUrl) return;
+    if (!this.generatedDesign.imageURL) return;
 
     this.isSaving = true;
     this.error = null;
 
-    this.designService.saveGeneratedDesign(this.design).subscribe({
+    this.designService.saveGeneratedDesign(this.generatedDesign).subscribe({
       next: () => {
         this.isSaving = false;
-        window.history.back();
+        this.router.navigate(['/designs']);
       },
       error: (err) => {
-        this.error = 'Failed to save design. Please try again.';
+        this.error = 'Failed to save design, ' + (err.error || 'Please try again.');
         this.isSaving = false;
-        console.error(err);
+      }
+    });
+  }
+
+   discardDesign(): void {
+    if (!this.generatedDesign.imageURL) {
+      this.router.navigate(['/designs']);
+      return;
+    }
+
+    this.designService.discardDesign(this.generatedDesign).subscribe({
+      next: () => {
+        this.router.navigate(['/designs']);
+      },
+      error: (err) => {
+        console.error('Failed to discard design:', err);
+        this.router.navigate(['/designs']);
       }
     });
   }
