@@ -12,10 +12,12 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
     public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
         private readonly DbSet<Product> _products;
+        private readonly ApplicationDbContext _context;
 
         public ProductRepository(ApplicationDbContext db) : base(db)
         {
             _products = db.Set<Product>();
+            _context = db;
         }
 
 
@@ -66,6 +68,11 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             return product;
         }
 
-
+        public async Task<Product?> GetByIdWithVariantsAsync(int productId)
+        {
+            return await _context.Products
+                .Include(p => p.ProductDetails)
+                .FirstOrDefaultAsync(p => p.Id == productId);
+        }
     }
 }
