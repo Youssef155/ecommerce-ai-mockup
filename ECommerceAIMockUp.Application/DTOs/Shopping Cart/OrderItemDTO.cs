@@ -17,6 +17,8 @@ namespace ECommerceAIMockUp.Application.DTOs.Shopping_Cart
         public int ProductDetailsId { get; set; }
         public int DesignDetailsId { get; set; }
 
+        public double UnitPrice { get; set; }
+        public double LineTotal { get; set; }
         public double OrderTotal { get; set; }
     }
 }

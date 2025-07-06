@@ -7,7 +7,7 @@ namespace ECommerceAIMockUp.Application.Contracts.Repositories
         Task<IEnumerable<T>> GetAllAsync(bool tracking, params Expression<Func<T, object>>[] includes);
         Task<T> GetByIdAsunc(int id, bool tracking, params Expression<Func<T, object>>[] includes);
         Task<T> CreateAsync(T entity);
-        T Update(T entity);
+        Task<T> Update(T entity);
         Task DeleteAsync(int id);
 
         IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes);
