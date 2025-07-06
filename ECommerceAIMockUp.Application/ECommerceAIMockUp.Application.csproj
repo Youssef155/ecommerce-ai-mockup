@@ -19,4 +19,8 @@
     <ProjectReference Include="..\ECommerceAIMockUp.Domain\ECommerceAIMockUp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="MappingProfiles\" />
+  </ItemGroup>
+
 </Project>
