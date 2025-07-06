@@ -5,9 +5,9 @@ namespace ECommerceAIMockUp.Application.DTOs.Shopping_Cart;
 
 public class OrderDTO
 {
-    [Required]
-    [Range(1, 100,ErrorMessage ="You must enter a quantity between 1 and 100")]
-    public int Quantity { get; set; }
+    //[Required]
+    //[Range(1, 100,ErrorMessage ="You must enter a quantity between 1 and 100")]
+    //public int Quantity { get; set; }
     [Required]
     public int ProductDetailsId { get; set; }
     [Required]
