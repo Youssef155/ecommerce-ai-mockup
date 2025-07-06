@@ -23,10 +23,11 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
 
         var cart = await orderRepository.GetAllQueryable(tracking: true)
     .Where(o => o.AppUserId == userId && o.Status == OrderStatus.CartItem)
+    .Include(o=>o.OrderItems)
+        .ThenInclude(i=>i.ProductDetails)
+           .ThenInclude(p=>p.Product)
     .Include(o => o.OrderItems)
         .ThenInclude(i => i.DesignDetails)
-    .Include(o => o.OrderItems)
-        .ThenInclude(i => i.ProductDetails)
     .FirstOrDefaultAsync();
 
 
@@ -42,6 +43,7 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
         var cart = await GetCartAsync (UserId);
         if (cart == null)
             throw new Exception("Your Cart is empty, Start adding items to display them in the cart");
+        cart.OrderTotal = cart.OrderItems.Sum(i => i.Quantity * i.ProductDetails.Product.Price);
 
         var itemsDto = cart.OrderItems.Select(i => new OrderItemDTO
         {
@@ -49,8 +51,9 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
             ProductDetailsId = i.ProductDetailsId,
             Quantity = i.Quantity,
             OrderId = i.OrderId,
-            OrderTotal = cart.OrderTotal
-
+            OrderTotal = cart.OrderTotal,
+            UnitPrice = i.ProductDetails.Product.Price,
+            LineTotal = i.Quantity * i.ProductDetails.Product.Price
         }).ToList();
 
         return itemsDto;
@@ -104,12 +107,13 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
 
         var orderitem = new OrderItem
         {
-            Quantity = item.Quantity,
             DesignDetailsId = item.DesignDetailsId,
             ProductDetailsId = item.ProductDetailsId,
             OrderId = cart.Id,
         };
         cart.OrderItems.Add(orderitem);
+        cart.OrderTotal = cart.OrderItems
+           .Sum(i => i.Quantity * i.ProductDetails.Product.Price);
     }
 
     public async Task Remove(string userId, OrderItem orderItem)
@@ -124,6 +128,9 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
             throw new Exception("Item was not found");
 
         await orderItemRepo.DeleteAsync(item.Id);
+        cart.OrderTotal = cart.OrderItems
+            .Sum(i => i.Quantity * i.ProductDetails.Product.Price);
+
     }
 
     public async Task RemoveRange(string userId, List<OrderItem> items)
@@ -139,6 +146,9 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
             Orderitems.Remove(item);
             await orderItemRepo.DeleteAsync(item.Id);
         }
+        cart.OrderTotal = cart.OrderItems
+            .Sum(i => i.Quantity * i.ProductDetails.Product.Price);
+
     }
 
     public async Task UpdateQuantity(string userId, int ItemId, int quantity)
@@ -149,6 +159,9 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
         var item= await GetItemById(userId, ItemId);
         item.Quantity = quantity;
         cart.OrderDate = DateTime.Now;
+        cart.OrderTotal = cart.OrderItems
+            .Sum(i => i.Quantity * i.ProductDetails.Product.Price);
+
         //save changes
     }
 
