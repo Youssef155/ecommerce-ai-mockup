@@ -65,7 +65,5 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             await CreateAsync(product);
             return product;
         }
-
-
     }
 }

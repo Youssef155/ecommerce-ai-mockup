@@ -9,7 +9,7 @@ import { ApiResponse } from '../models/Products/Product';
 export class ProductService {
 
   private readonly APIUrl = 'https://localhost:7256/api/Product'; 
-  private readonly pageSize = 10;
+  private readonly pageSize = 5;
   constructor(private http : HttpClient) { }
 
   getProducts(page: number =1): Observable<ApiResponse>{
