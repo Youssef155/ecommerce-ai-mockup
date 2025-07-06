@@ -9,6 +9,8 @@ namespace ECommerceAIMockUp.Application.Contracts.Repositories
         Task<T> CreateAsync(T entity);
         T Update(T entity);
         Task DeleteAsync(int id);
+
+        IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes);
         Task<int> SaveAsync();
     }
 }

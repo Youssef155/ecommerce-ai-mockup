@@ -3,23 +3,22 @@ using ECommerceAIMockUp.Domain.Entities;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace ECommerceAIMockUp.Infrastructure.Repositories;
-public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
+namespace ECommerceAIMockUp.Infrastructure.Repositories
 {
-    private readonly DbSet<Category> _category;
-
-    public CategoryRepository(ApplicationDbContext db) : base(db)
+    public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
-        _category = db.Set<Category>();
+        private readonly DbSet<Category> _category;
+
+        public CategoryRepository(ApplicationDbContext db) : base(db)
+        {
+            _category = db.Set<Category>();
+        }
+
+        public async Task<int> GetByNameAsync(string CategoryName)
+        {
+            var CategorySelect = await _category.FirstOrDefaultAsync(c => c.Name.ToLower() == CategoryName.ToLower());
+            return CategorySelect.Id;
+        }
     }
-
-    public async Task<int> GetByNameAsync(string CategoryName)
-    {
-        var CategorySelect = await _category.FirstOrDefaultAsync(c => c.Name.ToLower() == CategoryName.ToLower());
-        return CategorySelect.Id;
-    }
-
-
-
 }
 

@@ -14,6 +14,9 @@ namespace ECommerceAIMockUp.Application
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAdminUserService, AdminUserService>();
             services.AddScoped<IOrderService, OrderService>();
+
+            services.AddScoped<IProductService, ProductService>();
+
             return services;
         }
     }
