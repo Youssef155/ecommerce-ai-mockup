@@ -1,5 +1,5 @@
-﻿using ECommerceAIMockUp.Application.DTOs.Product;
-using ECommerceAIMockUp.Application.Services.Interfaces;
+﻿using ECommerceAIMockUp.Application.Services.Interfaces;
+using ECommerceAIMockUp.Application.DTOs.Product;
 using ECommerceAIMockUp.Domain.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +66,17 @@ namespace ECommerceAIMockUp.API.Controllers
 
 
 
+        [HttpPost("Product")]
+        public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto dto)
+        {
+            var result = await _productService.CreateProductAsync(dto);
+
+            if (result.StatusCode == HttpStatusCode.Created)
+                return Ok("Product created successfully");
+            else
+                return BadRequest(result);
+        }
+
         /// <summary>
         /// Get basic product info and available sizes.
         /// </summary>
@@ -123,17 +134,6 @@ namespace ECommerceAIMockUp.API.Controllers
             {
                 return NotFound("Variant not found for the given size and color.");
             }
-        }
-
-        [HttpPost("Product")]
-        public async Task<IActionResult> CreateProduct([FromForm] CreateProductDto dto)
-        {
-            var result = await _productService.CreateProductAsync(dto);
-
-            if (result.StatusCode == HttpStatusCode.Created)
-                return Ok("Product created successfully");
-            else
-                return BadRequest(result);
         }
     }
 }
