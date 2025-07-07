@@ -1,0 +1,55 @@
+<!-- <div class="design-mockup"> -->
+  <!-- Loading State -->
+  <!-- <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div> -->
+
+  <!-- Error State -->
+  <!-- <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+    <button class="btn btn-sm btn-outline-secondary ms-3" routerLink="/designs">
+      Back to Designs
+    </button>
+  </div>  -->
+
+<div class="mockup-wrapper">
+  <div class="canvas-container" #wrapperRef>
+    <canvas #canvasEl></canvas>
+  </div>
+
+  <div class="controls">
+    <label>Scale X: {{ scaleX }}</label>
+<input
+  type="range"
+  min="0.1"
+  max="2"
+  step="0.01"
+  [(ngModel)]="scaleX"
+  (ngModelChange)="updateScale()"
+/>
+
+<!-- Scale Y -->
+<label>Scale Y: {{ scaleY }}</label>
+<input
+  type="range"
+  min="0.1"
+  max="2"
+  step="0.01"
+  [(ngModel)]="scaleY"
+  (ngModelChange)="updateScale()"
+/>
+
+    <label>Rotation: {{ rotation }}°</label>
+    <input type="range" min="-180" max="180" step="1" [(ngModel)]="rotation" (input)="updateRotation()" />
+
+    <label>X: {{ x }}</label>
+<input type="range" [min]="-maxX" [max]="maxX" step="0.01" [(ngModel)]="x" (ngModelChange)="updatePosition()" />
+
+    <label>Y: {{ y }}</label>
+<input type="range" [min]="-maxY" [max]="maxY" step="0.01" [(ngModel)]="y" (ngModelChange)="updatePosition()" />
+
+  </div>
+</div>
+

@@ -29,9 +29,12 @@
     <div class="col" *ngFor="let design of designs">
       <div class="card h-100">
         <img [src]="design.imageUrl"  class="card-img-top" style="height: 200px; object-fit: cover;">
-        <div class="card-body">
-          <h5 class="card-title"></h5>
-          
+        <div class="hover-overlay">
+          <button class="btn btn-primary position-absolute top-50 start-50 translate-middle"
+                  [routerLink]="['/designs/mockup']"
+                  (click)="setMockupData(productDetailsId, design.id, productImageUrl, design.imageUrl)">
+            Preview Mockup
+          </button>
         </div>
       </div>
     </div>
