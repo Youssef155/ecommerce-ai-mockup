@@ -1,1 +1,36 @@
-<p>product-details works!</p>
+@if (product) {
+  <div class="product-detail">
+    <div class="product-image">
+      <img [src]="product.image" [alt]="product.name">
+    </div>
+    <div class="product-info">
+      <h2>{{ product.name }}</h2>
+      <p class="description">{{ product.descriptions }}</p>
+      <p class="price">{{ product.price | currency }}</p>
+      
+      <app-size-selector 
+        [sizes]="product.availableSizes" 
+        (sizeSelected)="onSizeSelect($event)">
+      </app-size-selector>
+      
+      @if (isLoadingColors) {
+        <div class="loading">Loading colors...</div>
+      }
+      
+      @if (selectedSize && availableColors.length > 0) {
+        <app-color-selector 
+          [colors]="availableColors" 
+          (colorSelected)="onColorSelect($event)">
+        </app-color-selector>
+      }
+      
+      @if (selectedColor) {
+        <button class="add-to-cart">Add to Cart</button>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="no-product-selected">
+    <p>Please select a product to view details</p>
+  </div>
+}

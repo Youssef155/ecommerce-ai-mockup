@@ -1,45 +1,48 @@
-import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../../core/services/product.service';
-
+import { Component, Input, signal } from '@angular/core';
+import { Product } from '../../../core/models/Products/Product';
+import { ProductVariationService } from '../../../core/services/product-variation.service';
+import { ProductVariation } from '../../../core/models/Products/product-variation';
+import { CommonModule } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
+import { SizeSelectorComponent } from '../size-selector/size-selector.component';
+import { ColorSelectorComponent } from '../color-selector/color-selector.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-product-details',
-  templateUrl: './product-details.component.html'
+  standalone: true,
+  imports: [SizeSelectorComponent, ColorSelectorComponent, CurrencyPipe],
+  templateUrl: './product-details.component.html',
+  styleUrls: ['./product-details.component.css']
 })
-export class ProductDetailsComponent implements OnInit {
-  productId = 1; // Example; use dynamic route param in real case
-  product: any;
-  selectedSize: string = '';
-  colors: string[] = [];
-  selectedColor: string = '';
-  variant: any;
+export class ProductDetailsComponent {
+  @Input() product: Product | null = null;
+  
+  selectedSize: string | null = null;
+  selectedColor: string | null = null;
+  availableColors: string[] = [];
+  isLoadingColors = false;
 
-  constructor(private productService: ProductService) {}
+  constructor(private productVariationService: ProductVariationService) {}
 
-  ngOnInit(): void {
-    this.loadProduct();
-  }
-
-  loadProduct(): void {
-    this.productService.getProduct(this.productId).subscribe({
-      next: (data) => this.product = data,
-      error: () => console.error('Product not found')
-    });
-  }
-
-  onSizeSelect(size: string): void {
+  onSizeSelect(size: string) {
+    if (!this.product) return;
+    
+    this.isLoadingColors = true;
     this.selectedSize = size;
-    this.productService.getColorsBySize(this.productId, size).subscribe({
-      next: (colors) => this.colors = colors,
-      error: () => this.colors = []
-    });
+    this.selectedColor = null;
+    
+    this.productVariationService.getColorsBySize(this.product.id, size)
+      .subscribe({
+        next: (variation) => {
+          this.availableColors = variation.availableColors;
+          this.isLoadingColors = false;
+        },
+        error: () => this.isLoadingColors = false
+      });
   }
 
-  onColorSelect(color: string): void {
+  onColorSelect(color: string) {
     this.selectedColor = color;
-    this.productService.getVariant(this.productId, this.selectedSize, color).subscribe({
-      next: (variant) => this.variant = variant,
-      error: () => this.variant = null
-    });
   }
 }
