@@ -171,27 +171,32 @@
           <table class="data-table">
             <thead>
               <tr>
+                <th>ID</th>
                 <th>Name</th>
                 <th>Price</th>
                 <th>Category</th>
                 <th>Description</th>
-                <th>Stock</th>
+                <th>Gender</th>
+                <th>Season</th>
+                <th>Image</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let product of filteredProducts">
+                <td>{{ product.id || 'N/A' }}</td>
                 <td>{{ product.name || 'N/A' }}</td>
                 <td>${{ product.price || 0 }}</td>
-                <td>{{ product.category || 'N/A' }}</td>
+                <td>{{ product.categoryName || 'N/A' }}</td>
                 <td class="description-cell">{{ product.description || 'N/A' }}</td>
+                <td>{{ product.gender || 'N/A' }}</td>
+                <td>{{ product.season || 'N/A' }}</td>
                 <td>
-                  <span class="stock-badge" [class.low-stock]="product.stock < 10">
-                    {{ product.stock || 0 }}
-                  </span>
+                  <img [src]="product.imageUrl" alt="Product Image" style="width: 50px;" *ngIf="product.imageUrl" />
+                  <span *ngIf="!product.imageUrl">No Image</span>
                 </td>
               </tr>
               <tr *ngIf="filteredProducts.length === 0 && !loading">
-                <td colspan="5" class="no-data">No products found</td>
+                <td colspan="8" class="no-data">No products found</td>
               </tr>
             </tbody>
           </table>
@@ -308,15 +313,32 @@
           <!-- Products Form -->
           <div *ngIf="modalType === 'products'">
             <label>Name:</label>
-            <input type="text" [(ngModel)]="newItem.name" placeholder="Enter product name" />
+            <input type="text" [(ngModel)]="newItem.name" placeholder="Enter product name" required />
             <label>Price:</label>
-            <input type="number" [(ngModel)]="newItem.price" placeholder="Enter price" />
-            <label>Category:</label>
-            <input type="text" [(ngModel)]="newItem.category" placeholder="Enter category" />
+            <input type="number" [(ngModel)]="newItem.price" placeholder="Enter price" required />
+            <label>Category Name:</label>
+            <input type="text" [(ngModel)]="newItem.categoryName" placeholder="Enter category name" required />
             <label>Description:</label>
             <textarea [(ngModel)]="newItem.description" placeholder="Enter description"></textarea>
+            <label>Gender:</label>
+            <select [(ngModel)]="newItem.gender" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Unisex">Unisex</option>
+            </select>
+            <label>Season:</label>
+            <select [(ngModel)]="newItem.season" required>
+              <option value="Summer">Summer</option>
+              <option value="Winter">Winter</option>
+              <option value="Spring">Spring</option>
+              <option value="Fall">Fall</option>
+            </select>
+            <label>Color:</label>
+            <input type="text" [(ngModel)]="newItem.colors" placeholder="Enter colors (comma-separated)" />
+            <label>Size:</label>
+            <input type="text" [(ngModel)]="newItem.sizes" placeholder="Enter sizes (comma-separated)" />
             <label>Stock:</label>
-            <input type="number" [(ngModel)]="newItem.stock" placeholder="Enter stock" />
+            <input type="number" [(ngModel)]="newItem.stock" placeholder="Enter stock" required />
             <label>Image:</label>
             <input type="file" (change)="onFileChange($event)" accept="image/*" />
           </div>

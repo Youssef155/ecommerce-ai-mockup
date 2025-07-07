@@ -786,3 +786,12 @@ select:focus {
   justify-content: flex-end;
   gap: 10px;
 }
+
+.modal-body select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 14px;
+}
