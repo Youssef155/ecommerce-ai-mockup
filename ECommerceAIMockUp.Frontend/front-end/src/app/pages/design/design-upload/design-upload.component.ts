@@ -53,7 +53,7 @@ export class DesignUploadComponent {
     this.designService.uploadDesign(this.selectedFile).subscribe({
       next: (res) => {
         this.isUploading = false;
-        this.router.navigate(['/designs']);
+        this.router.navigate(['/design']);
       },
       error: (err) => {
         this.error = `Failed to upload design, ` + (err.error || 'Please try again.');

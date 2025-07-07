@@ -74,7 +74,7 @@ export class DesignGenerateComponent {
     this.designService.saveGeneratedDesign(this.generatedDesign).subscribe({
       next: () => {
         this.isSaving = false;
-        this.router.navigate(['/designs']);
+        this.router.navigate(['/design']);
       },
       error: (err) => {
         this.error = 'Failed to save design, ' + (err.error || 'Please try again.');
@@ -85,17 +85,17 @@ export class DesignGenerateComponent {
 
    discardDesign(): void {
     if (!this.generatedDesign.imageURL) {
-      this.router.navigate(['/designs']);
+      this.router.navigate(['/design']);
       return;
     }
 
     this.designService.discardDesign(this.generatedDesign).subscribe({
       next: () => {
-        this.router.navigate(['/designs']);
+        this.router.navigate(['/design']);
       },
       error: (err) => {
         console.error('Failed to discard design:', err);
-        this.router.navigate(['/designs']);
+        this.router.navigate(['/design']);
       }
     });
   }

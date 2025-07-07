@@ -45,10 +45,10 @@
     <input type="range" min="-180" max="180" step="1" [(ngModel)]="rotation" (input)="updateRotation()" />
 
     <label>X: {{ x }}</label>
-<input type="range" [min]="-maxX" [max]="maxX" step="0.01" [(ngModel)]="x" (ngModelChange)="updatePosition()" />
+<input type="range" [min]="-maxX" [max]="maxX" step="0.001" [(ngModel)]="x" (ngModelChange)="updatePosition()" />
 
     <label>Y: {{ y }}</label>
-<input type="range" [min]="-maxY" [max]="maxY" step="0.01" [(ngModel)]="y" (ngModelChange)="updatePosition()" />
+<input type="range" [min]="-maxY" [max]="maxY" step="0.001" [(ngModel)]="y" (ngModelChange)="updatePosition()" />
 
   </div>
 </div>
