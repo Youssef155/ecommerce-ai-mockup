@@ -1,7 +1,9 @@
 ﻿using ECommerceAIMockUp.Domain.Entities;
 
-namespace ECommerceAIMockUp.Application.Contracts.Repositories;
-public interface ICategoryRepository : IBaseRepository<Category>
+namespace ECommerceAIMockUp.Application.Contracts.Repositories
 {
-    Task<int> GetByNameAsync(string CategoryName);
+    public interface ICategoryRepository : IBaseRepository<Category>
+    {
+        Task<int> GetByNameAsync(string CategoryName);
+    }
 }

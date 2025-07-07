@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace ECommerceAIMockUp.API
 {
@@ -7,6 +10,9 @@ namespace ECommerceAIMockUp.API
         private const string CorsPolicyName = "Client App";
         public static IServiceCollection AddPresentationServices(this IServiceCollection services)
         {
+            const string serverName = "ECommerceAiMockUP";
+            const string serviceVersion = "1.0.0";
+
 
             services.AddCors(opt =>
             {
@@ -34,12 +40,46 @@ namespace ECommerceAIMockUp.API
                 };
             });
 
+
+            services.AddOpenTelemetry().ConfigureResource(resource => resource.AddService(serverName, serviceVersion))
+                .WithTracing(tracing => tracing
+                // .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddSqlClientInstrumentation()
+                .AddConsoleExporter()
+                .AddOtlpExporter()
+                .AddHoneycomb(c =>
+                {
+                    c.ServiceName = serverName;
+                    c.ServiceVersion = serviceVersion;
+                    c.ApiKey = "LxVPVr94wyGHc7p7dwwfVD";
+                    c.Dataset = "ECommerceAI";
+                }));
+
+
             return services;
         }
 
         public static IApplicationBuilder UseClientCors(this IApplicationBuilder app)
         {
             return app.UseCors(CorsPolicyName);
+        }
+
+        public static WebApplicationBuilder AddCutomLoggin(this WebApplicationBuilder builder)
+        {
+            builder.Logging
+                .ClearProviders()
+                .AddConsole()
+                .AddDebug()
+                .AddOpenTelemetry(opt =>
+                {
+                    opt.AddConsoleExporter()
+                        .SetResourceBuilder(
+                        resourceBuilder: ResourceBuilder.CreateDefault().AddService("Logging.NET BY Mostafa"))
+                        .IncludeScopes = true;
+                });
+
+            return builder;
         }
     }
 }

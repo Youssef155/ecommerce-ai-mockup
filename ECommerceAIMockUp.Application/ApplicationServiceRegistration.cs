@@ -11,6 +11,9 @@ namespace ECommerceAIMockUp.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            services.AddScoped<IProductService, ProductService>();
+
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAdminUserService, AdminUserService>();
             services.AddScoped<IOrderService, OrderService>();

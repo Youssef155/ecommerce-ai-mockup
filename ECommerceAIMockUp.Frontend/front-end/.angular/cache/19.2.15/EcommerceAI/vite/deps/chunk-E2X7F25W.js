@@ -1,19 +1,33 @@
 import {
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-E2X7F25W.js
   withHttpTransferCache
 } from "./chunk-2LFFPLM5.js";
 import {
+========
+>>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-VHIJCBPP.js
   CommonModule,
   DomAdapter,
   getDOM,
   setRootDomAdapter
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-E2X7F25W.js
 } from "./chunk-KOUZRL47.js";
+========
+} from "./chunk-XM7BB76I.js";
+import {
+  withHttpTransferCache
+} from "./chunk-A2S7RXMG.js";
+>>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-VHIJCBPP.js
 import {
   DOCUMENT,
   PLATFORM_BROWSER_ID,
   XhrFactory,
   isPlatformServer,
   parseCookieValue
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-E2X7F25W.js
 } from "./chunk-FRXTEGWH.js";
+========
+} from "./chunk-4YNGKIBB.js";
+>>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-VHIJCBPP.js
 import {
   APP_ID,
   ApplicationModule,
@@ -74,9 +88,9 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-LKBYGJ3F.js";
+} from "./chunk-44Z5NQYP.js";
 
-// node_modules/@angular/platform-browser/fesm2022/dom_renderer-DGKzginR.mjs
+// ../node_modules/@angular/platform-browser/fesm2022/dom_renderer-DGKzginR.mjs
 var EVENT_MANAGER_PLUGINS = new InjectionToken(ngDevMode ? "EventManagerPlugins" : "");
 var EventManager = class _EventManager {
   _zone;
@@ -786,7 +800,7 @@ var EmulatedEncapsulationDomRenderer2 = class extends NoneEncapsulationDomRender
   }
 };
 
-// node_modules/@angular/platform-browser/fesm2022/browser-D-u-fknz.mjs
+// ../node_modules/@angular/platform-browser/fesm2022/browser-D-u-fknz.mjs
 var BrowserDomAdapter = class _BrowserDomAdapter extends DomAdapter {
   supportsDOMEvents = true;
   static makeCurrent() {
@@ -1228,7 +1242,7 @@ var BrowserModule = class _BrowserModule {
   }], () => [], null);
 })();
 
-// node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs
+// ../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs
 var Meta = class _Meta {
   _doc;
   _dom;
@@ -2013,4 +2027,8 @@ export {
    * License: MIT
    *)
 */
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-E2X7F25W.js
 //# sourceMappingURL=chunk-E2X7F25W.js.map
+========
+//# sourceMappingURL=chunk-VHIJCBPP.js.map
+>>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-VHIJCBPP.js

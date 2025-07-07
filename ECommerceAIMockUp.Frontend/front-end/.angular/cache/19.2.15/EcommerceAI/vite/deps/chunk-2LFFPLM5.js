@@ -3,7 +3,11 @@ import {
   XhrFactory,
   isPlatformServer,
   parseCookieValue
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-2LFFPLM5.js
 } from "./chunk-FRXTEGWH.js";
+========
+} from "./chunk-4YNGKIBB.js";
+>>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-A2S7RXMG.js
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
@@ -50,9 +54,9 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-LKBYGJ3F.js";
+} from "./chunk-44Z5NQYP.js";
 
-// node_modules/@angular/common/fesm2022/module-z3bvLlVg.mjs
+// ../node_modules/@angular/common/fesm2022/module-z3bvLlVg.mjs
 var HttpHandler = class {
 };
 var HttpBackend = class {
@@ -2234,7 +2238,7 @@ var HttpClientJsonpModule = class _HttpClientJsonpModule {
   }], null, null);
 })();
 
-// node_modules/@angular/common/fesm2022/http.mjs
+// ../node_modules/@angular/common/fesm2022/http.mjs
 var httpResource = (() => {
   const jsonFn = makeHttpResourceFn("json");
   jsonFn.arrayBuffer = makeHttpResourceFn("arraybuffer");
@@ -2564,4 +2568,8 @@ export {
    * License: MIT
    *)
 */
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-2LFFPLM5.js
 //# sourceMappingURL=chunk-2LFFPLM5.js.map
+========
+//# sourceMappingURL=chunk-A2S7RXMG.js.map
+>>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-A2S7RXMG.js

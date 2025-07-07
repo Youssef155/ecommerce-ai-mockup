@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace ECommerceAIMockUp.Infrastructure.Repositories
 {
+
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         private ApplicationDbContext _context;
@@ -29,6 +30,7 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
         public async Task<T> CreateAsync(T entity)
         {
             await _context.AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -73,6 +75,21 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             _dbSet.Update(entity);
             return entity;
         }
+
+        public IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            if (includes != null && includes.Any())
+                query = AddIncludes(includes);
+
+            return query;
+
+        }
+
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();
