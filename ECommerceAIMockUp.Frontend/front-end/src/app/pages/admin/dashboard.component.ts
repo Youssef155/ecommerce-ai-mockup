@@ -119,27 +119,59 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  private fetchProducts() {
-   this.loading = true;
+ private fetchProducts() {
+  this.loading = true;
   this.http.get<ApiResponse<any>>(`${this.apiUrl}/Product/products?pageNumber=1&pageSize=10`, {
     headers: this.getAuthHeaders()
   }).subscribe({
     next: (response) => {
       console.log('API Response:', response);
-      if (response && response.data && Array.isArray(response.data.data)) {
-        this.products = response.data.data.map((dto: any) => ({
-          id: dto.Id || 0,
-          name: dto.Name || '',
-          price: dto.Price || 0,
-          description: dto.Description || '',
-          categoryName: dto.CategoryName || '',
-          stock: 0,
-          imageUrl: dto.Image || '',
-          gender: dto.Gender?.toString() || '',
-          season: dto.Season?.toString() || '',
-          colors: [],
-          sizes: [],
-          categoryId: undefined
+      if (response && response.data) {
+        if (response.data.data && Array.isArray(response.data.data)) {
+          this.products = response.data.data.map((dto: any) => ({
+            id: dto.Id || dto.id || 0,
+            name: dto.Name || dto.name || '',
+            price: dto.Price || dto.price || 0,
+            description: dto.Description || dto.description || '',
+            categoryName: dto.CategoryName || dto.categoryName || '',
+            stock: dto.stock || 0,
+            imageUrl: dto.Image || dto.imageUrl || '',
+            gender: dto.Gender?.toString() || dto.gender || '',
+            season: dto.Season?.toString() || dto.season || '',
+            colors: dto.colors || [],
+            sizes: dto.sizes || [],
+            categoryId: dto.categoryId
+          }));
+        } else if (Array.isArray(response.data)) {
+          this.products = response.data.map((dto: any) => ({
+            id: dto.Id || dto.id || 0,
+            name: dto.Name || dto.name || '',
+            price: dto.Price || dto.price || 0,
+            description: dto.Description || dto.description || '',
+            categoryName: dto.CategoryName || dto.categoryName || '',
+            stock: dto.stock || 0,
+            imageUrl: dto.Image || dto.imageUrl || '',
+            gender: dto.Gender?.toString() || dto.gender || '',
+            season: dto.Season?.toString() || dto.season || '',
+            colors: dto.colors || [],
+            sizes: dto.sizes || [],
+            categoryId: dto.categoryId
+          }));
+        }
+      } else if (response && response.result && Array.isArray(response.result)) {
+        this.products = response.result.map((dto: any) => ({
+          id: dto.Id || dto.id || 0,
+          name: dto.Name || dto.name || '',
+          price: dto.Price || dto.price || 0,
+          description: dto.Description || dto.description || '',
+          categoryName: dto.CategoryName || dto.categoryName || '',
+          stock: dto.stock || 0,
+          imageUrl: dto.Image || dto.imageUrl || '',
+          gender: dto.Gender?.toString() || dto.gender || '',
+          season: dto.Season?.toString() || dto.season || '',
+          colors: dto.colors || [],
+          sizes: dto.sizes || [],
+          categoryId: dto.categoryId
         }));
       } else {
         console.warn('Unexpected response structure:', response);
@@ -254,20 +286,18 @@ export class AdminDashboardComponent implements OnInit {
   let body: any;
   if (this.modalType === 'products') {
     const formData = new FormData();
-    formData.append('Name', this.newItem.name || '');
-    formData.append('Description', this.newItem.description || '');
-    formData.append('Gender', this.newItem.gender || 'Male');
-    formData.append('Season', this.newItem.season || 'Summer');
-    formData.append('Price', this.newItem.price?.toString() || '0');
-    formData.append('CategoryName', this.newItem.categoryName || '');
-    formData.append('Color', this.newItem.colors?.join(',') || '');
-    formData.append('Size', this.newItem.sizes?.join(',') || '');
-    formData.append('Amount', this.newItem.stock?.toString() || '0');
-    if (this.newItem.image) {
-      formData.append('ImgUrl', this.newItem.image);
-    } else {
-      console.warn('No image file selected for product');
+
+    if (!this.newItem.name || !this.newItem.price || !this.newItem.categoryName || !this.newItem.gender || !this.newItem.season || !this.newItem.image) {
+      alert('Please fill all required fields: Name, Price, Category Name, Gender, Season, and Image.');
+      return;
     }
+    formData.append('Name', this.newItem.name);
+    formData.append('Description', this.newItem.description || '');
+    formData.append('Gender', this.newItem.gender);
+    formData.append('Season', this.newItem.season);
+    formData.append('Price', this.newItem.price.toString());
+    formData.append('CategoryName', this.newItem.categoryName);
+    if (this.newItem.image) formData.append('ImgUrl', this.newItem.image);
     console.log('Sending FormData:', Array.from(formData.entries()));
     body = formData;
     endpoint = `${this.apiUrl}/Product/Product`;
@@ -285,13 +315,16 @@ export class AdminDashboardComponent implements OnInit {
 
   request.subscribe({
     next: () => {
-      alert(isEdit ? 'Category updated successfully' : 'Item added successfully');
+      alert(isEdit ? 'Item updated successfully' : 'Product added successfully');
       this.refreshData();
       this.closeModal();
     },
     error: (error) => {
       console.error('Error saving item:', error);
       this.handleError(error);
+      if (error.status === 400) {
+        alert('Error: Check if all required fields are filled correctly.');
+      }
     }
   });
 }

@@ -12,13 +12,4 @@ export interface Product {
   gender?: string;
   categoryId?: number;
 }
-export interface GetAllProductsDto {
-  Id: number;
-  Name: string;
-  Price: number;
-  Description: string;
-  CategoryName: string;
-  Image?: string;
-  Gender?: number;
-  Season?: number;
-}
+
