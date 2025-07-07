@@ -83,8 +83,6 @@ namespace ECommerceAIMockUp.Infrastructure
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IRedisService, RedisService>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             return services;
