@@ -13,12 +13,10 @@ namespace ECommerceAIMockUp.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IProductService, ProductService>();
-
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IAdminUserService, AdminUserService>();
             services.AddScoped<IOrderService, OrderService>();
 
-            services.AddScoped<IProductService, ProductService>();
 
             return services;
         }
