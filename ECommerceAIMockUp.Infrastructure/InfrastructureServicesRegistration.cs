@@ -87,8 +87,6 @@ namespace ECommerceAIMockUp.Infrastructure
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IRedisService, RedisService>();
-            services.AddScoped<IFileService, FileService>();
             return services;
         }
     }
