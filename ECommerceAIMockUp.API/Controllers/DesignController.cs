@@ -19,12 +19,15 @@ namespace ECommerceAIMockUp.API.Controllers
         private readonly GenerateImageCase _generateImageCase;
         private readonly SaveImageCase _saveDesignCase;
         private readonly GetDesignsCase _getDesignCase;
+        private readonly AddDesignDetailsCase _addDesignDetailsCase;
 
-        public DesignController(GenerateImageCase generateImageCase, SaveImageCase saveDesignCase, GetDesignsCase getDesignCase)
+        public DesignController(GenerateImageCase generateImageCase, SaveImageCase saveDesignCase, GetDesignsCase getDesignCase, 
+            AddDesignDetailsCase addDesignDetailsCase)
         {
             _generateImageCase = generateImageCase;
             _saveDesignCase = saveDesignCase;
             _getDesignCase = getDesignCase;
+            _addDesignDetailsCase = addDesignDetailsCase;
         }
 
         [HttpGet]
@@ -37,7 +40,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(new { result = response.Data });
         }
 
-        [HttpPost("Generate")]
+        [HttpPost("generate-design")]
         public async Task<IActionResult> GenerateDesign(ImagePromptRequest request)
         {
             if (string.IsNullOrEmpty(request.Prompt))
@@ -49,7 +52,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(response.Data);
         }
 
-        [HttpPost("Upload")]
+        [HttpPost("upload-design")]
         public async Task<IActionResult> UploadDesign(IFormFile imageFile)
         {
             if (imageFile == null || imageFile.Length == 0)
@@ -61,7 +64,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(new { result = response.Data });
         }
 
-        [HttpPost("SaveGeneratedDesign")]
+        [HttpPost("save-generated-design")]
         public async Task<IActionResult> SaveGeneratedDesign(GeneratedDesign design)
         {
             if (design == null)
@@ -73,7 +76,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(new { result = response.Data });
         }
 
-        [HttpPost("DiscardGeneratedDesign")]
+        [HttpPost("discard-generated-design")]
         public async Task<IActionResult> DiscardGeneratedDesign(GeneratedDesign design)
         {
             if (design == null)
@@ -82,6 +85,13 @@ namespace ECommerceAIMockUp.API.Controllers
             if (!response.IsSucceeded)
                 return BadRequest(new { result = response.Data });
             return Ok(new { result = response.Data });
+        }
+
+        [HttpPost("design-details")]
+        public async Task<IActionResult> AddDesignDetails(DesignDetailsDTO designDetails)
+        {
+            var respone = await _addDesignDetailsCase.AddDesignDetailsAsync(designDetails);
+            return Ok(new { result = respone.Data });
         }
     }
 }

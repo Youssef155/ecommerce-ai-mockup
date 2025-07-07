@@ -19,7 +19,7 @@ namespace ECommerceAIMockUp.Application.Cases.DesignCases
             _designDetailsRepo = designDetailsRepo;
         }
 
-        public async Task<Response<int>> SaveDesignDetails(DesignDetailsDTO designDetailsDTO)
+        public async Task<Response<int>> AddDesignDetailsAsync(DesignDetailsDTO designDetailsDTO)
         {
             DesignDetails designDetails = new DesignDetails
             {

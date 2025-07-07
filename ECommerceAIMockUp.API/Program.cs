@@ -52,6 +52,7 @@ builder.Services.AddScoped<IDesignRepository, DesignRepository>();
 builder.Services.AddScoped<GenerateImageCase>();
 builder.Services.AddScoped<SaveImageCase>();
 builder.Services.AddScoped<GetDesignsCase>();
+builder.Services.AddScoped<AddDesignDetailsCase>();
 #endregion
 
 
