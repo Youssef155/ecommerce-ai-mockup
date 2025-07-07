@@ -20,7 +20,7 @@ export const routes: Routes = [
 
   {
     path: 'admin',
-    loadComponent: () => import('./pages/admin/dashboard.component').then(c => c.DashboardComponent),
+    loadComponent: () => import('./pages/admin/dashboard.component').then(c => c.AdminDashboardComponent),
     title: 'Admin Dashboard'
   },
   { path: '**', redirectTo: 'auth/login' }
