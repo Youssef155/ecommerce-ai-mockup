@@ -4,7 +4,7 @@ import {
   inject,
   ChangeDetectorRef
 } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { MockupService } from '../../../core/services/mockup.service.service';
 import { MockupStateService } from '../../../core/services/mockup-state-service.service';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import * as fabric from 'fabric';
 // 
 @Component({
-    selector: 'app-design-mockup',
+  selector: 'app-design-mockup',
   templateUrl: './design-mockup.component.html',
   styleUrls: ['./design-mockup.component.css'],
   standalone: true,
@@ -31,6 +31,7 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   productImageUrl: string | null = null;
   productDetailsId: number | null = null;
   designId: number | null = null;
+  position: 'front' | 'back' = 'front';
 
   canvasWidth = 0;
   canvasHeight = 0;
@@ -42,16 +43,18 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   scaleY = .3;
   maxX: number = .5;
   maxY: number = .5;
+  opacity: number = 1;
+  router: Router = inject(Router);
 
   get designObject() {
     return this.mockupService.designObject;
   }
 
-  
+
   ngOnInit(): void {
     this.initializeFromRoute();
   }
-  
+
   private initializeFromRoute(): void {
     const state = this.mockupStateService.getState();
     console.log('Initializing from state:', state);
@@ -104,43 +107,44 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
     this.updatePosition();
   }
 
-   private setupCanvasListeners() {
+  private setupCanvasListeners() {
     const syncObjectState = () => {
-  const obj = this.designObject;
-  const tshirt = this.mockupService.tshirtObject;
-  if (!obj || !tshirt) return;
+      const obj = this.designObject;
+      const tshirt = this.mockupService.tshirtObject;
+      if (!obj || !tshirt) return;
 
-  // T-shirt bounds in canvas coordinates
-  const bounds = tshirt.getBoundingRect();
-  const objBounds = obj.getBoundingRect();
+      // T-shirt bounds in canvas coordinates
+      const bounds = tshirt.getBoundingRect();
+      const objBounds = obj.getBoundingRect();
 
-  // Calculate relative position (center-based)
-  const xRaw = ((obj.left ?? 0) - (bounds.left + bounds.width / 2)) / bounds.width;
-  const yRaw = ((obj.top ?? 0) - (bounds.top + bounds.height / 2)) / bounds.height;
+      // Calculate relative position (center-based)
+      const xRaw = ((obj.left ?? 0) - (bounds.left + bounds.width / 2)) / bounds.width;
+      const yRaw = ((obj.top ?? 0) - (bounds.top + bounds.height / 2)) / bounds.height;
 
-  this.x = parseFloat(xRaw.toFixed(3));
-  this.y = parseFloat(yRaw.toFixed(3));
+      this.x = parseFloat(xRaw.toFixed(3));
+      this.y = parseFloat(yRaw.toFixed(3));
 
-  // Calculate relative scale
-  const visualScaleX = obj.scaleX ?? 1;
-  const visualScaleY = obj.scaleY ?? 1;
+      // Calculate relative scale
+      const visualScaleX = obj.scaleX ?? 1;
+      const visualScaleY = obj.scaleY ?? 1;
 
-  const logicalScaleX = (visualScaleX * obj.width!) / (this.mockupService.tshirtOriginalWidth * this.mockupService.tshirtScaleFactor);
-  const logicalScaleY = (visualScaleY * obj.height!) / (this.mockupService.tshirtOriginalHeight * this.mockupService.tshirtScaleFactor);
+      const logicalScaleX = (visualScaleX * obj.width!) / (this.mockupService.tshirtOriginalWidth * this.mockupService.tshirtScaleFactor);
+      const logicalScaleY = (visualScaleY * obj.height!) / (this.mockupService.tshirtOriginalHeight * this.mockupService.tshirtScaleFactor);
 
-  this.scaleX = parseFloat(logicalScaleX.toFixed(3));
-  this.scaleY = parseFloat(logicalScaleY.toFixed(3));
-  this.rotation = Math.round(obj.angle ?? 0);
+      this.scaleX = parseFloat(logicalScaleX.toFixed(3));
+      this.scaleY = parseFloat(logicalScaleY.toFixed(3));
+      this.rotation = Math.round(obj.angle ?? 0);
+      this.opacity = parseFloat((obj.opacity ?? 1).toFixed(2));
 
-  // 🆕 Calculate allowed X/Y range based on design size relative to T-shirt
-  const objWidthRatio = objBounds.width / bounds.width;
-  const objHeightRatio = objBounds.height / bounds.height;
+      // 🆕 Calculate allowed X/Y range based on design size relative to T-shirt
+      const objWidthRatio = objBounds.width / bounds.width;
+      const objHeightRatio = objBounds.height / bounds.height;
 
-  this.maxX = parseFloat((0.5 - objWidthRatio / 2).toFixed(3));
-  this.maxY = parseFloat((0.5 - objHeightRatio / 2).toFixed(3));
+      this.maxX = parseFloat((0.5 - objWidthRatio / 2).toFixed(3));
+      this.maxY = parseFloat((0.5 - objHeightRatio / 2).toFixed(3));
 
-  this.cdr.detectChanges();
-};
+      this.cdr.detectChanges();
+    };
 
     this.canvas.on('object:moving', syncObjectState);
     this.canvas.on('object:scaling', syncObjectState);
@@ -173,6 +177,14 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
     this.canvas.renderAll();
   }
 
+  updateOpacity() {
+    const obj = this.designObject;
+    if (!obj) return;
+
+    obj.set('opacity', this.opacity);
+    this.canvas.renderAll();
+  }
+
   updatePosition() {
     const obj = this.designObject;
     const tshirt = this.mockupService.tshirtObject;
@@ -189,5 +201,12 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
     this.canvas.renderAll();
   }
 
-  
+  onCancel() {
+  const confirmCancel = confirm("Are you sure you want to cancel? Your changes won't be saved.");
+  if (confirmCancel) {
+    this.router.navigate(['/design']);
+  }
+}
+
+
 }

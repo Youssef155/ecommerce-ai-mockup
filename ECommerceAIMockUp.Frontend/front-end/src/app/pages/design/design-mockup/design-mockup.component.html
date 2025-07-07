@@ -1,55 +1,127 @@
 <!-- <div class="design-mockup"> -->
-  <!-- Loading State -->
-  <!-- <div *ngIf="loading" class="loading-overlay">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-  </div> -->
+<!-- Loading State -->
+<!-- <div *ngIf="loading" class="loading-overlay">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div> -->
 
-  <!-- Error State -->
-  <!-- <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-    <button class="btn btn-sm btn-outline-secondary ms-3" routerLink="/designs">
-      Back to Designs
-    </button>
-  </div>  -->
+<!-- Error State -->
+<!-- <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+      <button class="btn btn-sm btn-outline-secondary ms-3" routerLink="/designs">
+        Back to Designs
+      </button>
+    </div>  -->
 
 <div class="mockup-wrapper">
   <div class="canvas-container" #wrapperRef>
     <canvas #canvasEl></canvas>
   </div>
 
-  <div class="controls">
-    <label>Scale X: {{ scaleX }}</label>
-<input
-  type="range"
-  min="0.1"
-  max="2"
-  step="0.01"
-  [(ngModel)]="scaleX"
-  (ngModelChange)="updateScale()"
-/>
+  <div class="controller-container d-flex flex-column h-100">
+    <div class="flex-grow-1 overflow-auto pe-3">
+      <label>Scale X: {{ scaleX }}</label>
+      <input
+        type="range"
+        class="form-range"
+        min="0.1"
+        max="1"
+        step="0.01"
+        [(ngModel)]="scaleX"
+        (ngModelChange)="updateScale()"
+      />
 
-<!-- Scale Y -->
-<label>Scale Y: {{ scaleY }}</label>
-<input
-  type="range"
-  min="0.1"
-  max="2"
-  step="0.01"
-  [(ngModel)]="scaleY"
-  (ngModelChange)="updateScale()"
-/>
+      <!-- Scale Y -->
+      <label>Scale Y: {{ scaleY }}</label>
+      <input
+        type="range"
+        class="form-range"
+        min="0.1"
+        max="1"
+        step="0.01"
+        [(ngModel)]="scaleY"
+        (ngModelChange)="updateScale()"
+      />
 
-    <label>Rotation: {{ rotation }}°</label>
-    <input type="range" min="-180" max="180" step="1" [(ngModel)]="rotation" (input)="updateRotation()" />
+      <label>Rotation: {{ rotation }}°</label>
+      <input
+        type="range"
+        class="form-range"
+        min="-180"
+        max="180"
+        step="1"
+        [(ngModel)]="rotation"
+        (input)="updateRotation()"
+      />
 
-    <label>X: {{ x }}</label>
-<input type="range" [min]="-maxX" [max]="maxX" step="0.001" [(ngModel)]="x" (ngModelChange)="updatePosition()" />
+      <label>X: {{ x }}</label>
+      <input
+        type="range"
+        class="form-range"
+        [min]="-maxX"
+        [max]="maxX"
+        step="0.001"
+        [(ngModel)]="x"
+        (ngModelChange)="updatePosition()"
+      />
 
-    <label>Y: {{ y }}</label>
-<input type="range" [min]="-maxY" [max]="maxY" step="0.001" [(ngModel)]="y" (ngModelChange)="updatePosition()" />
+      <label>Y: {{ y }}</label>
+      <input
+        type="range"
+        class="form-range"
+        [min]="-maxY"
+        [max]="maxY"
+        step="0.001"
+        [(ngModel)]="y"
+        (ngModelChange)="updatePosition()"
+      />
 
+      <label for="opacityRange">Opacity: {{ opacity }}</label>
+      <input
+        type="range"
+        class="form-range"
+        id="opacityRange"
+        min="0"
+        max="1"
+        step="0.01"
+        [(ngModel)]="opacity"
+        (ngModelChange)="updateOpacity()"
+      />
+
+      <div class="mb-3">
+        <label class="form-label d-block mb-2">Side:</label>
+
+        <div class="btn-group" role="group" aria-label="T-shirt side">
+          <input
+            type="radio"
+            class="btn-check"
+            name="tshirtSide"
+            id="sideFront"
+            [value]="'front'"
+            [(ngModel)]="position"
+            autocomplete="off"
+          />
+          <label class="btn btn-outline-primary" for="sideFront">Front</label>
+
+          <input
+            type="radio"
+            class="btn-check"
+            name="tshirtSide"
+            id="sideBack"
+            [value]="'back'"
+            [(ngModel)]="position"
+            autocomplete="off"
+          />
+          <label class="btn btn-outline-primary" for="sideBack">Back</label>
+        </div>
+      </div>
+    </div>
+
+  <div class="mt-auto pt-3 border-top d-flex justify-content-between">
+    <button class="btn btn-outline-secondary" (click)="onCancel()">
+      Cancel
+    </button>
+    <button class="btn btn-primary">Add to Cart</button>
   </div>
 </div>
-

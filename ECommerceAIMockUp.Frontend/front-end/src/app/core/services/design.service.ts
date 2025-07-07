@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Design } from '../models/design.model';
 import { GeneratedDesign } from '../models/generated-design.model';
+import { DesignDetails } from '../models/design-details.model';
 
 @Injectable({ providedIn: 'root' })
 
@@ -17,18 +18,23 @@ export class DesignService {
   uploadDesign(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('imageFile', file);
-    return this.http.post(`${this.apiUrl}/Upload`, formData);
+    return this.http.post(`${this.apiUrl}/upload`, formData);
   }
 
   generateDesign(promptText: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/Generate`, { prompt: promptText });
+    return this.http.post(`${this.apiUrl}/generate`, { prompt: promptText });
   }
 
   saveGeneratedDesign(generatedDesign: GeneratedDesign): Observable<any> {
-    return this.http.post(`${this.apiUrl}/Savegenerateddesign`, generatedDesign);
+    return this.http.post(`${this.apiUrl}/save-generated`, generatedDesign);
   }
 
   discardDesign(generatedDesign: GeneratedDesign): Observable<any> {
-    return this.http.post(`${this.apiUrl}/discardgenerateddesign`, generatedDesign);
+    return this.http.post(`${this.apiUrl}/discard-generated`, generatedDesign);
   }
+
+  addDesignDetails(designDetails: DesignDetails): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add-details`, designDetails);
+  } 
+  
 }

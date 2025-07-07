@@ -26,7 +26,7 @@ canvas {
   border: 1px solid #ccc;
 }
 
-.controls {
+.controller-container {
   width: 240px;
   background: #ffffff;
   border-left: 1px solid #ddd;
