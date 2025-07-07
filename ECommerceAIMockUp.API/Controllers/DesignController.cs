@@ -40,7 +40,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(new { result = response.Data });
         }
 
-        [HttpPost("generate-design")]
+        [HttpPost("generate")]
         public async Task<IActionResult> GenerateDesign(ImagePromptRequest request)
         {
             if (string.IsNullOrEmpty(request.Prompt))
@@ -52,7 +52,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(response.Data);
         }
 
-        [HttpPost("upload-design")]
+        [HttpPost("upload")]
         public async Task<IActionResult> UploadDesign(IFormFile imageFile)
         {
             if (imageFile == null || imageFile.Length == 0)
@@ -64,7 +64,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(new { result = response.Data });
         }
 
-        [HttpPost("save-generated-design")]
+        [HttpPost("save-generated")]
         public async Task<IActionResult> SaveGeneratedDesign(GeneratedDesign design)
         {
             if (design == null)
@@ -76,7 +76,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(new { result = response.Data });
         }
 
-        [HttpPost("discard-generated-design")]
+        [HttpPost("discard-generated")]
         public async Task<IActionResult> DiscardGeneratedDesign(GeneratedDesign design)
         {
             if (design == null)
@@ -87,7 +87,7 @@ namespace ECommerceAIMockUp.API.Controllers
             return Ok(new { result = response.Data });
         }
 
-        [HttpPost("design-details")]
+        [HttpPost("add-details")]
         public async Task<IActionResult> AddDesignDetails(DesignDetailsDTO designDetails)
         {
             var respone = await _addDesignDetailsCase.AddDesignDetailsAsync(designDetails);
