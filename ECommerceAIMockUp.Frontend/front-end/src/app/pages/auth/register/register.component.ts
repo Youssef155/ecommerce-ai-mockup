@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
       Email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
       Password: ['', [Validators.required, Validators.minLength(6)]],
       City: ['', [Validators.maxLength(15)]],
-      Address: [''],
+      Street: ['',Validators.required],
       PhoneNumber:['',Validators.required]
     });
   }
