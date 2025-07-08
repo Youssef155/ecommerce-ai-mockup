@@ -1,5 +1,10 @@
 ﻿using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ECommerceAIMockUp.Domain.ValueObjects;
 
 namespace ECommerceAIMockUp.Application.Contracts.Repositories
@@ -12,5 +17,6 @@ namespace ECommerceAIMockUp.Application.Contracts.Repositories
 
         Task<Product> CreateProductManuallyAsync(Product product, ProductDetails details);
 
+        Task<Product?> GetByIdWithVariantsAsync(int productId);
     }
 }
