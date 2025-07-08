@@ -1,8 +1,8 @@
 import {
   InjectionToken
-} from "./chunk-44Z5NQYP.js";
+} from "./chunk-N5YEG3PY.js";
 
-// ../node_modules/@angular/common/fesm2022/xhr-BfNfxNDv.mjs
+// ../../../node_modules/@angular/common/fesm2022/xhr-BfNfxNDv.mjs
 function parseCookieValue(cookieStr, name) {
   name = encodeURIComponent(name);
   for (const cookie of cookieStr.split(";")) {
@@ -25,7 +25,7 @@ function isPlatformServer(platformId) {
 var XhrFactory = class {
 };
 
-// ../node_modules/@angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs
+// ../../../node_modules/@angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs
 var DOCUMENT = new InjectionToken(ngDevMode ? "DocumentToken" : "");
 
 export {
@@ -47,4 +47,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-6D5LSNKI.js.map
+//# sourceMappingURL=chunk-NJDIPGDQ.js.map

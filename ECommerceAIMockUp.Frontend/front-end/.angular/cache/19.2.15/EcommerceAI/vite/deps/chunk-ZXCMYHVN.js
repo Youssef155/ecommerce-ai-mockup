@@ -1,11 +1,7 @@
 import {
   DOCUMENT,
   isPlatformBrowser
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-KOUZRL47.js
-} from "./chunk-FRXTEGWH.js";
-========
-} from "./chunk-4YNGKIBB.js";
->>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-XM7BB76I.js
+} from "./chunk-NJDIPGDQ.js";
 import {
   ApplicationRef,
   Attribute,
@@ -35,13 +31,9 @@ import {
   Renderer2,
   RendererStyleFlags2,
   RuntimeError,
-  Subject,
   TemplateRef,
   Version,
   ViewContainerRef,
-  __async,
-  __spreadProps,
-  __spreadValues,
   booleanAttribute,
   createNgModule,
   findLocaleData,
@@ -68,9 +60,15 @@ import {
   ɵɵinject,
   ɵɵinjectAttribute,
   ɵɵstyleProp
-} from "./chunk-44Z5NQYP.js";
+} from "./chunk-N5YEG3PY.js";
+import {
+  Subject,
+  __async,
+  __spreadProps,
+  __spreadValues
+} from "./chunk-URVW6DVJ.js";
 
-// ../node_modules/@angular/common/fesm2022/location-Dq4mJT-A.mjs
+// ../../../node_modules/@angular/common/fesm2022/location-Dq4mJT-A.mjs
 var _DOM = null;
 function getDOM() {
   return _DOM;
@@ -557,7 +555,7 @@ function _stripOrigin(baseHref) {
   return baseHref;
 }
 
-// ../node_modules/@angular/common/fesm2022/common_module-Dx7dWex5.mjs
+// ../../../node_modules/@angular/common/fesm2022/common_module-Dx7dWex5.mjs
 var HashLocationStrategy = class _HashLocationStrategy extends LocationStrategy {
   _platformLocation;
   _baseHref = "";
@@ -3661,7 +3659,7 @@ var CommonModule = class _CommonModule {
   }], null, null);
 })();
 
-// ../node_modules/@angular/common/fesm2022/platform_navigation-B45Jeakb.mjs
+// ../../../node_modules/@angular/common/fesm2022/platform_navigation-B45Jeakb.mjs
 var PlatformNavigation = class _PlatformNavigation {
   static ɵfac = function PlatformNavigation_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _PlatformNavigation)();
@@ -3682,7 +3680,7 @@ var PlatformNavigation = class _PlatformNavigation {
   }], null, null);
 })();
 
-// ../node_modules/@angular/common/fesm2022/common.mjs
+// ../../../node_modules/@angular/common/fesm2022/common.mjs
 function registerLocaleData2(data, localeId, extraData) {
   return registerLocaleData(data, localeId, extraData);
 }
@@ -5122,8 +5120,4 @@ export {
    * License: MIT
    *)
 */
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-KOUZRL47.js
-//# sourceMappingURL=chunk-KOUZRL47.js.map
-========
-//# sourceMappingURL=chunk-XM7BB76I.js.map
->>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-XM7BB76I.js
+//# sourceMappingURL=chunk-ZXCMYHVN.js.map
