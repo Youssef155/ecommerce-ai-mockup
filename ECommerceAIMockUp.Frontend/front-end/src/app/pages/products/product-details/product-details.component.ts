@@ -1,48 +1,73 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/Products/Product';
 import { ProductVariationService } from '../../../core/services/product-variation.service';
-import { ProductVariation } from '../../../core/models/Products/product-variation';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
 import { SizeSelectorComponent } from '../size-selector/size-selector.component';
-import { ColorSelectorComponent } from '../color-selector/color-selector.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ColorSelectorComponent } from '../color-selector/color-selector.component'; 
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [SizeSelectorComponent, ColorSelectorComponent, CurrencyPipe],
+  imports: [CommonModule, CurrencyPipe, SizeSelectorComponent, ColorSelectorComponent],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })
-export class ProductDetailsComponent {
-  @Input() product: Product | null = null;
-  
+export class ProductDetailsComponent implements OnInit {
+  product: Product | null = null;
   selectedSize: string | null = null;
-  selectedColor: string | null = null;
   availableColors: string[] = [];
-  isLoadingColors = false;
+  isLoading = true;
+  error: string | null = null;
 
-  constructor(private productVariationService: ProductVariationService) {}
+  constructor(
+    private productService: ProductService,
+    private productVariationService: ProductVariationService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    const productId = this.route.snapshot.paramMap.get('id');
+    if (productId) {
+      this.loadProductDetails(+productId);
+    }
+  }
+
+  loadProductDetails(id: number) {
+    this.isLoading = true;
+    this.productService.getProduct(id).subscribe({
+      next: (product) => {
+        this.product = product;
+        this.isLoading = false;
+        console.log(product)
+      },
+      error: (err) => {
+        this.error = 'Failed to load product details';
+        this.isLoading = false;
+        console.error('Error loading product:', err);
+      }
+    });
+  }
 
   onSizeSelect(size: string) {
-    if (!this.product) return;
-    
-    this.isLoadingColors = true;
-    this.selectedSize = size;
-    this.selectedColor = null;
-    
-    this.productVariationService.getColorsBySize(this.product.id, size)
-      .subscribe({
-        next: (variation) => {
-          this.availableColors = variation.availableColors;
-          this.isLoadingColors = false;
-        },
-        error: () => this.isLoadingColors = false
-      });
+      if (!this.product) return;
+      
+      this.selectedSize = size;
+      this.availableColors = [];
+      
+      this.productVariationService.getColorsBySize(this.product.id, size)
+        .subscribe({
+          next: (colors) => {
+            this.availableColors = colors;
+            console.log('Size:', size, 'Colors:', colors);
+          },
+          error: () => {
+            this.availableColors = [];
+            console.warn('Failed to load colors for size:', size);
+          }
+        });
   }
 
-  onColorSelect(color: string) {
-    this.selectedColor = color;
-  }
 }

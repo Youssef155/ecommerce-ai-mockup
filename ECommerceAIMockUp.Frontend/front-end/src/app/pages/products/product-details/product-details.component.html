@@ -1,36 +1,48 @@
-@if (product) {
-  <div class="product-detail">
+@if (isLoading) {
+  <div class="loading">Loading product details...</div>
+} @else if (error) {
+  <div class="error">{{ error }}</div>
+} @else if (product) {
+  <div class="product-details">
     <div class="product-image">
-      <img [src]="product.image" [alt]="product.name">
+      <img [src]="'https://localhost:7256' + product.image" />
     </div>
+    
     <div class="product-info">
-      <h2>{{ product.name }}</h2>
+      <h1>{{ product.name }}</h1>
       <p class="description">{{ product.descriptions }}</p>
       <p class="price">{{ product.price | currency }}</p>
-      
-      <app-size-selector 
-        [sizes]="product.availableSizes" 
-        (sizeSelected)="onSizeSelect($event)">
-      </app-size-selector>
-      
-      @if (isLoadingColors) {
-        <div class="loading">Loading colors...</div>
-      }
-      
-      @if (selectedSize && availableColors.length > 0) {
-        <app-color-selector 
-          [colors]="availableColors" 
-          (colorSelected)="onColorSelect($event)">
-        </app-color-selector>
-      }
-      
-      @if (selectedColor) {
-        <button class="add-to-cart">Add to Cart</button>
-      }
-    </div>
+
+      <div class="size-selector">
+        <h3>Available Sizes:</h3>
+        <div class="size-options">
+          @for (size of product.availableSizes; track size) {
+            <button 
+              (click)="onSizeSelect(size)"
+              [class.selected]="selectedSize === size">
+              {{ size }}
+            </button>
+          }
+        </div>
+      </div>
+
+      @if (selectedSize) {
+        <div class="color-selector">
+        <h3>Available Colors:</h3>
+        @if (availableColors.length > 0) {
+          <div class="color-options">
+            @for (color of availableColors; track color) {
+              <div class="color-option"
+                  [style.backgroundColor]="color.toLowerCase()"
+                  [title]="color">
+              </div>
+            }
+          </div>
+        } @else {
+          <p>No colors available for this size</p>
+        }
   </div>
-} @else {
-  <div class="no-product-selected">
-    <p>Please select a product to view details</p>
+}
+    </div>
   </div>
 }

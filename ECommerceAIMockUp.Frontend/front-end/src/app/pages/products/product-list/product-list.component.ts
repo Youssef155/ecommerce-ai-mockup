@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/Products/Product';
+import { ImageService } from '../../../core/services/image.service';
 
 @Component({
   selector: 'app-product',
@@ -19,7 +20,7 @@ export class ProductComponent implements OnInit {
   loading = false;
   error = '';
 
-  constructor(private productService: ProductService, private router: Router) {}
+  constructor(private productService: ProductService, private router: Router, public imageService: ImageService) {}
 
 categories = [
   { id: 1, name: 'Tops' },
