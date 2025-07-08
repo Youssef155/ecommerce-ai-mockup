@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DesignService } from '../../../core/services/design.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
@@ -32,6 +32,7 @@ export class DesignUploadComponent {
   constructor(
     private designService: DesignService,
     private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   onFileSelected(event: Event): void {
@@ -53,7 +54,10 @@ export class DesignUploadComponent {
     this.designService.uploadDesign(this.selectedFile).subscribe({
       next: (res) => {
         this.isUploading = false;
-        this.router.navigate(['/design']);
+        this.router.navigate(['/design'],{
+          relativeTo: this.route,
+          queryParamsHandling: 'preserve'
+        });
       },
       error: (err) => {
         this.error = `Failed to upload design, ` + (err.error || 'Please try again.');

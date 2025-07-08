@@ -4,12 +4,14 @@ import {
   inject,
   ChangeDetectorRef
 } from '@angular/core';
-import { Route, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Route, Router, RouterModule } from '@angular/router';
 import { MockupService } from '../../../core/services/mockup.service.service';
-import { MockupStateService } from '../../../core/services/mockup-state-service.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as fabric from 'fabric';
+import { DesignDetails } from '../../../core/models/design-details.model';
+import { DesignService } from '../../../core/services/design.service';
+import { firstValueFrom } from 'rxjs';
 // 
 @Component({
   selector: 'app-design-mockup',
@@ -22,29 +24,32 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   @ViewChild('canvasEl', { static: true }) canvasEl!: ElementRef<HTMLCanvasElement>;
   @ViewChild('wrapperRef', { static: true }) wrapperRef!: ElementRef<HTMLDivElement>;
 
-  private mockupStateService = inject(MockupStateService);
   private cdr = inject(ChangeDetectorRef);
   private mockupService = inject(MockupService);
+  private router: Router = inject(Router);
+  private designService = inject(DesignService);
+  private route = inject(ActivatedRoute);
 
   canvas!: fabric.Canvas;
   designImageUrl: string | null = null;
   productImageUrl: string | null = null;
   productDetailsId: number | null = null;
-  designId: number | null = null;
-  position: 'front' | 'back' = 'front';
+
+  designDetails: DesignDetails = {
+    designId: 0,
+    scaleX: .3,
+    scaleY: .3,
+    xAxis: 0,
+    yAxis: 0,
+    rotation: 0,
+    opacity: 1,
+    position: 'front'
+  }
 
   canvasWidth = 0;
   canvasHeight = 0;
-
-  x = 0;
-  y = 0;
-  rotation = 0;
-  scaleX = .3;
-  scaleY = .3;
   maxX: number = .5;
   maxY: number = .5;
-  opacity: number = 1;
-  router: Router = inject(Router);
 
   get designObject() {
     return this.mockupService.designObject;
@@ -56,13 +61,12 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   }
 
   private initializeFromRoute(): void {
-    const state = this.mockupStateService.getState();
-    console.log('Initializing from state:', state);
-    this.productImageUrl = state.productImageUrl ?? null;
-    this.designImageUrl = state.designImageUrl ?? null;
-    this.designId = state.designId ?? null;
-    this.productDetailsId = state.productDetailsId ?? null;
-    console.log(this.productImageUrl, this.designImageUrl, this.designId, this.productDetailsId);
+    this.route.queryParams.subscribe(params => {
+      this.designImageUrl = params['designImageUrl'] || null;
+      this.productImageUrl = params['productImageUrl'] || "https://localhost:7256/images/products/white-tshirt-n0j.png";
+      this.designDetails.designId = params['designId'] ? +params['designId'] : 0;
+      this.productDetailsId = params['productDetailsId'] ? +params['productDetailsId'] : 0;
+    });
   }
   ngAfterViewInit(): void {
     this.setCanvasSize();
@@ -92,8 +96,8 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   }
 
   private async resizeCanvas() {
-    const currentX = this.x;
-    const currentY = this.y;
+    const currentX = this.designDetails.xAxis;
+    const currentY = this.designDetails.yAxis;
     this.canvas.setDimensions({
       width: this.canvasWidth,
       height: this.canvasHeight,
@@ -101,9 +105,9 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
 
     this.canvas.clear();
     await this.mockupService.renderTshirt(this.productImageUrl!, this.canvasWidth, this.canvasHeight);
-    await this.mockupService.renderDesign(this.designImageUrl!, this.scaleX, this.scaleY, this.rotation);
-    this.x = currentX;
-    this.y = currentY;
+    await this.mockupService.renderDesign(this.designImageUrl!, this.designDetails.scaleX, this.designDetails.scaleY, this.designDetails.rotation);
+    this.designDetails.xAxis = currentX;
+    this.designDetails.yAxis = currentY;
     this.updatePosition();
   }
 
@@ -121,8 +125,8 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
       const xRaw = ((obj.left ?? 0) - (bounds.left + bounds.width / 2)) / bounds.width;
       const yRaw = ((obj.top ?? 0) - (bounds.top + bounds.height / 2)) / bounds.height;
 
-      this.x = parseFloat(xRaw.toFixed(3));
-      this.y = parseFloat(yRaw.toFixed(3));
+      this.designDetails.xAxis = parseFloat(xRaw.toFixed(3));
+      this.designDetails.yAxis = parseFloat(yRaw.toFixed(3));
 
       // Calculate relative scale
       const visualScaleX = obj.scaleX ?? 1;
@@ -131,12 +135,12 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
       const logicalScaleX = (visualScaleX * obj.width!) / (this.mockupService.tshirtOriginalWidth * this.mockupService.tshirtScaleFactor);
       const logicalScaleY = (visualScaleY * obj.height!) / (this.mockupService.tshirtOriginalHeight * this.mockupService.tshirtScaleFactor);
 
-      this.scaleX = parseFloat(logicalScaleX.toFixed(3));
-      this.scaleY = parseFloat(logicalScaleY.toFixed(3));
-      this.rotation = Math.round(obj.angle ?? 0);
-      this.opacity = parseFloat((obj.opacity ?? 1).toFixed(2));
+      this.designDetails.scaleX = parseFloat(logicalScaleX.toFixed(3));
+      this.designDetails.scaleY = parseFloat(logicalScaleY.toFixed(3));
+      this.designDetails.rotation = Math.round(obj.angle ?? 0);
+      this.designDetails.opacity = parseFloat((obj.opacity ?? 1).toFixed(2));
 
-      // 🆕 Calculate allowed X/Y range based on design size relative to T-shirt
+      // Calculate allowed X/Y range based on design size relative to T-shirt
       const objWidthRatio = objBounds.width / bounds.width;
       const objHeightRatio = objBounds.height / bounds.height;
 
@@ -163,8 +167,8 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
     const height = this.mockupService.tshirtOriginalHeight;
 
     design.set({
-      scaleX: (width * this.scaleX * factor) / design.width!,
-      scaleY: (height * this.scaleY * factor) / design.height!,
+      scaleX: (width * this.designDetails.scaleX * factor) / design.width!,
+      scaleY: (height * this.designDetails.scaleY * factor) / design.height!,
     });
     design.setCoords();
     this.canvas.renderAll();
@@ -172,7 +176,7 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
 
   updateRotation() {
     if (!this.designObject) return;
-    this.designObject.rotate(this.rotation);
+    this.designObject.rotate(this.designDetails.rotation);
     this.designObject.setCoords();
     this.canvas.renderAll();
   }
@@ -181,7 +185,7 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
     const obj = this.designObject;
     if (!obj) return;
 
-    obj.set('opacity', this.opacity);
+    obj.set('opacity', this.designDetails.opacity);
     this.canvas.renderAll();
   }
 
@@ -192,8 +196,8 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
 
     const bounds = tshirt.getBoundingRect();
 
-    const left = bounds.left + bounds.width / 2 + this.x * bounds.width;
-    const top = bounds.top + bounds.height / 2 + this.y * bounds.height;
+    const left = bounds.left + bounds.width / 2 + this.designDetails.xAxis * bounds.width;
+    const top = bounds.top + bounds.height / 2 + this.designDetails.yAxis * bounds.height;
 
     obj.set({ left, top });
     this.mockupService.enforceBounds(obj);
@@ -202,11 +206,22 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   }
 
   onCancel() {
-  const confirmCancel = confirm("Are you sure you want to cancel? Your changes won't be saved.");
-  if (confirmCancel) {
-    this.router.navigate(['/design']);
+    const confirmCancel = confirm("Are you sure you want to cancel? Your changes won't be saved.");
+    if (confirmCancel) {
+      this.router.navigate(['/design']);
+    }
   }
-}
+
+  async onAddToCart() {
+    try {
+      const response = await firstValueFrom(this.designService.addDesignDetails(this.designDetails));
+      const designDetailsId = response.result;
+    } catch (err) {
+      console.error(err);
+      alert('Something went wrong. Please try again.');
+    }
+  }
+
 
 
 }

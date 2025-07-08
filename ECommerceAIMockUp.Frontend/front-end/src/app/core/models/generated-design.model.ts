@@ -1,4 +1,4 @@
 export interface GeneratedDesign {
-    imageURL: string;
+    imageUrl: string;
     promptId: number;
 }

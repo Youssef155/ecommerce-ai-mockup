@@ -2,10 +2,16 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0">My Designs</h1>
     <div>
-      <a routerLink="/design/upload" class="btn btn-primary me-2">
+      <a 
+      [routerLink]="['/design/upload']"
+      queryParamsHandling="preserve"
+       class="btn btn-primary me-2">
         <i class="fas fa-upload me-1"></i> Upload Design
       </a>
-      <a routerLink="/design/generate" class="btn btn-success">
+      <a 
+      [routerLink]="['/design/generate']" 
+      queryParamsHandling="preserve"
+      class="btn btn-success">
         <i class="fas fa-magic me-1"></i> Generate with AI
       </a>
     </div>
@@ -31,8 +37,7 @@
         <img [src]="design.imageUrl"  class="card-img-top" style="height: 200px; object-fit: cover;">
         <div class="hover-overlay">
           <button class="btn btn-primary position-absolute top-50 start-50 translate-middle"
-                  [routerLink]="['/design/mockup']"
-                  (click)="setMockupData(productDetailsId, design.id, productImageUrl, design.imageUrl)">
+                  (click)="previewMockup(design)">
             Preview Mockup
           </button>
         </div>

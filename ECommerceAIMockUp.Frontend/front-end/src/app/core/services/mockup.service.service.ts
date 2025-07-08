@@ -24,8 +24,8 @@ export class MockupService {
     return this.canvas;
   }
 
-  async renderTshirt(tshirtUrl: string, canvasWidth: number, canvasHeight: number): Promise<void> {
-  const img = await FabricImage.fromURL(tshirtUrl);
+  async renderTshirt(productImageUrl: string, canvasWidth: number, canvasHeight: number): Promise<void> {
+  const img = await FabricImage.fromURL(productImageUrl);
   img.selectable = false;
 
     this.tshirtOriginalWidth = img.width!;
@@ -57,9 +57,9 @@ export class MockupService {
 }
 
 async renderDesign(
-  designUrl: string, logicalScaleX: number, logicalScaleY: number, rotation: number
+  designImageUrl: string, logicalScaleX: number, logicalScaleY: number, rotation: number
 ): Promise<void> {
-  const img = await FabricImage.fromURL(designUrl);
+  const img = await FabricImage.fromURL(designImageUrl);
   img.set({
       originX: 'center',
       originY: 'center',

@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { DesignService } from '../../../core/services/design.service';
 import { Design } from '../../../core/models/design.model';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { 
-  faUpload, 
-  faMagic, 
-  faSpinner, 
-  faCalendarAlt, 
-  faImages, 
+import {
+  faUpload,
+  faMagic,
+  faSpinner,
+  faCalendarAlt,
+  faImages,
   faRobot,
   faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
-import { MockupStateService } from '../../../core/services/mockup-state-service.service';
 
 @Component({
   selector: 'app-design-list',
@@ -26,7 +25,6 @@ export class DesignListComponent implements OnInit {
   designs: Design[] = [];
   loading = true;
   error: string | null = null;
-  productImageUrl: string = 'https://localhost:7256/images/products/white-tshirt-n0j.png'; // Default product image URL
   productDetailsId: number = 1; // Default product ID for mockup
 
   // Font Awesome icons
@@ -38,7 +36,7 @@ export class DesignListComponent implements OnInit {
   faRobot = faRobot;
   faExclamationTriangle = faExclamationTriangle;
 
-  constructor(private designService: DesignService, private router: Router, private mockupStateService: MockupStateService) { }
+  constructor(private designService: DesignService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.loadDesigns();
@@ -47,7 +45,7 @@ export class DesignListComponent implements OnInit {
   loadDesigns(): void {
     this.loading = true;
     this.error = null;
-    
+
     this.designService.getDesigns().subscribe({
       next: (res) => {
         this.designs = res.result || [];
@@ -60,36 +58,28 @@ export class DesignListComponent implements OnInit {
     });
   }
 
-  setMockupData(
-  productDetailsId: number,
-  designId: number,
-  productImageUrl: string,
-  designImageUrl: string
-  ): void {
-  this.mockupStateService.setState({
-    productDetailsId,
-    designId,
-    productImageUrl,
-    designImageUrl,
-  });
-}
-
   previewMockup(design: Design): void {
-  // const productId = this.route.snapshot.queryParams['productId'];
-  const productId : number = 1; 
+    let productDetailsId: number | null = null;
+    let productImageUrl: string | null = null;
+    this.route.queryParams.subscribe(params => {
+      productDetailsId = params['productDetailsId'];
+      productImageUrl = params['productImageUrl'];
 
-  
-  if (productId) {
-    this.router.navigate(['/designs/mockup', productId, design.id], {
-      state: {
-        designImageUrl: design.imageUrl,
-        productImageUrl: this.productImageUrl,
+      if (productDetailsId && productImageUrl) {
+        this.router.navigate(['/design/mockup'], {
+          relativeTo: this.route,
+          queryParams: {
+            designId: design.id,
+            designImageUrl: design.imageUrl,
+          },
+          queryParamsHandling: 'merge'
+        }
+        );
+      } else {
+        alert('Please select a product first');
       }
     });
-  } else {
-    alert('Please select a product first');
   }
-}
 
   onDesignAdded(design: Design): void {
     this.designs = [design, ...this.designs];

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DesignService } from '../../../core/services/design.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
@@ -22,7 +22,7 @@ import { GeneratedDesign } from '../../../core/models/generated-design.model';
   styleUrls: ['./design-generate.component.css']
 })
 export class DesignGenerateComponent {
-  generatedDesign: GeneratedDesign = { imageURL: '', promptId: 0 };
+  generatedDesign: GeneratedDesign = { imageUrl: '', promptId: 0 };
   prompt = '';
   isGenerating = false;
   isSaving = false;
@@ -39,6 +39,7 @@ export class DesignGenerateComponent {
   constructor(
     private designService: DesignService,
     private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   generateDesign(): void {
@@ -54,8 +55,7 @@ export class DesignGenerateComponent {
       next: (response) => {
         console.log('Design generated successfully:', response);
         this.generatedDesign.promptId = response.promptId;
-        this.generatedDesign.imageURL = response.imageURL;
-        console.log('Design object:', this.generatedDesign);
+        this.generatedDesign.imageUrl = response.imageURL;
         this.isGenerating = false;
       },
       error: (err) => {
@@ -66,7 +66,7 @@ export class DesignGenerateComponent {
   }
 
   saveDesign(): void {
-    if (!this.generatedDesign.imageURL) return;
+    if (!this.generatedDesign.imageUrl) return;
 
     this.isSaving = true;
     this.error = null;
@@ -74,7 +74,10 @@ export class DesignGenerateComponent {
     this.designService.saveGeneratedDesign(this.generatedDesign).subscribe({
       next: () => {
         this.isSaving = false;
-        this.router.navigate(['/design']);
+        this.router.navigate(['/design'], {
+          relativeTo: this.route,
+          queryParamsHandling: 'preserve'
+        });
       },
       error: (err) => {
         this.error = 'Failed to save design, ' + (err.error || 'Please try again.');
@@ -84,14 +87,20 @@ export class DesignGenerateComponent {
   }
 
    discardDesign(): void {
-    if (!this.generatedDesign.imageURL) {
-      this.router.navigate(['/design']);
+    if (!this.generatedDesign.imageUrl) {
+      this.router.navigate(['/design'], {
+          relativeTo: this.route,
+          queryParamsHandling: 'preserve'
+        });
       return;
     }
 
     this.designService.discardDesign(this.generatedDesign).subscribe({
       next: () => {
-        this.router.navigate(['/design']);
+        this.router.navigate(['/design'], {
+          relativeTo: this.route,
+          queryParamsHandling: 'preserve'
+        });
       },
       error: (err) => {
         console.error('Failed to discard design:', err);
@@ -99,4 +108,11 @@ export class DesignGenerateComponent {
       }
     });
   }
+
+  back(): void{
+    this.router.navigate(['/design'], {
+          relativeTo: this.route,
+          queryParamsHandling: 'preserve'
+        }
+  )}
 }
