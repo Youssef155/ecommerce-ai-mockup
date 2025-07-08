@@ -8,7 +8,7 @@ namespace ECommerceAIMockUp.Application.DTOs.Design
 {
     public class GeneratedDesign
     {
-        public string ImageURL { get; set; } = "";
+        public string ImageUrl { get; set; } = "";
         public int PromptId { get; set; }
     }
 }

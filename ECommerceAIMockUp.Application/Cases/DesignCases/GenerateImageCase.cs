@@ -78,20 +78,20 @@ namespace ECommerceAIMockUp.Application.Cases.DesignCases
             await _logRepository.SaveChangesAsync();
             string baseUrl = _config["ImageUrlSetting:BaseUrl"]!;
             string imageUrl = $"{baseUrl.TrimEnd('/')}/designs/{imageName.TrimStart('/')}";
-            GeneratedDesign generatedDesign = new GeneratedDesign() { ImageURL = imageUrl, PromptId = aiLog.Id};
+            GeneratedDesign generatedDesign = new GeneratedDesign() { ImageUrl = imageUrl, PromptId = aiLog.Id};
             return new Response<GeneratedDesign> { Data = generatedDesign, IsSucceeded = true };
             
         }
         public async Task<Response<string>> SaveGeneratedImage(GeneratedDesign image, string userId)
         {
-            string imageName = Uri.UnescapeDataString(new Uri(image.ImageURL).Segments.Last());
+            string imageName = Uri.UnescapeDataString(new Uri(image.ImageUrl).Segments.Last());
             await AddDesignToDataBaseAsync(userId, imageName, image.PromptId);
             return new Response<string> { IsSucceeded = true, Data = "Saved" };
         }
 
         public async Task<Response<string>> DeleteGeneratedImageFile(GeneratedDesign image)
         {
-            string imageName = Uri.UnescapeDataString(new Uri(image.ImageURL).Segments.Last());
+            string imageName = Uri.UnescapeDataString(new Uri(image.ImageUrl).Segments.Last());
             await _imageStorageService.DeleteAsync(imageName, "images", "designs");
             return new Response<string> { IsSucceeded = true, Data = "Done" };
         }

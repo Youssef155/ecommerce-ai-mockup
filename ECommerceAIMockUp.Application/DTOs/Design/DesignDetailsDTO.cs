@@ -19,10 +19,10 @@ namespace ECommerceAIMockUp.Application.DTOs.Design
         [Range(0.1, 1)]
         public float ScaleY { get; set; }
         [Required]
-        [Range(0, .5)]
+        [Range(-.5, .5)]
         public float XAxis { get; set; }
         [Required]
-        [Range(0, .5)]
+        [Range(-0.5, .5)]
         public float YAxis { get; set; }
         [Required]
         [Range(0, 1)]
