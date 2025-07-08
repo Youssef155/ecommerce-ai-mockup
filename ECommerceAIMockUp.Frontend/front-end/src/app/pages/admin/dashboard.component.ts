@@ -10,9 +10,6 @@ import { PaymentStatus } from '../../shared/Enums/payment-status';
 import { Order } from '../../interfaces/order';
 import { ApiResponse } from '../../interfaces/api-response';
 import { OrderUpdatePaymentDto, OrderUpdateStatusDto } from '../../interfaces/order-item';
-
-
-
 @Component({
   selector: 'app-dashboard',
   imports: [CommonModule, FormsModule],
@@ -20,8 +17,6 @@ import { OrderUpdatePaymentDto, OrderUpdateStatusDto } from '../../interfaces/or
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-
-
 export class AdminDashboardComponent implements OnInit {
   activeTab = 'dashboard';
   isSidebarOpen = true;
@@ -124,33 +119,77 @@ export class AdminDashboardComponent implements OnInit {
     });
   }
 
-  private fetchProducts() {
-    this.loading = true;
-    this.http.get<any>(`${this.apiUrl}/Product/products?pageNumber=1&pageSize=10`, {
-      headers: this.getAuthHeaders()
-    }).subscribe({
-      next: (response) => {
-        if (response && response.data) {
-          this.products = Array.isArray(response.data) ? response.data : [];
-        } else if (response && response.result) {
-          this.products = Array.isArray(response.result) ? response.result : [];
-        } else if (Array.isArray(response)) {
-          this.products = response;
-        } else {
-          this.products = [];
+ private fetchProducts() {
+  this.loading = true;
+  this.http.get<ApiResponse<any>>(`${this.apiUrl}/Product/products?pageNumber=1&pageSize=10`, {
+    headers: this.getAuthHeaders()
+  }).subscribe({
+    next: (response) => {
+      console.log('API Response:', response);
+      if (response && response.data) {
+        if (response.data.data && Array.isArray(response.data.data)) {
+          this.products = response.data.data.map((dto: any) => ({
+            id: dto.Id || dto.id || 0,
+            name: dto.Name || dto.name || '',
+            price: dto.Price || dto.price || 0,
+            description: dto.Description || dto.description || '',
+            categoryName: dto.CategoryName || dto.categoryName || '',
+            stock: dto.stock || 0,
+            imageUrl: dto.Image || dto.imageUrl || '',
+            gender: dto.Gender?.toString() || dto.gender || '',
+            season: dto.Season?.toString() || dto.season || '',
+            colors: dto.colors || [],
+            sizes: dto.sizes || [],
+            categoryId: dto.categoryId
+          }));
+        } else if (Array.isArray(response.data)) {
+          this.products = response.data.map((dto: any) => ({
+            id: dto.Id || dto.id || 0,
+            name: dto.Name || dto.name || '',
+            price: dto.Price || dto.price || 0,
+            description: dto.Description || dto.description || '',
+            categoryName: dto.CategoryName || dto.categoryName || '',
+            stock: dto.stock || 0,
+            imageUrl: dto.Image || dto.imageUrl || '',
+            gender: dto.Gender?.toString() || dto.gender || '',
+            season: dto.Season?.toString() || dto.season || '',
+            colors: dto.colors || [],
+            sizes: dto.sizes || [],
+            categoryId: dto.categoryId
+          }));
         }
-        this.filteredProducts = this.products;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching products:', error);
+      } else if (response && response.result && Array.isArray(response.result)) {
+        this.products = response.result.map((dto: any) => ({
+          id: dto.Id || dto.id || 0,
+          name: dto.Name || dto.name || '',
+          price: dto.Price || dto.price || 0,
+          description: dto.Description || dto.description || '',
+          categoryName: dto.CategoryName || dto.categoryName || '',
+          stock: dto.stock || 0,
+          imageUrl: dto.Image || dto.imageUrl || '',
+          gender: dto.Gender?.toString() || dto.gender || '',
+          season: dto.Season?.toString() || dto.season || '',
+          colors: dto.colors || [],
+          sizes: dto.sizes || [],
+          categoryId: dto.categoryId
+        }));
+      } else {
+        console.warn('Unexpected response structure:', response);
         this.products = [];
-        this.filteredProducts = [];
-        this.loading = false;
-        this.handleError(error);
       }
-    });
-  }
+      this.filteredProducts = [...this.products];
+      this.loading = false;
+    },
+    error: (error) => {
+      console.error('Error fetching products:', error);
+      this.products = [];
+      this.filteredProducts = [];
+      this.loading = false;
+      this.handleError(error);
+    }
+  });
+}
+
 
   private fetchCategories() {
     this.loading = true;
@@ -238,45 +277,57 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   saveItem() {
-    if (!this.modalType) return;
+  if (!this.modalType) return;
 
-    const isEdit = !!this.selectedItem;
-    let endpoint = '';
-    let headers = this.getAuthHeaders(this.modalType === 'products');
+  const isEdit = !!this.selectedItem;
+  let endpoint = '';
+  let headers = this.getAuthHeaders(this.modalType === 'products');
 
-    let body = this.newItem;
-    if (this.modalType === 'products') {
-      const formData = new FormData();
-      for (const key in this.newItem) {
-        if (this.newItem.hasOwnProperty(key) && this.newItem[key] !== undefined) {
-          formData.append(key, this.newItem[key]);
-        }
-      }
-      body = formData;
-      endpoint = `${this.apiUrl}/Product/Product`;
-    } else if (this.modalType === 'categories') {
-      endpoint = isEdit ? `${this.apiUrl}/Categories/${this.selectedItem.id}` : `${this.apiUrl}/Categories`;
-    } else {
-      console.log('Unknown modal type:', this.modalType);
+  let body: any;
+  if (this.modalType === 'products') {
+    const formData = new FormData();
+
+    if (!this.newItem.name || !this.newItem.price || !this.newItem.categoryName || !this.newItem.gender || !this.newItem.season || !this.newItem.image) {
+      alert('Please fill all required fields: Name, Price, Category Name, Gender, Season, and Image.');
       return;
     }
-
-    const request = isEdit
-      ? this.http.put(endpoint, body, { headers })
-      : this.http.post(endpoint, body, { headers });
-
-    request.subscribe({
-      next: () => {
-        alert(isEdit ? 'Category updated successfully' : 'Item added successfully');
-        this.refreshData();
-        this.closeModal();
-      },
-      error: (error) => {
-        console.error('Error saving item:', error);
-        this.handleError(error);
-      }
-    });
+    formData.append('Name', this.newItem.name);
+    formData.append('Description', this.newItem.description || '');
+    formData.append('Gender', this.newItem.gender);
+    formData.append('Season', this.newItem.season);
+    formData.append('Price', this.newItem.price.toString());
+    formData.append('CategoryName', this.newItem.categoryName);
+    if (this.newItem.image) formData.append('ImgUrl', this.newItem.image);
+    console.log('Sending FormData:', Array.from(formData.entries()));
+    body = formData;
+    endpoint = `${this.apiUrl}/Product/Product`;
+  } else if (this.modalType === 'categories') {
+    body = this.newItem;
+    endpoint = isEdit ? `${this.apiUrl}/Categories/${this.selectedItem.id}` : `${this.apiUrl}/Categories`;
+  } else {
+    console.log('Unknown modal type:', this.modalType);
+    return;
   }
+
+  const request = isEdit
+    ? this.http.put(endpoint, body, { headers })
+    : this.http.post(endpoint, body, { headers });
+
+  request.subscribe({
+    next: () => {
+      alert(isEdit ? 'Item updated successfully' : 'Product added successfully');
+      this.refreshData();
+      this.closeModal();
+    },
+    error: (error) => {
+      console.error('Error saving item:', error);
+      this.handleError(error);
+      if (error.status === 400) {
+        alert('Error: Check if all required fields are filled correctly.');
+      }
+    }
+  });
+}
 
   deleteItem(id: number, type: string) {
     if (confirm('Are you sure you want to delete this item?')) {
@@ -386,35 +437,37 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   search() {
-    const term = this.searchTerm.toLowerCase();
+  const term = this.searchTerm.toLowerCase();
 
-    if (this.activeTab === 'users') {
-      this.filteredUsers = this.users.filter(u =>
-        u.name?.toLowerCase().includes(term) ||
-        u.email?.toLowerCase().includes(term) ||
-        u.phone?.toLowerCase().includes(term)
-      );
-    } else if (this.activeTab === 'products') {
-      this.filteredProducts = this.products.filter(p =>
-        p.name?.toLowerCase().includes(term) ||
-        p.category?.toLowerCase().includes(term) ||
-        p.description?.toLowerCase().includes(term)
-      );
-    } else if (this.activeTab === 'categories') {
-      this.filteredCategories = this.categories.filter(c =>
-        c.name?.toLowerCase().includes(term) ||
-        c.description?.toLowerCase().includes(term)
-      );
-    } else if (this.activeTab === 'orders') {
-      this.filteredOrders = this.orders.filter(o =>
-        o.id.toString().includes(term) ||
-        o.userName?.toLowerCase().includes(term) ||
-        o.userEmail?.toLowerCase().includes(term) ||
-        o.status?.toString().toLowerCase().includes(term) ||
-        o.paymentStatus?.toString().toLowerCase().includes(term)
-      );
-    }
+  if (this.activeTab === 'users') {
+    this.filteredUsers = this.users.filter(u =>
+      (u.name?.toLowerCase().includes(term) || false) ||
+      (u.email?.toLowerCase().includes(term) || false) ||
+      (u.phone?.toLowerCase().includes(term) || false)
+    );
+  } else if (this.activeTab === 'products') {
+    this.filteredProducts = this.products.filter(p =>
+      (p.name?.toLowerCase().includes(term) || false) ||
+      (p.categoryName?.toLowerCase().includes(term) || false) ||
+      (p.description?.toLowerCase().includes(term) || false) ||
+      (p.gender?.toLowerCase().includes(term) || false) ||
+      (p.season?.toLowerCase().includes(term) || false)
+    );
+  } else if (this.activeTab === 'categories') {
+    this.filteredCategories = this.categories.filter(c =>
+      (c.name?.toLowerCase().includes(term) || false) ||
+      (c.description?.toLowerCase().includes(term) || false)
+    );
+  } else if (this.activeTab === 'orders') {
+    this.filteredOrders = this.orders.filter(o =>
+      o.id.toString().includes(term) ||
+      (o.userName?.toLowerCase().includes(term) || false) ||
+      (o.userEmail?.toLowerCase().includes(term) || false) ||
+      (o.status?.toString().toLowerCase().includes(term) || false) ||
+      (o.paymentStatus?.toString().toLowerCase().includes(term) || false)
+    );
   }
+}
 
   get dashboardStats() {
     return {
