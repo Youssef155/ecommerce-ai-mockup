@@ -3,9 +3,9 @@
 } @else if (error) {
   <div class="error">{{ error }}</div>
 } @else if (product) {
-  <div class="product-details">
+  <div class="product-details card">
     <div class="product-image">
-      <img [src]="'https://localhost:7256' + product.image" />
+      <img [src]="'https://localhost:7256' + product.image" alt="{{ product.name }}" />
     </div>
     
     <div class="product-info">
@@ -28,21 +28,35 @@
 
       @if (selectedSize) {
         <div class="color-selector">
-        <h3>Available Colors:</h3>
-        @if (availableColors.length > 0) {
-          <div class="color-options">
-            @for (color of availableColors; track color) {
-              <div class="color-option"
-                  [style.backgroundColor]="color.toLowerCase()"
-                  [title]="color">
-              </div>
-            }
-          </div>
-        } @else {
-          <p>No colors available for this size</p>
-        }
-  </div>
-}
+          <h3>Available Colors:</h3>
+          @if (availableColors.length > 0) {
+            <div class="color-options">
+              @for (color of availableColors; track color) {
+                <div class="color-option"
+                    [style.backgroundColor]="color.toLowerCase()"
+                    [class.selected]="selectedColor === color"
+                    (click)="onColorSelect(color)"
+                    [title]="color">
+                </div>
+              }
+            </div>
+          } @else {
+            <p>No colors available for this size</p>
+          }
+        </div>
+      }
+
+      <button class="add-to-cart" 
+              [disabled]="!selectedSize || !selectedColor"
+              (click)="addToCart()">
+        Add to Cart
+      </button>
+
+      <button class="go-to-design"
+              [disabled]="!product"
+              (click)="goToDesign()">
+        Go To Design
+      </button>
     </div>
   </div>
 }

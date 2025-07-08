@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
 import { SizeSelectorComponent } from '../size-selector/size-selector.component';
 import { ColorSelectorComponent } from '../color-selector/color-selector.component'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-details',
@@ -18,6 +19,7 @@ import { ColorSelectorComponent } from '../color-selector/color-selector.compone
 export class ProductDetailsComponent implements OnInit {
   product: Product | null = null;
   selectedSize: string | null = null;
+  selectedColor: string | null = null;
   availableColors: string[] = [];
   isLoading = true;
   error: string | null = null;
@@ -25,7 +27,8 @@ export class ProductDetailsComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private productVariationService: ProductVariationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -52,22 +55,44 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   onSizeSelect(size: string) {
-      if (!this.product) return;
-      
-      this.selectedSize = size;
-      this.availableColors = [];
-      
-      this.productVariationService.getColorsBySize(this.product.id, size)
-        .subscribe({
-          next: (colors) => {
-            this.availableColors = colors;
-            console.log('Size:', size, 'Colors:', colors);
-          },
-          error: () => {
-            this.availableColors = [];
-            console.warn('Failed to load colors for size:', size);
+    if (!this.product) return;
+
+    this.selectedSize = size;
+    this.selectedColor = null;
+    this.availableColors = [];
+
+    this.productVariationService.getColorsBySize(this.product.id, size)
+      .subscribe({
+        next: (colors) => {
+          this.availableColors = colors;
+          if (colors.length === 1) {
+            this.selectedColor = colors[0];
           }
-        });
+        },
+        error: () => {
+          this.availableColors = [];
+        }
+      });
   }
 
+  onColorSelect(color: string) {
+    this.selectedColor = color;
+  }
+
+  addToCart() {
+    if (!this.product || !this.selectedSize || !this.selectedColor) return;
+    alert(`Added to cart: ${this.product.name} - Size: ${this.selectedSize}, Color: ${this.selectedColor}`);
+  }
+
+  goToDesign() {
+    if (!this.product) return;
+    const productDetailsId = this.product.id;
+    const imgUrl = this.product.image;
+    this.router.navigate(['/design'], {
+      queryParams: {
+        productDetailsId,
+        imgUrl
+      }
+    });
+  }
 }

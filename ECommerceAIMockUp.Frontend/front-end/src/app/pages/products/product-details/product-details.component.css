@@ -1,23 +1,40 @@
 /* product-details.component.css */
-.product-details {
+.product-details.card {
   display: flex;
-  gap: 2rem;
-  margin-top: 2rem;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  padding: 2rem;
+  gap: 3rem;
+  /* Ensure the card stretches full width on desktop */
+  width: 100%;
+  max-width: 1100px;
+  margin: 2rem auto;
 }
 
 .product-image {
-  flex: 1;
+  flex: 1 1 400px;
   max-width: 500px;
+  min-width: 320px;
+  margin-left: 17rem; /* Space from the left edge of the screen */
+  margin-right: 2rem; /* Space between image and details */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-image img {
   width: 100%;
   height: auto;
   border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .product-info {
-  flex: 1;
+  flex: 2 1 0;
+  min-width: 300px;
+  padding-right: 1rem;
 }
 
 .size-options {
@@ -50,10 +67,33 @@
   border-radius: 50%;
   cursor: pointer;
   border: 2px solid black;
+  transition: border-color 0.2s;
+}
+
+.color-option.selected {
+  border-color: #1a8917;
+  box-shadow: 0 0 0 2px #e6f4ea;
 }
 
 .color-option:hover {
   border-color: #333;
+}
+
+.add-to-cart {
+  margin-top: 2rem;
+  padding: 0.75rem 2rem;
+  background: #1a8917;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.add-to-cart:disabled {
+  background: #ccc;
+  cursor: not-allowed;
 }
 
 .loading {
@@ -65,4 +105,50 @@
   color: red;
   padding: 2rem;
   text-align: center;
+}
+
+.go-to-design {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  padding: 0.75rem 2rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  display: inline-block;
+}
+
+.go-to-design:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.go-to-design:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Make sure buttons are spaced nicely */
+.add-to-cart + .go-to-design {
+  margin-left: 1rem;
+}
+
+@media (max-width: 900px) {
+  .product-details.card {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+  }
+  .product-image {
+    margin-left: 0;
+    margin-right: 0;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .product-info {
+    padding-right: 0;
+  }
 }
