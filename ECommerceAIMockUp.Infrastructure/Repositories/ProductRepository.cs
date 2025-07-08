@@ -68,6 +68,11 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             return product;
         }
 
-
+        public async Task<Product?> GetByIdWithVariantsAsync(int productId)
+        {
+            return await _context.Products
+                .Include(p => p.ProductDetails)
+                .FirstOrDefaultAsync(p => p.Id == productId);
+        }
     }
 }

@@ -51,6 +51,28 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
 
             return response;
         }
+        public async Task<ProductBasicDto> GetProductBasicAsync(int productId)
+        {
+            var product = await _productRepository.GetByIdWithVariantsAsync(productId);
+
+            if (product == null)
+                throw new KeyNotFoundException("Product not found.");
+
+            var sizes = product.ProductDetails
+                .Select(v => v.Size)
+                .Distinct()
+                .OrderBy(s => s)
+                .ToList();
+
+            return new ProductBasicDto
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                AvailableSizes = sizes
+            };
+        }
 
         public async Task<Response<PaginatedResult<GetAllProductsDto>>> GetProductCategoryFilterService(List<Gender>? gender, List<Season>? seasons, int? categoryId, int pageNumber = 1, int pageSize = 10)
         {
@@ -79,6 +101,30 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
             var response = new Response<PaginatedResult<GetAllProductsDto>>(paginatedDto, HttpStatusCode.OK, true);
 
             return response;
+        }
+
+        public async Task<ColorOptionsDto> GetAvailableColorsAsync(int productId, string size)
+        {
+            var product = await _productRepository.GetByIdWithVariantsAsync(productId);
+
+            if (product == null)
+                throw new KeyNotFoundException("Product not found.");
+
+            var colors = product.ProductDetails
+                .Where(v => v.Size.Equals(size, StringComparison.OrdinalIgnoreCase))
+                .Select(v => v.Color)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
+
+            if (!colors.Any())
+                throw new InvalidOperationException("No colors found for the specified size.");
+
+            return new ColorOptionsDto
+            {
+                Size = size,
+                AvailableColors = colors
+            };
         }
 
         public async Task<Response<string>> CreateProductAsync(CreateProductDto dto)
@@ -116,6 +162,31 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
             {
                 return new Response<string>($"Failed to create product: {ex.Message}", HttpStatusCode.InternalServerError, false);
             }
+        }
+
+        public async Task<ProductVariantDto> GetVariantAsync(int productId, string size, string color)
+        {
+            var product = await _productRepository.GetByIdWithVariantsAsync(productId);
+
+            if (product == null)
+                throw new KeyNotFoundException("Product not found.");
+
+            var variant = product.ProductDetails
+                .FirstOrDefault(v =>
+                    v.Size.Equals(size, StringComparison.OrdinalIgnoreCase) &&
+                    v.Color.Equals(color, StringComparison.OrdinalIgnoreCase));
+
+            if (variant == null)
+                throw new InvalidOperationException("Variant not found for the given size and color.");
+
+            return new ProductVariantDto
+            {
+                ProductId = product.Id,
+                Size = variant.Size,
+                Color = variant.Color,
+                Price = variant.Product.Price,
+                Stock = variant.Amount
+            };
         }
 
     }
