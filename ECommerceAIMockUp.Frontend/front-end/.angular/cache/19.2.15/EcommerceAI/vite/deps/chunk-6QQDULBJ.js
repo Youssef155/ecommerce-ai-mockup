@@ -1,11 +1,7 @@
 import {
   DOCUMENT,
   isPlatformBrowser
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-XM7BB76I.js
-} from "./chunk-4YNGKIBB.js";
-========
-} from "./chunk-QZ2E34AJ.js";
->>>>>>>> origin/frontend/DesignPage:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-GBANFASH.js
+} from "./chunk-B57Y36QR.js";
 import {
   ApplicationRef,
   Attribute,
@@ -64,19 +60,15 @@ import {
   ɵɵinject,
   ɵɵinjectAttribute,
   ɵɵstyleProp
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-XM7BB76I.js
-} from "./chunk-44Z5NQYP.js";
-========
-} from "./chunk-5QXQOMPN.js";
+} from "./chunk-DNHWGLDI.js";
 import {
   Subject
-} from "./chunk-P6U2JBMQ.js";
+} from "./chunk-YG73TWR3.js";
 import {
   __async,
   __spreadProps,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
->>>>>>>> origin/frontend/DesignPage:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-GBANFASH.js
 
 // ../node_modules/@angular/common/fesm2022/location-Dq4mJT-A.mjs
 var _DOM = null;
@@ -5130,8 +5122,4 @@ export {
    * License: MIT
    *)
 */
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-XM7BB76I.js
-//# sourceMappingURL=chunk-XM7BB76I.js.map
-========
-//# sourceMappingURL=chunk-GBANFASH.js.map
->>>>>>>> origin/frontend/DesignPage:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-GBANFASH.js
+//# sourceMappingURL=chunk-6QQDULBJ.js.map

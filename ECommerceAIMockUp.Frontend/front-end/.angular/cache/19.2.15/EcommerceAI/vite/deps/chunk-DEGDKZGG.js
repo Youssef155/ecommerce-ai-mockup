@@ -1,30 +1,19 @@
 import {
+  withHttpTransferCache
+} from "./chunk-RHAXR6J5.js";
+import {
   CommonModule,
   DomAdapter,
   getDOM,
   setRootDomAdapter
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-VHIJCBPP.js
-} from "./chunk-XM7BB76I.js";
-import {
-  withHttpTransferCache
-} from "./chunk-A2S7RXMG.js";
-========
-} from "./chunk-GBANFASH.js";
-import {
-  withHttpTransferCache
-} from "./chunk-MNYYNOOB.js";
->>>>>>>> origin/frontend/DesignPage:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-SUM7U2CD.js
+} from "./chunk-6QQDULBJ.js";
 import {
   DOCUMENT,
   PLATFORM_BROWSER_ID,
   XhrFactory,
   isPlatformServer,
   parseCookieValue
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-VHIJCBPP.js
-} from "./chunk-4YNGKIBB.js";
-========
-} from "./chunk-QZ2E34AJ.js";
->>>>>>>> origin/frontend/DesignPage:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-SUM7U2CD.js
+} from "./chunk-B57Y36QR.js";
 import {
   APP_ID,
   ApplicationModule,
@@ -83,15 +72,11 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-VHIJCBPP.js
-} from "./chunk-44Z5NQYP.js";
-========
-} from "./chunk-5QXQOMPN.js";
+} from "./chunk-DNHWGLDI.js";
 import {
   __spreadProps,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
->>>>>>>> origin/frontend/DesignPage:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-SUM7U2CD.js
 
 // ../node_modules/@angular/platform-browser/fesm2022/dom_renderer-DGKzginR.mjs
 var EVENT_MANAGER_PLUGINS = new InjectionToken(ngDevMode ? "EventManagerPlugins" : "");
@@ -2030,8 +2015,4 @@ export {
    * License: MIT
    *)
 */
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-VHIJCBPP.js
-//# sourceMappingURL=chunk-VHIJCBPP.js.map
-========
-//# sourceMappingURL=chunk-SUM7U2CD.js.map
->>>>>>>> origin/frontend/DesignPage:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-SUM7U2CD.js
+//# sourceMappingURL=chunk-DEGDKZGG.js.map

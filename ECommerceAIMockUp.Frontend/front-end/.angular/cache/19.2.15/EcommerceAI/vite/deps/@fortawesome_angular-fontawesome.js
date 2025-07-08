@@ -1,11 +1,11 @@
 import {
   DomSanitizer
-} from "./chunk-SUM7U2CD.js";
-import "./chunk-GBANFASH.js";
-import "./chunk-MNYYNOOB.js";
+} from "./chunk-DEGDKZGG.js";
+import "./chunk-RHAXR6J5.js";
+import "./chunk-6QQDULBJ.js";
 import {
   DOCUMENT
-} from "./chunk-QZ2E34AJ.js";
+} from "./chunk-B57Y36QR.js";
 import {
   Component,
   Directive,
@@ -33,11 +33,11 @@ import {
   ɵɵprojection,
   ɵɵprojectionDef,
   ɵɵsanitizeHtml
-} from "./chunk-5QXQOMPN.js";
-import "./chunk-P6U2JBMQ.js";
+} from "./chunk-DNHWGLDI.js";
+import "./chunk-YG73TWR3.js";
 import "./chunk-WDMUDEB6.js";
 
-// node_modules/@fortawesome/fontawesome-svg-core/index.mjs
+// ../node_modules/@fortawesome/fontawesome-svg-core/index.mjs
 function _defineProperty(e, r2, t2) {
   return (r2 = _toPropertyKey(r2)) in e ? Object.defineProperty(e, r2, {
     value: t2,
@@ -2915,7 +2915,7 @@ var layer = api.layer;
 var text = api.text;
 var counter = api.counter;
 
-// node_modules/@fortawesome/angular-fontawesome/fesm2022/angular-fontawesome.mjs
+// ../node_modules/@fortawesome/angular-fontawesome/fesm2022/angular-fontawesome.mjs
 var _c0 = ["*"];
 var faWarnIfIconDefinitionMissing = (iconSpec) => {
   throw new Error(`Could not find icon with iconName=${iconSpec.iconName} and prefix=${iconSpec.prefix} in the icon library.`);
