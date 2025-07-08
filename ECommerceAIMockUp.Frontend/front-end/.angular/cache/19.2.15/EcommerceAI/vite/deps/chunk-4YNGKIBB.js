@@ -2,14 +2,10 @@ import {
   InjectionToken
 } from "./chunk-44Z5NQYP.js";
 
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-FRXTEGWH.js
-// node_modules/@angular/common/fesm2022/xhr-BfNfxNDv.mjs
-========
 // ../node_modules/@angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs
 var DOCUMENT = new InjectionToken(ngDevMode ? "DocumentToken" : "");
 
 // ../node_modules/@angular/common/fesm2022/xhr-BfNfxNDv.mjs
->>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-4YNGKIBB.js
 function parseCookieValue(cookieStr, name) {
   name = encodeURIComponent(name);
   for (const cookie of cookieStr.split(";")) {
@@ -32,30 +28,23 @@ function isPlatformServer(platformId) {
 var XhrFactory = class {
 };
 
-// node_modules/@angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs
-var DOCUMENT = new InjectionToken(ngDevMode ? "DocumentToken" : "");
-
 export {
+  DOCUMENT,
   parseCookieValue,
   PLATFORM_BROWSER_ID,
   PLATFORM_SERVER_ID,
   isPlatformBrowser,
   isPlatformServer,
-  XhrFactory,
-  DOCUMENT
+  XhrFactory
 };
 /*! Bundled license information:
 
-@angular/common/fesm2022/xhr-BfNfxNDv.mjs:
 @angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs:
+@angular/common/fesm2022/xhr-BfNfxNDv.mjs:
   (**
    * @license Angular v19.2.14
    * (c) 2010-2025 Google LLC. https://angular.io/
    * License: MIT
    *)
 */
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-FRXTEGWH.js
-//# sourceMappingURL=chunk-FRXTEGWH.js.map
-========
 //# sourceMappingURL=chunk-4YNGKIBB.js.map
->>>>>>>> efdbe3295fc618b8fbd17fb89d2cf2af5d04df65:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-4YNGKIBB.js
