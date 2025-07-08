@@ -4,9 +4,12 @@ namespace ECommerceAIMockUp.Domain.Entities;
 
 public class DesignDetails : BaseEntity
 {
-    public float Scale { get; set; }
+    public float ScaleX { get; set; }
+    public float ScaleY { get; set; }
     public float XAxis { get; set; }
     public float YAxis { get; set; }
+    public float Opacity { get; set; }
+    public float Rotation { get; set; }
     public string Position { get; set; }
 
     public OrderItem OrderItem { get; set; }

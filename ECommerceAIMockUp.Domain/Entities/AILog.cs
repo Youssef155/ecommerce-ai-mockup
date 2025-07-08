@@ -4,7 +4,6 @@ namespace ECommerceAIMockUp.Domain.Entities;
 
 public class AILog : BaseEntity
 {
-    public string RequestType { get; set; }
     public string PromptText { get; set; }
     public bool IsSuccesed { get; set; }
 

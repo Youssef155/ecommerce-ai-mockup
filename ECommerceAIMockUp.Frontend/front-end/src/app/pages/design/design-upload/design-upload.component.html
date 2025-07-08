@@ -1,0 +1,73 @@
+<div class="container py-4">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="mb-0"><i class="pi pi-cloud-upload me-2"></i>Upload Design</h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="error" class="alert alert-danger">
+        <i class="pi pi-exclamation-triangle me-2"></i>{{ error }}
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Select an image file</label>
+        <div
+          class="border rounded p-5 text-center"
+          [class.bg-light]="!selectedFile"
+          (click)="fileInput.click()"
+          style="cursor: pointer"
+        >
+          <input
+            #fileInput
+            type="file"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            hidden
+          />
+
+          <div *ngIf="!selectedFile">
+            <i
+              class="pi pi-cloud-upload"
+              style="font-size: 2rem; color: #6c757d"
+            ></i>
+            <p class="mt-2 mb-0">Click to select an image file</p>
+          </div>
+
+          <div *ngIf="selectedFile" class="text-success">
+            <i class="pi pi-image" style="font-size: 2rem"></i>
+            <p class="mt-2 mb-0">{{ selectedFile.name }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isUploading" class="progress mb-3">
+        <div
+          class="progress-bar progress-bar-striped progress-bar-animated"
+          style="width: 100%"
+        ></div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <a
+          [routerLink]="['/design']"
+          queryParamsHandling="preserve"
+          class="btn btn-outline-secondary"
+        >
+          <i class="pi pi-times me-2"></i>Cancel
+        </a>
+        <button
+          (click)="uploadDesign()"
+          [disabled]="!selectedFile || isUploading"
+          class="btn btn-primary"
+        >
+          <span *ngIf="isUploading">
+            <i class="pi pi-spinner pi-spin me-2"></i>
+            Uploading...
+          </span>
+          <span *ngIf="!isUploading">
+            <i class="pi pi-upload me-2"></i>Upload
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
