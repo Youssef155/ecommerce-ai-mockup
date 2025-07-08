@@ -1,6 +1,6 @@
 import {
   Title
-} from "./chunk-VHIJCBPP.js";
+} from "./chunk-SUM7U2CD.js";
 import {
   HashLocationStrategy,
   LOCATION_INITIALIZED,
@@ -8,28 +8,24 @@ import {
   LocationStrategy,
   PathLocationStrategy,
   ViewportScroller
-} from "./chunk-XM7BB76I.js";
-import "./chunk-A2S7RXMG.js";
+} from "./chunk-GBANFASH.js";
+import "./chunk-MNYYNOOB.js";
 import {
   DOCUMENT
-} from "./chunk-4YNGKIBB.js";
+} from "./chunk-QZ2E34AJ.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
   Attribute,
-  BehaviorSubject,
   ChangeDetectorRef,
   Compiler,
   Component,
-  ConnectableObservable,
   Console,
   ContentChildren,
   DestroyRef,
   Directive,
-  EMPTY,
   ENVIRONMENT_INITIALIZER,
   ElementRef,
-  EmptyError,
   EnvironmentInjector,
   EventEmitter,
   HostBinding,
@@ -48,53 +44,23 @@ import {
   Renderer2,
   RuntimeError,
   SkipSelf,
-  Subject,
-  Subscription,
   Version,
   ViewContainerRef,
-  __spreadProps,
-  __spreadValues,
   afterNextRender,
   booleanAttribute,
-  catchError,
-  combineLatest,
-  concat,
-  concatMap,
   createEnvironmentInjector,
-  defaultIfEmpty,
-  defer,
-  filter,
-  finalize,
-  first,
-  from,
   inject,
   input,
   isInjectable,
   isNgModule,
-  isObservable,
   isPromise,
   isStandalone,
-  last,
   makeEnvironmentProviders,
-  map,
-  mergeAll,
-  mergeMap,
-  of,
   performanceMarkFeature,
-  pipe,
   provideAppInitializer,
-  refCount,
   reflectComponentType,
   runInInjectionContext,
-  scan,
   setClassMetadata,
-  startWith,
-  switchMap,
-  take,
-  takeLast,
-  takeUntil,
-  tap,
-  throwError,
   ɵɵNgOnChangesFeature,
   ɵɵattribute,
   ɵɵcontentQuery,
@@ -113,9 +79,47 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-44Z5NQYP.js";
+} from "./chunk-5QXQOMPN.js";
+import {
+  BehaviorSubject,
+  ConnectableObservable,
+  EMPTY,
+  EmptyError,
+  Subject,
+  Subscription,
+  catchError,
+  combineLatest,
+  concat,
+  concatMap,
+  defaultIfEmpty,
+  defer,
+  filter,
+  finalize,
+  first,
+  from,
+  isObservable,
+  last,
+  map,
+  mergeAll,
+  mergeMap,
+  of,
+  pipe,
+  refCount,
+  scan,
+  startWith,
+  switchMap,
+  take,
+  takeLast,
+  takeUntil,
+  tap,
+  throwError
+} from "./chunk-P6U2JBMQ.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-WDMUDEB6.js";
 
-// ../node_modules/@angular/router/fesm2022/router-Dwfin5Au.mjs
+// node_modules/@angular/router/fesm2022/router-Dwfin5Au.mjs
 var PRIMARY_OUTLET = "primary";
 var RouteTitleKey = Symbol("RouteTitle");
 var ParamsAsMap = class {
@@ -4744,7 +4748,7 @@ function isPublicRouterEvent(e) {
   return !(e instanceof BeforeActivateRoutes) && !(e instanceof RedirectRequest);
 }
 
-// ../node_modules/@angular/router/fesm2022/router_module-DTJgGWLd.mjs
+// node_modules/@angular/router/fesm2022/router_module-DTJgGWLd.mjs
 var RouterLink = class _RouterLink {
   router;
   route;
@@ -5877,7 +5881,7 @@ function provideRouterInitializer() {
   ];
 }
 
-// ../node_modules/@angular/router/fesm2022/router.mjs
+// node_modules/@angular/router/fesm2022/router.mjs
 function mapToCanMatch(providers) {
   return providers.map((provider) => (...params) => inject(provider).canMatch(...params));
 }
