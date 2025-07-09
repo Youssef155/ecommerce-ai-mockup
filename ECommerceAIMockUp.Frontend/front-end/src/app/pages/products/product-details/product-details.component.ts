@@ -8,6 +8,7 @@ import { CurrencyPipe } from '@angular/common';
 import { SizeSelectorComponent } from '../size-selector/size-selector.component';
 import { ColorSelectorComponent } from '../color-selector/color-selector.component'; 
 import { Router } from '@angular/router';
+import { ProductDetails } from '../../../core/models/Products/product-details';
 
 @Component({
   selector: 'app-product-details',
@@ -18,6 +19,7 @@ import { Router } from '@angular/router';
 })
 export class ProductDetailsComponent implements OnInit {
   product: Product | null = null;
+  productDetails: ProductDetails | null = null;
   selectedSize: string | null = null;
   selectedColor: string | null = null;
   availableColors: string[] = [];
@@ -77,6 +79,14 @@ export class ProductDetailsComponent implements OnInit {
 
   onColorSelect(color: string) {
     this.selectedColor = color;
+
+    if (this.selectedSize && this.selectedColor && this.product) {
+      this.productVariationService
+        .getProductVariant(this.product.id, this.selectedSize, this.selectedColor)
+        .subscribe((details: ProductDetails) => {
+          this.productDetails = details;
+        });
+    }
   }
 
   addToCart() {
@@ -85,13 +95,13 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   goToDesign() {
-    if (!this.product) return;
-    const productDetailsId = this.product.id;
-    const imgUrl = this.product.image;
+    if (!this.product || !this.productDetails) return;
+    const productDetailsId = this.productDetails.productDetailsId;
+    const productImageUrl = this.product.image;
     this.router.navigate(['/design'], {
       queryParams: {
         productDetailsId,
-        imgUrl
+        productImageUrl
       }
     });
   }

@@ -185,6 +185,7 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
             return new ProductVariantDto
             {
                 ProductId = product.Id,
+                ProductDetailsId = variant.Id,
                 Size = variant.Size,
                 Color = variant.Color,
                 Price = variant.Product.Price,

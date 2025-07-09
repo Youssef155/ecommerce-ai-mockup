@@ -7,8 +7,6 @@ export class ImageService {
   private readonly APIUrl = 'https://localhost:7256'; 
 
   getFullUrl(path: string): string {
-    // 1. Handle empty paths
-    if (!path) return 'assets/default-product.png';
     
     // 2. Return full URLs as-is
     if (path.startsWith('http')) return path;

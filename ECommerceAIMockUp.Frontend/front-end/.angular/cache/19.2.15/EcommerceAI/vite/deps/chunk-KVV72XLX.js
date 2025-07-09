@@ -1,6 +1,6 @@
 import {
   InjectionToken
-} from "./chunk-BHISX6PZ.js";
+} from "./chunk-4WDWLN4O.js";
 
 // ../node_modules/@angular/common/fesm2022/xhr-BfNfxNDv.mjs
 function parseCookieValue(cookieStr, name) {
@@ -47,4 +47,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-DVDQGRSS.js.map
+//# sourceMappingURL=chunk-KVV72XLX.js.map
