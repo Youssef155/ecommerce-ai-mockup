@@ -131,10 +131,6 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RequestType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -215,11 +211,20 @@ namespace ECommerceAIMockUp.Infrastructure.Migrations
                     b.Property<int>("DesignId")
                         .HasColumnType("int");
 
+                    b.Property<float>("Opacity")
+                        .HasColumnType("real");
+
                     b.Property<string>("Position")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Scale")
+                    b.Property<float>("Rotation")
+                        .HasColumnType("real");
+
+                    b.Property<float>("ScaleX")
+                        .HasColumnType("real");
+
+                    b.Property<float>("ScaleY")
                         .HasColumnType("real");
 
                     b.Property<DateTime?>("UpdatedAt")

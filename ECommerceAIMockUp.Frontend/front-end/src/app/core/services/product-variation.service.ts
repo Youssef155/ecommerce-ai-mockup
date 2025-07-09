@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { tap, map, catchError } from 'rxjs/operators';
 import { ProductVariation } from '../models/Products/product-variation';
+import { ProductDetails } from '../models/Products/product-details';
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +18,9 @@ export class ProductVariationService {
       tap(response => console.log('Raw API Response:', response)),
       map(variation => variation.availableColors || [])
     );
+  }
+
+  getProductVariant(productId: number, size: string, color: string): Observable<ProductDetails> {
+    return this.http.get<any>(`${this.apiUrl}/${productId}/variant?size=${size}&color=${color}`);
   }
 }

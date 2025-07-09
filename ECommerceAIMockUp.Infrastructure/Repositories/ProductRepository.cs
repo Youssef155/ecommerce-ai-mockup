@@ -1,7 +1,7 @@
 ﻿using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
-using ECommerceAIMockUp.Domain.ValueObjects;
+using ECommerceAIMockUp.Domain.Enums;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using ECommerceAIMockUp.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +12,10 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
     public class ProductRepository : BaseRepository<Product>, IProductRepository
     {
         private readonly DbSet<Product> _products;
-        private readonly ApplicationDbContext _context;
 
         public ProductRepository(ApplicationDbContext db) : base(db)
         {
             _products = db.Set<Product>();
-            _context = db;
         }
 
 
@@ -70,7 +68,7 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
 
         public async Task<Product?> GetByIdWithVariantsAsync(int productId)
         {
-            return await _context.Products
+            return await _products
                 .Include(p => p.ProductDetails)
                 .FirstOrDefaultAsync(p => p.Id == productId);
         }

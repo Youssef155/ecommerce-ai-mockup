@@ -1,4 +1,4 @@
-﻿using ECommerceAIMockUp.Domain.ValueObjects;
+﻿using ECommerceAIMockUp.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace ECommerceAIMockUp.Application.DTOs.Product

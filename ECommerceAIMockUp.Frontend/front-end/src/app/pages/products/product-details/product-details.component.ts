@@ -5,10 +5,10 @@ import { ProductVariationService } from '../../../core/services/product-variatio
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
-import { ColorSelectorComponent } from '../../color-selector/color-selector.component';
-import { SizeSelectorComponent } from '../../size-selector/size-selector.component';
+import { SizeSelectorComponent } from '../size-selector/size-selector.component';
+import { ColorSelectorComponent } from '../color-selector/color-selector.component'; 
 import { Router } from '@angular/router';
-import { CartService } from '../../../core/services/cart.service';
+import { ProductDetails } from '../../../core/models/Products/product-details';
 
 @Component({
   selector: 'app-product-details',
@@ -19,21 +19,18 @@ import { CartService } from '../../../core/services/cart.service';
 })
 export class ProductDetailsComponent implements OnInit {
   product: Product | null = null;
+  productDetails: ProductDetails | null = null;
   selectedSize: string | null = null;
   selectedColor: string | null = null;
   availableColors: string[] = [];
   isLoading = true;
   error: string | null = null;
 
-   quantityOptions = Array.from({ length: 10 }, (_, i) => i + 1);
-  selectedQuantity = 1;
-
   constructor(
     private productService: ProductService,
     private productVariationService: ProductVariationService,
     private route: ActivatedRoute,
-    private router: Router,
-    private cartService: CartService
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -82,28 +79,29 @@ export class ProductDetailsComponent implements OnInit {
 
   onColorSelect(color: string) {
     this.selectedColor = color;
+
+    if (this.selectedSize && this.selectedColor && this.product) {
+      this.productVariationService
+        .getProductVariant(this.product.id, this.selectedSize, this.selectedColor)
+        .subscribe((details: ProductDetails) => {
+          this.productDetails = details;
+        });
+    }
   }
 
-  addToCart() { //flag
+  addToCart() {
     if (!this.product || !this.selectedSize || !this.selectedColor) return;
-    this.cartService
-  .addToCart(
-    this.product.id,
-    this.product., //this should be the design Id, it will be handled with the design service
-    this.selectedQuantity
-  )
-  .subscribe(() => alert('Added to cart!'));
     alert(`Added to cart: ${this.product.name} - Size: ${this.selectedSize}, Color: ${this.selectedColor}`);
   }
 
   goToDesign() {
-    if (!this.product) return;
-    const productDetailsId = this.product.id;
-    const imgUrl = this.product.image;
+    if (!this.product || !this.productDetails) return;
+    const productDetailsId = this.productDetails.productDetailsId;
+    const productImageUrl = 'https://localhost:7256' + this.product.image;
     this.router.navigate(['/design'], {
       queryParams: {
         productDetailsId,
-        imgUrl
+        productImageUrl
       }
     });
   }

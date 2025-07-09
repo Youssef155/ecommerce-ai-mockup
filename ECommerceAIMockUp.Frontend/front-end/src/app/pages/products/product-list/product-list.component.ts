@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/Products/Product';
+import { AuthService } from '../../../core/services/auth.service';
+import { ImageService } from '../../../core/services/image.service';
 
 @Component({
   selector: 'app-product',
@@ -13,12 +15,13 @@ import { Product } from '../../../core/models/Products/Product';
 })
 export class ProductComponent implements OnInit {
   products : Product[] = [];
+  selectedProduct = signal<Product | undefined>(undefined);
   currentPage = 1;
   totalpages = 1;
   loading = false;
   error = '';
 
-  constructor(private productService: ProductService, private router: Router) {}
+    constructor(private authService: AuthService, private productService: ProductService, private router: Router, public imageService: ImageService) {}
 
 categories = [
   { id: 1, name: 'Tops' },
@@ -58,35 +61,37 @@ selectedCategoryId: number | null = null;
   }
 
   toggleGender(gender: string, event: any) {
-  if (event.target.checked) {
-    this.selectedGenders.push(gender);
-  } else {
-    this.selectedGenders = this.selectedGenders.filter(g => g !== gender);
+    if (event.target.checked) {
+      this.selectedGenders.push(gender);
+    } else {
+      this.selectedGenders = this.selectedGenders.filter(g => g !== gender);
+    }
+    this.loadFilteredProducts();
   }
-  this.loadFilteredProducts();
-}
 
-toggleSeason(season: string, event: any) {
-  if (event.target.checked) {
-    this.selectedSeasons.push(season);
-  } else {
-    this.selectedSeasons = this.selectedSeasons.filter(s => s !== season);
+  toggleSeason(season: string, event: any) {
+    if (event.target.checked) {
+      this.selectedSeasons.push(season);
+    } else {
+      this.selectedSeasons = this.selectedSeasons.filter(s => s !== season);
+    }
+    this.loadFilteredProducts();
   }
-  this.loadFilteredProducts();
-}
 
-selectCategory(categoryId: number | null) {
-  this.selectedCategoryId = categoryId;
-  this.loadFilteredProducts();
-}
+  selectCategory(categoryId: number | null) {
+    this.selectedCategoryId = categoryId;
+    this.loadFilteredProducts();
+  }
 
 
 loadFilteredProducts(page: number = 1) {
+  this.currentPage = page; // ✅ Update the current page
   this.loading = true;
   this.error = '';
 
   this.productService
-    .getFilteredProducts(this.currentPage, this.selectedGenders, this.selectedSeasons)
+    .getFilteredProducts(page, this.selectedGenders, this.selectedSeasons)
+
     .subscribe({
       next: (response) => {
         this.products = response.data.data;
@@ -103,19 +108,19 @@ loadFilteredProducts(page: number = 1) {
 
 
   get pageNumbers(): number[] {
-  return Array.from({ length: this.totalpages }, (_, i) => i + 1);
-}
+    return Array.from({ length: this.totalpages }, (_, i) => i + 1);
+  }
 
 
 
-goToPage(page: number): void {
-  if (page !== this.currentPage) {
-    this.currentPage = page;
+  goToPage(page: number): void {
+    if (page !== this.currentPage) {
+      this.currentPage = page;
 
-    const isFilterActive =
-      this.selectedGenders.length > 0 ||
-      this.selectedSeasons.length > 0 ||
-      this.selectedCategoryId !== null;
+      const isFilterActive =
+        this.selectedGenders.length > 0 ||
+        this.selectedSeasons.length > 0 ||
+        this.selectedCategoryId !== null;
 
     if (isFilterActive) {
       this.loadFilteredProducts();
@@ -123,5 +128,19 @@ goToPage(page: number): void {
       this.loadProducts();
     }
   }
+}
+
+logout() {
+  this.authService.logout().subscribe({
+    next: () => {
+      // Optionally clear localStorage/sessionStorage if you're storing tokens
+      localStorage.clear();
+      // Navigate to login or home
+      this.router.navigate(['/login']);
+    },
+    error: (err) => {
+      console.error('Logout failed:', err);
+    }
+  });
 }
 }

@@ -1,6 +1,6 @@
 ﻿using ECommerceAIMockUp.Application.DTOs.Product;
 using ECommerceAIMockUp.Application.Wrappers;
-using ECommerceAIMockUp.Domain.ValueObjects;
+using ECommerceAIMockUp.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

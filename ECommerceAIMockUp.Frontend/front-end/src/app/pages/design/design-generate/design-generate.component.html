@@ -1,0 +1,69 @@
+<div class="container py-4">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="mb-0">
+        <i class="fas fa-magic me-2"></i>Generate Design with AI
+      </h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="error" class="alert alert-danger">
+        <i class="pi pi-exclamation-triangle me-2"></i>{{ error }}
+      </div>
+
+      <div class="mb-4">
+        <label for="prompt" class="form-label">Describe what you want to generate</label>
+        <textarea id="prompt" class="form-control" [(ngModel)]="prompt" rows="4"
+                  placeholder="Example: A futuristic cityscape at sunset with flying cars"></textarea>
+      </div>
+
+      <button (click)="generateDesign()" 
+              [disabled]="!prompt.trim() || isGenerating" 
+              class="btn btn-primary mb-4">
+        <span *ngIf="isGenerating">
+          <i class="pi pi-spinner pi-spin me-2"></i>
+          Generating...
+        </span>
+        <span *ngIf="!isGenerating">
+          <i class="fas fa-wand-magic-sparkles me-2"></i>Generate Design
+        </span>
+      </button>
+
+      <button (click)="back()" 
+              class="btn  mb-4">
+        <span *ngIf="!isGenerating">
+         Back
+        </span>
+      </button>
+
+
+      <div *ngIf="isGenerating" class="progress mb-3">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" 
+             style="width: 100%"></div>
+      </div>
+
+      <div *ngIf="generatedDesign.imageUrl" class="border-top pt-4 mt-4">
+        <h3><i class="far fa-image me-2"></i>Preview</h3>
+        <div class="text-center">
+          <img [src]="generatedDesign.imageUrl" alt="Generated design" class="img-fluid rounded mb-4" style="max-height: 500px;">
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button (click)="discardDesign()" class="btn btn-outline-danger">
+            <i class="pi pi-trash me-2"></i>Discard
+          </button>
+          <button (click)="saveDesign()" 
+                  [disabled]="isSaving" 
+                  class="btn btn-success">
+            <span *ngIf="isSaving">
+              <i class="pi pi-spinner pi-spin me-2"></i>
+              Saving...
+            </span>
+            <span *ngIf="!isSaving">
+              <i class="pi pi-save me-2"></i>Save Design
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
