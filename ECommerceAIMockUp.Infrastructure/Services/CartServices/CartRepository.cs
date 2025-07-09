@@ -4,6 +4,7 @@ using ECommerceAIMockUp.Application.DTOs.Shopping_Cart;
 using ECommerceAIMockUp.Application.Services.Interfaces.Cart_Service;
 using ECommerceAIMockUp.Domain;
 using ECommerceAIMockUp.Domain.Entities;
+using ECommerceAIMockUp.Domain.Enums;
 using ECommerceAIMockUp.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;

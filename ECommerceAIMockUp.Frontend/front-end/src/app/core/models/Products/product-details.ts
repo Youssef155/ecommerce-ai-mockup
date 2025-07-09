@@ -4,5 +4,6 @@ export interface ProductDetails{
     Size: string,
     Color: string,
     Price: number,
-    Stock: number
+    Stock: number,
+    designDetailsId:number
 }

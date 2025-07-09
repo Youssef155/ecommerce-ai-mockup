@@ -68,6 +68,15 @@
           </span>
         </button>
       </div>
+      <div>
+      <button
+      (click)="addDesignToCart()"
+      [disabled]="!designDetailsId"
+      class="btn btn-success"
+      >
+      <i class="pi pi-shopping-cart me-2"></i>Add Design to Cart
+      </button>
+      </div>
     </div>
   </div>
 </div>
