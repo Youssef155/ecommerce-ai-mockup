@@ -1,31 +1,19 @@
 import {
-  withHttpTransferCache
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RKPXCCMJ.js
-} from "./chunk-SJ256V6U.js";
-========
-} from "./chunk-RHAXR6J5.js";
->>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-DEGDKZGG.js
-import {
   CommonModule,
   DomAdapter,
   getDOM,
   setRootDomAdapter
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RKPXCCMJ.js
-} from "./chunk-NZD5LUOL.js";
-========
-} from "./chunk-6QQDULBJ.js";
->>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-DEGDKZGG.js
+} from "./chunk-75QV6VMV.js";
+import {
+  withHttpTransferCache
+} from "./chunk-AR5GT2TD.js";
 import {
   DOCUMENT,
   PLATFORM_BROWSER_ID,
   XhrFactory,
   isPlatformServer,
   parseCookieValue
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RKPXCCMJ.js
-} from "./chunk-KVV72XLX.js";
-========
-} from "./chunk-B57Y36QR.js";
->>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-DEGDKZGG.js
+} from "./chunk-25CZ5YW6.js";
 import {
   APP_ID,
   ApplicationModule,
@@ -84,19 +72,11 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RKPXCCMJ.js
-} from "./chunk-4WDWLN4O.js";
-import {
-  __spreadProps,
-  __spreadValues
-} from "./chunk-GOXFRTJD.js";
-========
-} from "./chunk-DNHWGLDI.js";
+} from "./chunk-NLDEQDVI.js";
 import {
   __spreadProps,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
->>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-DEGDKZGG.js
 
 // ../node_modules/@angular/platform-browser/fesm2022/dom_renderer-DGKzginR.mjs
 var EVENT_MANAGER_PLUGINS = new InjectionToken(ngDevMode ? "EventManagerPlugins" : "");
@@ -2035,8 +2015,4 @@ export {
    * License: MIT
    *)
 */
-<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RKPXCCMJ.js
-//# sourceMappingURL=chunk-RKPXCCMJ.js.map
-========
-//# sourceMappingURL=chunk-DEGDKZGG.js.map
->>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-DEGDKZGG.js
+//# sourceMappingURL=chunk-HRMO5SKV.js.map
