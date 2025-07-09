@@ -7,6 +7,7 @@ export interface Product{
     price:number;
     categoryName:string;
     image:string;
+    availableSizes: string[];
 }
 
 export interface ApiResponse{

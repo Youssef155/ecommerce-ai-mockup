@@ -112,8 +112,6 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
             OrderId = cart.Id,
         };
         cart.OrderItems.Add(orderitem);
-        cart.OrderTotal = cart.OrderItems
-           .Sum(i => i.Quantity * i.ProductDetails.Product.Price);
     }
 
     public async Task Remove(string userId, OrderItem orderItem)
