@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models/Products/Product';
+import { AuthService } from '../../../core/services/auth.service';
 import { ImageService } from '../../../core/services/image.service';
 
 @Component({
@@ -20,7 +21,7 @@ export class ProductComponent implements OnInit {
   loading = false;
   error = '';
 
-  constructor(private productService: ProductService, private router: Router, public imageService: ImageService) {}
+    constructor(private authService: AuthService, private productService: ProductService, private router: Router, public imageService: ImageService) {}
 
 categories = [
   { id: 1, name: 'Tops' },
@@ -83,25 +84,27 @@ selectedCategoryId: number | null = null;
   }
 
 
-  loadFilteredProducts(page: number = 1) {
-    this.loading = true;
-    this.error = '';
+loadFilteredProducts(page: number = 1) {
+  this.currentPage = page; // ✅ Update the current page
+  this.loading = true;
+  this.error = '';
 
-    this.productService
-      .getFilteredProducts(this.currentPage, this.selectedGenders, this.selectedSeasons)
-      .subscribe({
-        next: (response) => {
-          this.products = response.data.data;
-          this.totalpages = response.data.totalPages;
-          this.loading = false;
-        },
-        error: (err) => {
-          this.loading = false;
-          this.error = 'Failed to load filtered products';
-          console.error(err);
-        }
-      });
-  }
+  this.productService
+    .getFilteredProducts(page, this.selectedGenders, this.selectedSeasons)
+
+    .subscribe({
+      next: (response) => {
+        this.products = response.data.data;
+        this.totalpages = response.data.totalPages;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error = 'Failed to load filtered products';
+        console.error(err);
+      }
+    });
+}
 
 
   get pageNumbers(): number[] {
@@ -119,11 +122,25 @@ selectedCategoryId: number | null = null;
         this.selectedSeasons.length > 0 ||
         this.selectedCategoryId !== null;
 
-      if (isFilterActive) {
-        this.loadFilteredProducts();
-      } else {
-        this.loadProducts();
-      }
+    if (isFilterActive) {
+      this.loadFilteredProducts();
+    } else {
+      this.loadProducts();
     }
   }
+}
+
+logout() {
+  this.authService.logout().subscribe({
+    next: () => {
+      // Optionally clear localStorage/sessionStorage if you're storing tokens
+      localStorage.clear();
+      // Navigate to login or home
+      this.router.navigate(['/login']);
+    },
+    error: (err) => {
+      console.error('Logout failed:', err);
+    }
+  });
+}
 }

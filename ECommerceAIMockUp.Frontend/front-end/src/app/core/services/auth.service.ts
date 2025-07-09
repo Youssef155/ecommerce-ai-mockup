@@ -23,4 +23,8 @@ export class AuthService {
   Login(model : any): Observable<any>{
     return this.http.post(`${this.APIUrl}/login`, model);
   }
+
+  logout(): Observable<any> {
+  return this.http.post(`${this.APIUrl}/Logout`, {});
+}
 }

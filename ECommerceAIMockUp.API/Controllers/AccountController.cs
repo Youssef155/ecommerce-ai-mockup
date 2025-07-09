@@ -63,5 +63,14 @@ namespace ECommerceAIMockUp.API.Controllers
             }
             return BadRequest("Invalid Token");
         }
+
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var result = await _authService.LogoutAsync();
+            if (result.StatusCode == HttpStatusCode.OK)
+                return Ok(result);
+            return BadRequest(result);
+        }
     }
 }
