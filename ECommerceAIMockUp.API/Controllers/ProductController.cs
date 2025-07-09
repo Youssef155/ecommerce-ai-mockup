@@ -1,14 +1,14 @@
 ﻿using ECommerceAIMockUp.Application.Services.Interfaces;
 using ECommerceAIMockUp.Application.DTOs.Product;
-using ECommerceAIMockUp.Domain.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using ECommerceAIMockUp.Domain.Enums;
 namespace ECommerceAIMockUp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;

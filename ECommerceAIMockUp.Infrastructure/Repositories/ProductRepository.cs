@@ -1,7 +1,7 @@
 ﻿using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
-using ECommerceAIMockUp.Domain.ValueObjects;
+using ECommerceAIMockUp.Domain.Enums;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using ECommerceAIMockUp.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;

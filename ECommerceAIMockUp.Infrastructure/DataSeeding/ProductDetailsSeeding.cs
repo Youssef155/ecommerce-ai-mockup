@@ -1,5 +1,5 @@
 ﻿using ECommerceAIMockUp.Domain.Entities;
-using ECommerceAIMockUp.Domain.ValueObjects;
+using ECommerceAIMockUp.Domain.Enums;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using Microsoft.Extensions.DependencyInjection;
 using System;
