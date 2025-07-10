@@ -24,8 +24,9 @@ export class DesignUploadComponent implements OnInit{
   isUploading = false;
   error: string | null = null;
 
-   productDetailsId!: number;
+  productDetailsId!: number;
   productImageUrl!: string;
+  quantity: number = 1;
 
   // after upload
   designDetailsId?: number;
@@ -46,7 +47,11 @@ export class DesignUploadComponent implements OnInit{
   ngOnInit(): void {
     const qp = this.route.snapshot.queryParamMap;
     this.productDetailsId = Number(qp.get('productDetailsId'));
-    this.productImageUrl  = qp.get('productImageUrl') || '';  }
+    this.productImageUrl  = qp.get('productImageUrl') || ''; 
+
+    const qtyParam = qp.get('quantity');
+    this.quantity = qtyParam ? Number(qtyParam) : 1;
+   }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -68,7 +73,17 @@ export class DesignUploadComponent implements OnInit{
       next: (res: { designDetailsId: number }) => {
         this.isUploading = false;
         this.designDetailsId = res.designDetailsId; // store the ID for adding to cart
+              this.router.navigate(['/design/mockup'], {
+        queryParams: {
+          designId: this.designDetailsId,
+          productDetailsId: this.productDetailsId,
+          quantity: this.quantity,
+          designImageUrl: URL.createObjectURL(this.selectedFile!),
+          productImageUrl: this.productImageUrl
+        }
+      });
       },
+      
 
       error: (err) => {
         this.error = `Failed to upload design, ` + (err.error || 'Please try again.');
@@ -76,20 +91,22 @@ export class DesignUploadComponent implements OnInit{
       }
     });
   }
-    addDesignToCart(): void {
-    if (!this.designDetailsId) {
-      this.error = 'Please upload your design first.';
-      return;
-    }
+//     addDesignToCart(): void {
+//       if (!this.designDetailsId) {
+//         this.error = 'Please upload your design first.';
+//         return;
+//       }
 
-    // quantity is 1 by default; you can extend this
-    this.cartService.addToCart(
-      this.productDetailsId,
-      this.designDetailsId,
-      1
-    ).subscribe({
-      next: () => this.router.navigate(['/cart']),
-      error: () => this.error = 'Failed to add to cart.'
-    });
-  }
+//       this.cartService.addToCart(
+//         this.productDetailsId,
+//         this.designDetailsId,
+//         this.quantity
+//       ).subscribe({
+//         next: () => this.router.navigate(['/cart']),
+//         error: (err) => {
+//           console.error('Add to cart failed', err);
+//           this.error = 'Failed to add to cart. Please try again.';
+//         }
+//       });
+// }
 }

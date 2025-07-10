@@ -77,14 +77,16 @@ namespace ECommerceAIMockUp.API.Controllers
             return CreatedAtAction(nameof(GetAll), null);
         }
 
-        [HttpDelete("{ItemId}")]
-        public async Task<IActionResult> DeleteItem([FromRoute] int ItemId)
+        [HttpDelete("{orderId}/{productId}/{designId}")]
+        public async Task<IActionResult> DeleteItem(
+            [FromRoute] int orderId,
+            [FromRoute] int productId,
+            [FromRoute] int designId)
         {
-            if (UserId == null)
-                return Unauthorized();
-            var item = await cartService.GetItemById(UserId, ItemId);
-            await cartService.Remove(UserId, item);
-            return CreatedAtAction(nameof(GetAll), null);
+            if (UserId == null) return Unauthorized();
+
+            await cartService.Remove(UserId, orderId, productId, designId);
+            return NoContent();
         }
     }
 }

@@ -53,16 +53,16 @@ namespace ECommerceAIMockUp.Application.Cases.DesignCases
 
         private async Task AddImageToDataBaseAsync(string userId, string imagePath)
         {
-            try
-            {
+            //try
+            //{
                 Design design = new Design { AppUserId = userId, ImageUrl = imagePath };
                 await _designRepository.CreateAsync(design);
                 await _designRepository.SaveChangesAsync();
-            }
-            catch
-            {
-                throw new Exception("Can not add to database");
-            }
+            //}
+            //catch
+            //{
+            //    throw new Exception("Can not add to database");
+            //}
         }
         public async Task<Response<string>> SaveUploadedImage(IFormFile imageFile, string userId)
         {

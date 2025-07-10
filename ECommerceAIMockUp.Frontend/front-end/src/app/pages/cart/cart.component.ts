@@ -35,13 +35,18 @@ export class CartComponent implements OnInit {
     });
   }
 
-  remove(item: OrderItemDTO) {
-    this.cartService.deleteItem(item.orderId).subscribe({
-      next: () => this.loadCart(),
-      error: err => {
-        console.error('Failed to remove item', err);
-        this.error = 'Failed to remove item';
-      }
-    });
-  }
+remove(item: OrderItemDTO) {
+  // Use composite key for deletion
+  this.cartService.deleteItem(
+    item.orderId, 
+    item.productDetailsId, 
+    item.designDetailsId
+  ).subscribe({
+    next: () => this.loadCart(),
+    error: err => {
+      console.error('Failed to remove item', err);
+      this.error = 'Failed to remove item. Please try again.';
+    }
+  });
+}
 }

@@ -100,7 +100,7 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
                 }
             };
             await orderRepository.CreateAsync(cart);
-
+            await orderRepository.SaveChangesAsync();
         }
 
         cart.OrderDate = DateTime.Now;
@@ -113,42 +113,24 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
             OrderId = cart.Id,
         };
         cart.OrderItems.Add(orderitem);
+        await orderRepository.SaveChangesAsync();
     }
 
-    public async Task Remove(string userId, OrderItem orderItem)
+    public async Task Remove(string userId, int orderId, int productId, int designId)
     {
         var cart = await GetCartAsync(userId);
-        if (cart == null)
-            throw new Exception("Your cart is empty");
+        if (cart == null) throw new Exception("Cart not found");
 
-        var item = cart.OrderItems.FirstOrDefault(o => o.Id == orderItem.Id);
-        //var item = await GetItemById(userId, orderItem.Id);
-        if (item == null)
-            throw new Exception("Item was not found");
+        var item = cart.OrderItems.FirstOrDefault(i =>
+            i.OrderId == orderId &&
+            i.ProductDetailsId == productId &&
+            i.DesignDetailsId == designId);
+
+        if (item == null) throw new Exception("Item not found");
 
         await orderItemRepo.DeleteAsync(item.Id);
-        cart.OrderTotal = cart.OrderItems
-            .Sum(i => i.Quantity * i.ProductDetails.Product.Price);
-
     }
-
-    public async Task RemoveRange(string userId, List<OrderItem> items)
-    {
-        var cart = await GetCartAsync(userId);
-        if (cart == null)
-            throw new Exception("Your cart is empty");
-
-        var Orderitems = cart.OrderItems;
-
-        foreach (var item in items)
-        {
-            Orderitems.Remove(item);
-            await orderItemRepo.DeleteAsync(item.Id);
-        }
-        cart.OrderTotal = cart.OrderItems
-            .Sum(i => i.Quantity * i.ProductDetails.Product.Price);
-
-    }
+    
 
     public async Task UpdateQuantity(string userId, int ItemId, int quantity)
     {
@@ -175,5 +157,6 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
         };
 
         await orderItemRepo.CreateAsync(orderItem);
+        await orderItemRepo.SaveChangesAsync();
     }
 }

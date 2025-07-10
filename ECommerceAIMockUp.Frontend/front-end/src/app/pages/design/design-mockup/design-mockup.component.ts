@@ -12,6 +12,7 @@ import * as fabric from 'fabric';
 import { DesignDetails } from '../../../core/models/design-details.model';
 import { DesignService } from '../../../core/services/design.service';
 import { firstValueFrom } from 'rxjs';
+import { CartService } from '../../../core/services/cart.service';
 // 
 @Component({
   selector: 'app-design-mockup',
@@ -34,7 +35,11 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   designImageUrl: string | null = null;
   productImageUrl: string | null = null;
   productDetailsId: number | null = null;
-
+  quantity: number = 1;
+constructor(
+  // ... existing injections
+  private cartService: CartService,
+) {}
   designDetails: DesignDetails = {
     designId: 0,
     scaleX: .3,
@@ -66,6 +71,7 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
       this.productImageUrl = params['productImageUrl'] || "https://localhost:7256/images/products/white-tshirt-n0j.png";
       this.designDetails.designId = params['designId'] ? +params['designId'] : 0;
       this.productDetailsId = params['productDetailsId'] ? +params['productDetailsId'] : 0;
+      this.quantity = params['quantity'] ? +params['quantity'] : 1;
     });
   }
   ngAfterViewInit(): void {
@@ -213,15 +219,42 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   }
 
   async onAddToCart() {
-    try {
-      const response = await firstValueFrom(this.designService.addDesignDetails(this.designDetails));
-      const designDetailsId = response.result;
-    } catch (err) {
-      console.error(err);
-      alert('Something went wrong. Please try again.');
+       const response = await firstValueFrom(
+      this.designService.addDesignDetails(this.designDetails)
+    );
+    console.log(response);
+    
+    // Get designDetailsId from response
+    const designDetailsId = response.result;
+  try {
+    // Save design details first
+ 
+    
+    if (!designDetailsId) {
+      throw new Error('Design details ID not found in response');
+    }    
+    // Add to cart
+    if (this.productDetailsId) {
+      this.cartService.addToCart(
+        this.productDetailsId,
+        designDetailsId,
+        this.quantity
+      ).subscribe({
+        next: () => this.router.navigate(['/cart']),
+        error: (err) => {
+          console.error('Add to cart failed', err);
+          alert('Failed to add to cart. Please try again.');
+        }
+      });
+    } else {
+      throw new Error('Product details ID is missing');
     }
+  } catch (err) {
+     console.log(this.productDetailsId,designDetailsId),
+    console.error(err);
+    alert('Something went wrong. Please try again.');
   }
-
+}
 
 
 }

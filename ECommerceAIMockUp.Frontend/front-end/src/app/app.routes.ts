@@ -14,6 +14,7 @@ export const routes: Routes = [
       { path: 'register', loadComponent: () => import('./pages/auth/register/register.component').then(c => c.RegisterComponent), title: 'Register' }
     ]
   },
+  {path: 'cart', loadComponent: () => import('./pages/cart/cart.component').then(c => c.CartComponent), title: 'Cart'},
   { 
     path: 'design',
     loadChildren: () => import('./pages/design/route').then(m => m.DESIGN_ROUTES),
