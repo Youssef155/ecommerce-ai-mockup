@@ -69,29 +69,31 @@ export class AdminDashboardComponent implements OnInit {
     const token = localStorage.getItem('angular19Token');
     if (!token) {
       this.showNotification('Please login first.', 'error');
-      this.logout();
+      this.redirectToLogin();
       return;
     }
 
-    const payload = this.getTokenPayload(token);
-    if (!payload || payload.role !== 'Admin') {
-      this.showNotification('Access denied. Admin privileges required.', 'error');
-      this.logout(); 
-      return;
-    }
 
-    this.loadDashboardData();
-  }
-
-  private getTokenPayload(token: string): any {
-    try {
-      const payloadBase64 = token.split('.')[1];
-      const decodedPayload = atob(payloadBase64);
-      return JSON.parse(decodedPayload);
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return null;
-    }
+    this.loading = true;
+    this.http.get<User[]>(`${this.apiUrl}/Users/admin`, { headers: this.getAuthHeaders() })
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError((error) => {
+          this.showNotification('Access denied or error occurred. Please login again.', 'error');
+          this.redirectToLogin();
+          return of(null);
+        }),
+        finalize(() => this.loading = false)
+      )
+      .subscribe({
+        next: (response) => {
+          if (response) {
+            this.users = Array.isArray(response) ? response : [];
+            this.filteredUsers = [...this.users];
+            this.loadDashboardData();
+          }
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -110,7 +112,6 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   private loadDashboardData() {
-    this.fetchUsers();
     this.fetchProducts();
     this.fetchCategories();
     this.fetchOrders();
@@ -156,64 +157,47 @@ export class AdminDashboardComponent implements OnInit {
       });
   }
 
-  private fetchProducts() {
+ 
+  fetchProducts() {
     this.loading = true;
-    this.http.get<ApiResponse<any>>(`${this.apiUrl}/Product/products?pageNumber=1&pageSize=10`, { headers: this.getAuthHeaders() })
-      .pipe(takeUntil(this.destroy$), catchError(this.handleHttpError), finalize(() => this.loading = false))
+    this.http.get<any>(`${this.apiUrl}/Product/products?pageNumber=1&pageSize=100`, { headers: this.getAuthHeaders() })
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(this.handleHttpError),
+        finalize(() => this.loading = false)
+      )
       .subscribe({
         next: (response) => {
-          console.log('API Response:', response);
-          if (response && response.data) {
-            if (response.data.data && Array.isArray(response.data.data)) {
-              this.products = response.data.data.map((dto: any) => ({
-                id: dto.Id || dto.id || 0,
-                name: dto.Name || dto.name || '',
-                price: dto.Price || dto.price || 0,
-                description: dto.Description || dto.description || '',
-                categoryName: dto.CategoryName || dto.categoryName || '',
-                stock: dto.stock || 0,
-                imageUrl: dto.Image || dto.imageUrl || '',
-                gender: dto.Gender,
-                season: dto.Season,
-                colors: dto.colors || [],
-                sizes: dto.sizes || [],
-                categoryId: dto.categoryId
-              }));
-            } else if (Array.isArray(response.data)) {
-              this.products = response.data.map((dto: any) => ({
-                id: dto.Id || dto.id || 0,
-                name: dto.Name || dto.name || '',
-                price: dto.Price || dto.price || 0,
-                description: dto.Description || dto.description || '',
-                categoryName: dto.CategoryName || dto.categoryName || '',
-                stock: dto.stock || 0,
-                imageUrl: dto.Image || dto.imageUrl || '',
-                gender: dto.Gender,
-                season: dto.Season,
-                colors: dto.colors || [],
-                sizes: dto.sizes || [],
-                categoryId: dto.categoryId
-              }));
-            }
-          } else if (response && response.result && Array.isArray(response.result)) {
-            this.products = response.result.map((dto: any) => ({
-              id: dto.Id || dto.id || 0,
-              name: dto.Name || dto.name || '',
-              price: dto.Price || dto.price || 0,
-              description: dto.Description || dto.description || '',
-              categoryName: dto.CategoryName || dto.categoryName || '',
-              stock: dto.stock || 0,
-              imageUrl: dto.Image || dto.imageUrl || '',
-              gender: dto.Gender,
-              season: dto.Season,
-              colors: dto.colors || [],
-              sizes: dto.sizes || [],
-              categoryId: dto.categoryId
-            }));
+          let rawProducts = [];
+
+          if (response?.data?.data && Array.isArray(response.data.data)) {
+            rawProducts = response.data.data;
+          } else if (Array.isArray(response?.data)) {
+            rawProducts = response.data;
+          } else if (Array.isArray(response?.result)) {
+            rawProducts = response.result;
           } else {
-            console.warn('Unexpected response structure:', response);
+            console.warn('Unexpected product response structure:', response);
             this.products = [];
+            this.filteredProducts = [];
+            return;
           }
+
+          this.products = rawProducts.map((dto: any) => ({
+            id: dto.id ?? dto.Id ?? 0,
+            name: dto.name ?? dto.Name ?? '',
+            price: dto.price ?? dto.Price ?? 0,
+            description: dto.description ?? dto.Description ?? '',
+            categoryName: dto.categoryName ?? dto.CategoryName ?? '',
+            stock: dto.stock ?? 0,
+            imageUrl: dto.imageUrl ?? dto.Image ?? '',
+            gender: dto.gender ?? dto.Gender,
+            season: dto.season ?? dto.Season,
+            colors: dto.colors ?? [],
+            sizes: dto.sizes ?? [],
+            categoryId: dto.categoryId ?? null
+          }));
+
           this.filteredProducts = [...this.products];
         }
       });
@@ -246,13 +230,9 @@ export class AdminDashboardComponent implements OnInit {
   private handleHttpError = (error: any) => {
     console.error('HTTP Error:', error);
     
-    if (error.status === 401) {
-      this.showNotification('Session expired. Please login again.', 'error');
-      this.logout();
-      return of(null);
-    } else if (error.status === 403) {
-      this.showNotification('Access denied. Admin privileges required.', 'error');
-      this.logout();
+    if (error.status === 401 || error.status === 403) {
+      this.showNotification('Access denied or session expired. Please login again.', 'error');
+      this.redirectToLogin();
       return of(null);
     } else if (error.status === 404) {
       this.showNotification('Resource not found.', 'error');
@@ -265,14 +245,10 @@ export class AdminDashboardComponent implements OnInit {
     return of(null);
   };
 
-  private logout(): void {
+  private redirectToLogin(): void {
     localStorage.removeItem('angular19Token');
-    this.router.navigate(['/login']);
-  }
-
-  private redirectToUnauthorized(): void {
     this.clearAllData();
-    this.router.navigate(['/unauthorized']);
+    this.router.navigate(['/login']);
   }
 
   private clearAllData(): void {
@@ -287,7 +263,6 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   private showNotification(message: string, type: 'success' | 'error' | 'warning'): void {
-    // Replace with proper notification service later
     alert(message);
   }
 
@@ -323,81 +298,84 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  saveItem() {
-    if (!this.modalType) return;
+saveItem() {
+  if (!this.modalType) return;
 
-    const isEdit = !!this.selectedItem;
-    let endpoint = '';
-    let headers = this.getAuthHeaders(this.modalType === 'products');
+  const isEdit = !!this.selectedItem;
+  let endpoint = '';
+  let headers = this.getAuthHeaders(this.modalType === 'products');
 
-    let body: any;
-    if (this.modalType === 'products') {
-      const formData = new FormData();
-      
-      formData.append('Name', this.newItem.name || '');
-      formData.append('Description', this.newItem.description || '');
-      
-      if (this.newItem.gender !== undefined) {
-        formData.append('Gender', this.newItem.gender.toString());
-      }
-      if (this.newItem.season !== undefined) {
-        formData.append('Season', this.newItem.season.toString());
-      }
-      if (this.newItem.price) {
-        formData.append('Price', this.newItem.price.toString());
-      }
-      if (this.newItem.categoryName) {
-        formData.append('CategoryName', this.newItem.categoryName);
-      }
-      
-      if (this.newItem.image) {
-        formData.append('ImgUrl', this.newItem.image);
-      }
+  let body: any;
+  if (this.modalType === 'products') {
+    const formData = new FormData();
 
-      console.log('Sending FormData:', Array.from(formData.entries()));
-      body = formData;
-      endpoint = `${this.apiUrl}/Product/Product`;
-    } else if (this.modalType === 'categories') {
-      body = this.newItem;
-      endpoint = isEdit ? `${this.apiUrl}/Categories/${this.selectedItem.id}` : `${this.apiUrl}/Categories`;
-    } else {
-      console.log('Unknown modal type:', this.modalType);
-      return;
+    formData.append('Name', this.newItem.name || '');
+    formData.append('Description', this.newItem.description || '');
+
+    if (this.newItem.gender !== undefined) {
+      formData.append('Gender', this.newItem.gender.toString());
+    }
+    if (this.newItem.season !== undefined) {
+      formData.append('Season', this.newItem.season.toString());
+    }
+    if (this.newItem.price !== undefined) {
+      formData.append('Price', this.newItem.price.toString());
+    }
+    if (this.newItem.categoryName) {
+      formData.append('CategoryName', this.newItem.categoryName);
     }
 
-    this.loading = true;
-    const request = isEdit
-      ? this.http.put(endpoint, body, { headers })
-      : this.http.post(endpoint, body, { headers });
+ 
+    formData.append('Color', this.newItem.color || '');
+    formData.append('Size', this.newItem.size || '');
+    formData.append('Amount', this.newItem.amount?.toString() || '0');
 
-    request.pipe(
-      takeUntil(this.destroy$), 
-      catchError((error) => {
-        console.error('Error saving item:', error);
-        if (error.status === 400) {
-          this.showNotification('Error: Check if all required fields are filled correctly.', 'error');
-        } else if (error.status === 401) {
-          this.showNotification('Session expired. Please login again.', 'error');
-          this.logout();
-        } else if (error.status === 403) {
-          this.showNotification('Access denied. Admin privileges required.', 'error');
-          this.logout();
-        } else {
-          this.showNotification('An error occurred while saving. Please try again.', 'error');
-        }
-        return of(null);
-      }),
-      finalize(() => this.loading = false)
-    ).subscribe({
-      next: (response) => {
-        if (response !== null) {
-          this.showNotification(isEdit ? 'Item updated successfully' : 'Item added successfully', 'success');
-          this.refreshData();
-          this.closeModal();
-        }
-      }
-    });
+    if (this.newItem.image) {
+      formData.append('ImgUrl', this.newItem.image);
+    }
+
+    console.log('Sending FormData:', Array.from(formData.entries()));
+    body = formData;
+    endpoint = `${this.apiUrl}/Product/Product`;
+  } else if (this.modalType === 'categories') {
+    body = this.newItem;
+    endpoint = isEdit ? `${this.apiUrl}/Categories/${this.selectedItem.id}` : `${this.apiUrl}/Categories`;
+  } else {
+    console.log('Unknown modal type:', this.modalType);
+    return;
   }
+
+  this.loading = true;
+  const request = isEdit
+    ? this.http.put(endpoint, body, { headers })
+    : this.http.post(endpoint, body, { headers });
+
+  request.pipe(
+    takeUntil(this.destroy$),
+    catchError((error) => {
+      console.error('Error saving item:', error);
+      if (error.status === 400) {
+        this.showNotification('Error: Check if all required fields are filled correctly.', 'error');
+      } else if (error.status === 401 || error.status === 403) {
+        this.showNotification('Access denied or session expired. Please login again.', 'error');
+        this.redirectToLogin();
+      } else {
+        this.showNotification('An error occurred while saving. Please try again.', 'error');
+      }
+      return of(null);
+    }),
+    finalize(() => this.loading = false)
+  ).subscribe({
+    next: (response) => {
+      if (response !== null) {
+        this.showNotification(isEdit ? 'Item updated successfully' : 'Item added successfully', 'success');
+        this.refreshData();
+        this.closeModal();
+      }
+    }
+  });
+}
+
 
   deleteItem(id: number, type: string) {
     if (confirm('Are you sure you want to delete this item?')) {
