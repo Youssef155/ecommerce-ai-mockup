@@ -46,7 +46,7 @@ export class AdminDashboardComponent implements OnInit {
   private apiUrl = 'https://localhost:7256/api';
   private destroy$ = new Subject<void>();
 
-  // Make enums available in template
+
   OrderStatus = OrderStatus;
   PaymentStatus = PaymentStatus;
   Gender = Gender;
@@ -66,13 +66,32 @@ export class AdminDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('angular19Token');
     if (!token) {
       this.showNotification('Please login first.', 'error');
       this.logout();
       return;
     }
+
+    const payload = this.getTokenPayload(token);
+    if (!payload || payload.role !== 'Admin') {
+      this.showNotification('Access denied. Admin privileges required.', 'error');
+      this.logout(); 
+      return;
+    }
+
     this.loadDashboardData();
+  }
+
+  private getTokenPayload(token: string): any {
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const decodedPayload = atob(payloadBase64);
+      return JSON.parse(decodedPayload);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
+    }
   }
 
   ngOnDestroy(): void {
@@ -115,7 +134,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   private getAuthHeaders(isMultipart: boolean = false): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('angular19Token');
     let headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -233,7 +252,6 @@ export class AdminDashboardComponent implements OnInit {
       return of(null);
     } else if (error.status === 403) {
       this.showNotification('Access denied. Admin privileges required.', 'error');
-      // بدل من redirect، نعمل logout للمستخدم
       this.logout();
       return of(null);
     } else if (error.status === 404) {
@@ -248,7 +266,7 @@ export class AdminDashboardComponent implements OnInit {
   };
 
   private logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem('angular19Token');
     this.router.navigate(['/login']);
   }
 
@@ -319,7 +337,6 @@ export class AdminDashboardComponent implements OnInit {
       formData.append('Name', this.newItem.name || '');
       formData.append('Description', this.newItem.description || '');
       
-      // Convert enum values to numbers
       if (this.newItem.gender !== undefined) {
         formData.append('Gender', this.newItem.gender.toString());
       }
@@ -573,7 +590,6 @@ export class AdminDashboardComponent implements OnInit {
     return Object.values(Season).filter(value => typeof value === 'number') as Season[];
   }
 
-  // Helper methods to get enum names
   getOrderStatusName(status: OrderStatus): string {
     return OrderStatus[status] || 'Unknown';
   }
