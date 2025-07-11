@@ -132,6 +132,8 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
             try
             {
                 var categoryId = await _categoryRespository.GetByNameAsync(dto.CategoryName);
+                if (categoryId is null)
+                    throw new Exception("Category Id Is Required");
                 var fileName = await _fileservice.SaveFile(dto.ImgUrl, "uploads/products", ".jpg,.jpeg,.png,.webp");
 
                 var productDetails = new ProductDetails
@@ -149,7 +151,7 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
                     Gender = dto.Gender,
                     Season = dto.Season,
                     Price = dto.Price,
-                    CategoryId = categoryId,
+                    CategoryId = categoryId.Value,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };

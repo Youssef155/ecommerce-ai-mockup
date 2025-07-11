@@ -12,8 +12,10 @@ export const routes: Routes = [
     path: 'auth',
     loadComponent: () => import('./layouts/auth-layout/auth-layout.component').then(m => m.AuthLayoutComponent),
     children: [
-      { path: 'login', loadComponent: () => import('./pages/auth/login/login.component').then(c => c.LoginComponent), title: 'Login' },
-      { path: 'register', loadComponent: () => import('./pages/auth/register/register.component').then(c => c.RegisterComponent), title: 'Register' }
+      { path: 'login', loadComponent: () => import('./pages/auth/login/login.component')
+        .then(c => c.LoginComponent), title: 'Login', data: { hideFooter: true, hideNavbar: true } },
+      { path: 'register', loadComponent: () => import('./pages/auth/register/register.component')
+        .then(c => c.RegisterComponent), title: 'Register', data: { hideFooter: true, hideNavbar: true } }
     ]
   },
 

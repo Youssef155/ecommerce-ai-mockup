@@ -193,8 +193,8 @@ export class AdminDashboardComponent implements OnInit {
             imageUrl: dto.imageUrl ?? dto.Image ?? '',
             gender: dto.gender ?? dto.Gender,
             season: dto.season ?? dto.Season,
-            colors: dto.colors ?? [],
-            sizes: dto.sizes ?? [],
+            color: dto.color ?? '',
+            size: dto.size ?? '',
             categoryId: dto.categoryId ?? null
           }));
 
@@ -308,7 +308,7 @@ saveItem() {
   let body: any;
   if (this.modalType === 'products') {
     const formData = new FormData();
-
+console.log(this.newItem);
     formData.append('Name', this.newItem.name || '');
     formData.append('Description', this.newItem.description || '');
 

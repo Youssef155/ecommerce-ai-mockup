@@ -9,9 +9,9 @@ export interface Product {
   categoryName: string; 
   stock: number;
   imageUrl?: string;
-  colors?: string[];
-  sizes?: string[];
-gender: Gender; 
+  color?: string;
+  size?: string;
+  gender: Gender; 
   season: Season; 
   categoryId?: number;
 }
