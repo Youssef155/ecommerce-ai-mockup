@@ -17,6 +17,7 @@ using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.OpenAI;
 using ECommerceAIMockUp.Infrastructure.Services.ImageGeneration.StabiliytAIServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json.Serialization;
+using ECommerceAIMockUp.Application.Cases.CartCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,7 @@ builder.Services.AddScoped<IImageStorageService, ImageStorageService>();
 #region Add Repositories DI
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IDesignRepository, DesignRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 #endregion
 
 #region Add DesignCases DI
@@ -63,7 +65,7 @@ builder.Services.AddScoped<SaveImageCase>();
 builder.Services.AddScoped<GetDesignsCase>();
 builder.Services.AddScoped<AddDesignDetailsCase>();
 #endregion
-
+builder.Services.AddScoped<CartCase>();
 
 
 builder.AddCutomLoggin();
