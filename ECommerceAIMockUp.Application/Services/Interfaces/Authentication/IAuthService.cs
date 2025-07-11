@@ -10,5 +10,7 @@ namespace ECommerceAIMockUp.Application.Services.Interfaces.Authentication
         public Task<Response<string>> RegisterAsync(UserRegisterDto model);
 
         public Task<Response<AuthResponseDto>> RefreshTokenAsync(string Email);
+
+        public Task<Response<string>> LogoutAsync();
     }
 }

@@ -4,6 +4,7 @@ using ECommerceAIMockUp.Domain.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using ECommerceAIMockUp.Domain.Enums;
 namespace ECommerceAIMockUp.API.Controllers
 {
     [Route("api/[controller]")]

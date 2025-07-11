@@ -122,6 +122,16 @@ namespace ECommerceAIMockUp.Infrastructure.Services.Authentication
             );
         }
 
+        public async Task<Response<string>> LogoutAsync()
+        {
+            return new Response<string>(
+                data: "User successfully logged out.",
+                statusCode: HttpStatusCode.OK,
+                isSucceeded: true
+            );
+        }
+
+
         #region Helper
 
         private AuthResponseDto Authenticate(AppUser user)

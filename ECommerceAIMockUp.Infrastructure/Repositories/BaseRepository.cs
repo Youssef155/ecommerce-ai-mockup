@@ -90,6 +90,10 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
 
         }
 
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
         public async Task<int> SaveAsync()
         {
             return await _context.SaveChangesAsync();

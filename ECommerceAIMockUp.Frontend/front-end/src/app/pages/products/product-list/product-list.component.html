@@ -3,16 +3,7 @@
 <div class="main">
   <!-- Sidebar Filters -->
   <aside class="sidebar">
-    <!-- Gender Filter -->
-    <div class="filter-group">
-      <h3>Gender</h3>
-      <label *ngFor="let gender of ['Male', 'Female', 'Unisex']">
-        <input type="checkbox"
-               [checked]="selectedGenders.includes(gender)"
-               (change)="toggleGender(gender, $event)" />
-        {{ gender }}
-      </label>
-    </div>
+  
 
     <!-- Season Filter -->
     <div class="filter-group">
@@ -25,24 +16,7 @@
       </label>
     </div>
 
-    <!-- Category Filter -->
-    <div class="filter-group">
-      <h3>Category</h3>
-      <label *ngFor="let cat of categories">
-        <input type="radio"
-               name="category"
-               [checked]="selectedCategoryId === cat.id"
-               (change)="selectCategory(cat.id)" />
-        {{ cat.name }}
-      </label>
-      <label>
-        <input type="radio"
-               name="category"
-               [checked]="selectedCategoryId === null"
-               (change)="selectCategory(null)" />
-        All
-      </label>
-    </div>
+    
   </aside>
 
   <!-- Product Section -->

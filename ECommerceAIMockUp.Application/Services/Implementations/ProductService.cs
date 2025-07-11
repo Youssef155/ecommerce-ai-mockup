@@ -6,8 +6,8 @@ using ECommerceAIMockUp.Application.Services.Interfaces.Caching;
 using ECommerceAIMockUp.Application.Services.Interfaces.FileServices;
 using ECommerceAIMockUp.Application.Wrappers;
 using ECommerceAIMockUp.Domain.Entities;
-using ECommerceAIMockUp.Domain.ValueObjects;
 using System.Net;
+using ECommerceAIMockUp.Domain.Enums;
 
 namespace ECommerceAIMockUp.Application.Services.Implementations
 {
@@ -70,6 +70,9 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
+                ImgUrl = product.ProductDetails
+                    .Select(d => d.ImgUrl)
+                    .FirstOrDefault(img => !string.IsNullOrEmpty(img)),
                 AvailableSizes = sizes
             };
         }
@@ -184,6 +187,7 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
             return new ProductVariantDto
             {
                 ProductId = product.Id,
+                ProductDetailsId = variant.Id,
                 Size = variant.Size,
                 Color = variant.Color,
                 Price = variant.Product.Price,
