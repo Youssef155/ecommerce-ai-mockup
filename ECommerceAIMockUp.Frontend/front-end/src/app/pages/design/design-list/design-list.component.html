@@ -2,10 +2,16 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0">My Designs</h1>
     <div>
-      <a routerLink="/designs/upload" class="btn btn-primary me-2">
+      <a 
+      [routerLink]="['/design/upload']"
+      queryParamsHandling="preserve"
+       class="btn btn-primary me-2">
         <i class="fas fa-upload me-1"></i> Upload Design
       </a>
-      <a routerLink="/designs/generate" class="btn btn-success">
+      <a 
+      [routerLink]="['/design/generate']" 
+      queryParamsHandling="preserve"
+      class="btn btn-success">
         <i class="fas fa-magic me-1"></i> Generate with AI
       </a>
     </div>
@@ -28,15 +34,12 @@
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" *ngIf="!loading && designs.length > 0">
     <div class="col" *ngFor="let design of designs">
       <div class="card h-100">
-        <img [src]="design.imageUrl" [alt]="design.name" class="card-img-top" style="height: 200px; object-fit: cover;">
-        <div class="card-body">
-          <h5 class="card-title">{{ design.name }}</h5>
-          <p class="card-text text-muted small">
-            <i class="far fa-calendar-alt me-1"></i>Created: {{ design.createdAt | date }}
-          </p>
-          <span *ngIf="design.isGenerated" class="badge bg-info text-dark">
-            <i class="fas fa-robot me-1"></i>AI Generated
-          </span>
+        <img [src]="design.imageUrl"  class="card-img-top" style="height: 200px; object-fit: cover;">
+        <div class="hover-overlay">
+          <button class="btn btn-primary position-absolute top-50 start-50 translate-middle"
+                  (click)="previewMockup(design)">
+            Preview Mockup
+          </button>
         </div>
       </div>
     </div>

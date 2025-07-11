@@ -7,8 +7,6 @@ using ECommerceAIMockUp.Application.Contracts.ImageGenerators;
 using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.Services.Implementations;
 using ECommerceAIMockUp.Application.Services.Interfaces;
-using ECommerceAIMockUp.Application.Services.Implementations;
-using ECommerceAIMockUp.Application.Services.Interfaces;
 using ECommerceAIMockUp.Infrastructure;
 using ECommerceAIMockUp.Infrastructure.Configurations;
 using ECommerceAIMockUp.Infrastructure.Repositories;
