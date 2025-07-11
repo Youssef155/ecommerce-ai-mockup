@@ -82,14 +82,21 @@ namespace ECommerceAIMockUp.Infrastructure
                     };
                 });
 
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
             services.AddScoped<IAuthService, AuthService>();
+
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IRedisService, RedisService>();
+
             services.AddScoped<IProductRepository, ProductRepository>();
+
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+
             services.AddScoped<IFileService, FileService>();
+
             return services;
         }
     }

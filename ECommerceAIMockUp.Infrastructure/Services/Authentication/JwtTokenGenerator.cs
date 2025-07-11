@@ -27,7 +27,8 @@ namespace ECommerceAIMockUp.Infrastructure.Services.Authentication
                 new Claim(ClaimTypes.NameIdentifier, user.UserId),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, user.FirstName),
-                new Claim(ClaimTypes.Surname, user.LastName)
+                new Claim(ClaimTypes.Surname, user.LastName),
+                new Claim(ClaimTypes.Role, "Admin")
             };
 
             var Credentials = new SigningCredentials(_jwtKey, SecurityAlgorithms.HmacSha256);

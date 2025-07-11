@@ -1,11 +1,15 @@
 import {
   InjectionToken
-} from "./chunk-RFZ2BTTM.js";
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-CVCILG5C.js
+} from "./chunk-BHISX6PZ.js";
+========
+} from "./chunk-NLDEQDVI.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-25CZ5YW6.js
 
-// node_modules/@angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs
+// ../node_modules/@angular/common/fesm2022/dom_tokens-rA0ACyx7.mjs
 var DOCUMENT = new InjectionToken(ngDevMode ? "DocumentToken" : "");
 
-// node_modules/@angular/common/fesm2022/xhr-BfNfxNDv.mjs
+// ../node_modules/@angular/common/fesm2022/xhr-BfNfxNDv.mjs
 function parseCookieValue(cookieStr, name) {
   name = encodeURIComponent(name);
   for (const cookie of cookieStr.split(";")) {
@@ -47,4 +51,8 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-B5QHEHR4.js.map
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-CVCILG5C.js
+//# sourceMappingURL=chunk-CVCILG5C.js.map
+========
+//# sourceMappingURL=chunk-25CZ5YW6.js.map
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-25CZ5YW6.js

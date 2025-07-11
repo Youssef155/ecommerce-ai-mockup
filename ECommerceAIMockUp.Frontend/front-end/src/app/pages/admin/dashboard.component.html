@@ -1,0 +1,367 @@
+<div class="admin-dashboard">
+  <!-- Sidebar -->
+  <div class="sidebar" [class.closed]="!isSidebarOpen">
+    <div class="sidebar-header">
+      <h2 [class.hidden]="!isSidebarOpen">Admin Panel</h2>
+      <button class="toggle-btn" (click)="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <ul class="nav-menu">
+        <li *ngFor="let item of menuItems" 
+            class="nav-item" 
+            [class.active]="activeTab === item.id"
+            (click)="setActiveTab(item.id)">
+          <i [class]="item.icon"></i>
+          <span [class.hidden]="!isSidebarOpen">{{ item.label }}</span>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" [class.sidebar-closed]="!isSidebarOpen">
+    <!-- Header -->
+    <header class="content-header">
+      <h1>{{ activeTab | titlecase }}</h1>
+      <div class="user-info">
+        <span>Welcome, Admin</span>
+        <div class="user-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Cards -->
+    <div class="dashboard-overview" *ngIf="activeTab === 'dashboard'">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon users">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ dashboardStats.totalUsers }}</h3>
+            <p>Total Users</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon products">
+            <i class="fas fa-box"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ dashboardStats.totalProducts }}</h3>
+            <p>Total Products</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon categories">
+            <i class="fas fa-tags"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ dashboardStats.totalCategories }}</h3>
+            <p>Categories</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon orders">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ dashboardStats.totalOrders }}</h3>
+            <p>Total Orders</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon active">
+            <i class="fas fa-user-check"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ dashboardStats.activeUsers }}</h3>
+            <p>Active Users</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon pending">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ dashboardStats.pendingOrders }}</h3>
+            <p>Pending Orders</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Tables Section -->
+    <div class="data-section" *ngIf="activeTab !== 'dashboard'">
+      <!-- Actions Bar -->
+      <div class="actions-bar">
+        <div class="search-container">
+          <input type="text" 
+                 class="search-input" 
+                 placeholder="Search..." 
+                 [(ngModel)]="searchTerm" 
+                 (input)="search()">
+          <i class="fas fa-search search-icon"></i>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn btn-primary" *ngIf="activeTab === 'products' || activeTab === 'categories'" (click)="addNew(activeTab)">
+            <i class="fas fa-plus"></i>
+            Add New
+          </button>
+          <button class="btn btn-secondary" (click)="refreshData()">
+            <i class="fas fa-refresh"></i>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <div class="table-wrapper" *ngIf="activeTab === 'users'">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of filteredUsers">
+                <td>{{ user.name || 'N/A' }}</td>
+                <td>{{ user.email || 'N/A' }}</td>
+                <td>{{ user.phone || 'N/A' }}</td>
+                <td>
+                  <span class="status-badge" [class.active]="user.isActive">
+                    {{ user.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td>{{ user.createdAt | date:'short' }}</td>
+                <td>
+                  <div class="action-buttons-group">
+                    <button class="btn-action promote" (click)="promoteUser(user.id)" title="Promote to Admin">
+                      <i class="fas fa-user-plus"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredUsers.length === 0 && !loading">
+                <td colspan="6" class="no-data">No users found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Products Table -->
+      <div class="table-wrapper" *ngIf="activeTab === 'products'">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Gender</th>
+                <th>Season</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of filteredProducts">
+                <td>{{ product.id || 'N/A' }}</td>
+                <td>{{ product.name || 'N/A' }}</td>
+                <td>${{ product.price || 0 }}</td>
+                <td>{{ product.categoryName || 'N/A' }}</td>
+                <td class="description-cell">{{ product.description || 'N/A' }}</td>
+                <td>{{ product.gender || 'N/A' }}</td>
+                <td>{{ product.season || 'N/A' }}</td>
+                <td>
+                  <img [src]="product.imageUrl" alt="Product Image" style="width: 50px;" *ngIf="product.imageUrl" />
+                  <span *ngIf="!product.imageUrl">No Image</span>
+                </td>
+              </tr>
+              <tr *ngIf="filteredProducts.length === 0 && !loading">
+                <td colspan="8" class="no-data">No products found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Categories Table -->
+      <div class="table-wrapper" *ngIf="activeTab === 'categories'">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Products Count</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let category of filteredCategories">
+                <td>{{ category.name || 'N/A' }}</td>
+                <td>{{ category.description || 'N/A' }}</td>
+                <td>{{ category.productsCount || 0 }}</td>
+                <td>
+                  <div class="action-buttons-group">
+                    <button class="btn-action edit" (click)="editCategory(category)" title="Edit">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-action delete" (click)="deleteItem(category.id, 'category')" title="Delete">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredCategories.length === 0 && !loading">
+                <td colspan="4" class="no-data">No categories found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Orders Table -->
+      <div class="table-wrapper" *ngIf="activeTab === 'orders'">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Total Amount</th>
+                <th>Order Status</th>
+                <th>Payment Status</th>
+                <th>Order Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let order of filteredOrders">
+                <td>#{{ order.id }}</td>
+                <td>
+                  <div class="customer-info">
+                    <div>{{ order.userName || 'N/A' }}</div>
+                    <small>{{ order.userEmail || 'N/A' }}</small>
+                  </div>
+                </td>
+                <td>${{ order.totalAmount || 0 }}</td>
+                <td>
+                  <select class="status-select" 
+                          [value]="order.status" 
+                          (change)="onOrderStatusChange(order.id, $event)"
+                          [class]="getStatusClass(order.status)">
+                    <option *ngFor="let status of getOrderStatusOptions()" [value]="status">
+                      {{ status }}
+                    </option>
+                  </select>
+                </td>
+                <td>
+                  <select class="payment-select" 
+                          [value]="order.paymentStatus" 
+                          (change)="onPaymentStatusChange(order.id, $event)"
+                          [class]="getPaymentStatusClass(order.paymentStatus)">
+                    <option *ngFor="let status of getPaymentStatusOptions()" [value]="status">
+                      {{ status }}
+                    </option>
+                  </select>
+                </td>
+                <td>{{ order.orderDate | date:'short' }}</td>
+                <td>
+                  <div class="action-buttons-group">
+                    <button class="btn-action delete" (click)="deleteItem(order.id, 'order')" title="Delete">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredOrders.length === 0 && !loading">
+                <td colspan="7" class="no-data">No orders found</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" *ngIf="showModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>{{ selectedItem ? 'Edit' : 'Add' }} {{ modalType | titlecase }}</h2>
+          <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <!-- Products Form -->
+          <div *ngIf="modalType === 'products'">
+            <label>Name:</label>
+            <input type="text" [(ngModel)]="newItem.name" placeholder="Enter product name" required />
+            <label>Price:</label>
+            <input type="number" [(ngModel)]="newItem.price" placeholder="Enter price" required />
+            <label>Category Name:</label>
+            <input type="text" [(ngModel)]="newItem.categoryName" placeholder="Enter category name" required />
+            <label>Description:</label>
+            <textarea [(ngModel)]="newItem.description" placeholder="Enter description"></textarea>
+           <label>Gender:</label>
+<select [(ngModel)]="newItem.gender" required>
+  <option *ngFor="let gender of getGenderOptions()" [value]="gender">
+    {{ getGenderName(gender) }}
+  </option>
+</select>
+
+<label>Season:</label>
+<select [(ngModel)]="newItem.season" required>
+  <option *ngFor="let season of getSeasonOptions()" [value]="season">
+    {{ getSeasonName(season) }}
+  </option>
+</select>
+            <label>Color:</label>
+            <input type="text" [(ngModel)]="newItem.color" placeholder="Enter color" />
+            <label>Size:</label>
+            <input type="text" [(ngModel)]="newItem.size" placeholder="Enter size" />
+            <label>Stock:</label>
+            <input type="number" [(ngModel)]="newItem.stock" placeholder="Enter stock" required />
+            <label>Image:</label>
+            <input type="file" (change)="onFileChange($event)" accept="image/*" />
+          </div>
+
+          <!-- Categories Form -->
+          <div *ngIf="modalType === 'categories'">
+            <label>Name:</label>
+            <input type="text" [(ngModel)]="newItem.name" placeholder="Enter category name" />
+            <label>Description:</label>
+            <textarea [(ngModel)]="newItem.description" placeholder="Enter description"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" (click)="saveItem()">Save</button>
+          <button class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div class="loading-container" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading data...</p>
+    </div>
+  </div>
+</div>

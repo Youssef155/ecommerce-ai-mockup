@@ -10,8 +10,10 @@ export const routes: Routes = [
     path: 'auth',
     loadComponent: () => import('./layouts/auth-layout/auth-layout.component').then(m => m.AuthLayoutComponent),
     children: [
-      { path: 'login', loadComponent: () => import('./pages/auth/login/login.component').then(c => c.LoginComponent), title: 'Login' },
-      { path: 'register', loadComponent: () => import('./pages/auth/register/register.component').then(c => c.RegisterComponent), title: 'Register' }
+      { path: 'login', loadComponent: () => import('./pages/auth/login/login.component')
+        .then(c => c.LoginComponent), title: 'Login', data: { hideFooter: true, hideNavbar: true } },
+      { path: 'register', loadComponent: () => import('./pages/auth/register/register.component')
+        .then(c => c.RegisterComponent), title: 'Register', data: { hideFooter: true, hideNavbar: true } }
     ]
   },
   {path: 'cart', loadComponent: () => import('./pages/cart/cart.component').then(c => c.CartComponent), title: 'Cart'},
@@ -19,6 +21,13 @@ export const routes: Routes = [
     path: 'design',
     loadChildren: () => import('./pages/design/route').then(m => m.DESIGN_ROUTES),
     title: 'Design'
+  },
+
+
+  {
+    path: 'admin',
+    loadComponent: () => import('./pages/admin/dashboard.component').then(c => c.AdminDashboardComponent),
+    title: 'Admin Dashboard'
   },
   { path: '**', redirectTo: 'auth/login' }
 ];

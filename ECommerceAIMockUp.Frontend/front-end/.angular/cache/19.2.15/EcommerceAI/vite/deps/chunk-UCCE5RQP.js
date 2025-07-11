@@ -1,7 +1,11 @@
 import {
   DOCUMENT,
   isPlatformBrowser
-} from "./chunk-B5QHEHR4.js";
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-QT6YAUMM.js
+} from "./chunk-CVCILG5C.js";
+========
+} from "./chunk-25CZ5YW6.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-75QV6VMV.js
 import {
   ApplicationRef,
   Attribute,
@@ -60,17 +64,27 @@ import {
   ɵɵinject,
   ɵɵinjectAttribute,
   ɵɵstyleProp
-} from "./chunk-RFZ2BTTM.js";
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-QT6YAUMM.js
+} from "./chunk-BHISX6PZ.js";
+import {
+  Subject,
+  __async,
+  __spreadProps,
+  __spreadValues
+} from "./chunk-7WI257C5.js";
+========
+} from "./chunk-NLDEQDVI.js";
 import {
   Subject
-} from "./chunk-4S3KYZTJ.js";
+} from "./chunk-3TD53JL4.js";
 import {
   __async,
   __spreadProps,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-75QV6VMV.js
 
-// node_modules/@angular/common/fesm2022/location-Dq4mJT-A.mjs
+// ../node_modules/@angular/common/fesm2022/location-Dq4mJT-A.mjs
 var _DOM = null;
 function getDOM() {
   return _DOM;
@@ -557,7 +571,7 @@ function _stripOrigin(baseHref) {
   return baseHref;
 }
 
-// node_modules/@angular/common/fesm2022/common_module-Dx7dWex5.mjs
+// ../node_modules/@angular/common/fesm2022/common_module-Dx7dWex5.mjs
 var HashLocationStrategy = class _HashLocationStrategy extends LocationStrategy {
   _platformLocation;
   _baseHref = "";
@@ -3661,7 +3675,7 @@ var CommonModule = class _CommonModule {
   }], null, null);
 })();
 
-// node_modules/@angular/common/fesm2022/platform_navigation-B45Jeakb.mjs
+// ../node_modules/@angular/common/fesm2022/platform_navigation-B45Jeakb.mjs
 var PlatformNavigation = class _PlatformNavigation {
   static ɵfac = function PlatformNavigation_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _PlatformNavigation)();
@@ -3682,7 +3696,7 @@ var PlatformNavigation = class _PlatformNavigation {
   }], null, null);
 })();
 
-// node_modules/@angular/common/fesm2022/common.mjs
+// ../node_modules/@angular/common/fesm2022/common.mjs
 function registerLocaleData2(data, localeId, extraData) {
   return registerLocaleData(data, localeId, extraData);
 }
@@ -5122,4 +5136,8 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-UCCE5RQP.js.map
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-QT6YAUMM.js
+//# sourceMappingURL=chunk-QT6YAUMM.js.map
+========
+//# sourceMappingURL=chunk-75QV6VMV.js.map
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-75QV6VMV.js
