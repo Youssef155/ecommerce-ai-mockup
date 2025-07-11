@@ -320,19 +320,19 @@
             <input type="text" [(ngModel)]="newItem.categoryName" placeholder="Enter category name" required />
             <label>Description:</label>
             <textarea [(ngModel)]="newItem.description" placeholder="Enter description"></textarea>
-            <label>Gender:</label>
-            <select [(ngModel)]="newItem.gender" required>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Unisex">Unisex</option>
-            </select>
-            <label>Season:</label>
-            <select [(ngModel)]="newItem.season" required>
-              <option value="Summer">Summer</option>
-              <option value="Winter">Winter</option>
-              <option value="Spring">Spring</option>
-              <option value="Fall">Fall</option>
-            </select>
+           <label>Gender:</label>
+<select [(ngModel)]="newItem.gender" required>
+  <option *ngFor="let gender of getGenderOptions()" [value]="gender">
+    {{ getGenderName(gender) }}
+  </option>
+</select>
+
+<label>Season:</label>
+<select [(ngModel)]="newItem.season" required>
+  <option *ngFor="let season of getSeasonOptions()" [value]="season">
+    {{ getSeasonName(season) }}
+  </option>
+</select>
             <label>Color:</label>
             <input type="text" [(ngModel)]="newItem.colors" placeholder="Enter colors (comma-separated)" />
             <label>Size:</label>

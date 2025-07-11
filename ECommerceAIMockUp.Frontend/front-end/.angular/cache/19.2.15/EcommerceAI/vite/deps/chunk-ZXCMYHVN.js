@@ -1,7 +1,11 @@
 import {
   DOCUMENT,
   isPlatformBrowser
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-XM7BB76I.js
 } from "./chunk-4YNGKIBB.js";
+========
+} from "./chunk-NJDIPGDQ.js";
+>>>>>>>> 17568e1ac87dcc8c12ff24c3d10271c8ba03ee75:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-ZXCMYHVN.js
 import {
   ApplicationRef,
   Attribute,
@@ -31,13 +35,9 @@ import {
   Renderer2,
   RendererStyleFlags2,
   RuntimeError,
-  Subject,
   TemplateRef,
   Version,
   ViewContainerRef,
-  __async,
-  __spreadProps,
-  __spreadValues,
   booleanAttribute,
   createNgModule,
   findLocaleData,
@@ -64,9 +64,15 @@ import {
   ɵɵinject,
   ɵɵinjectAttribute,
   ɵɵstyleProp
-} from "./chunk-44Z5NQYP.js";
+} from "./chunk-N5YEG3PY.js";
+import {
+  Subject,
+  __async,
+  __spreadProps,
+  __spreadValues
+} from "./chunk-URVW6DVJ.js";
 
-// ../node_modules/@angular/common/fesm2022/location-Dq4mJT-A.mjs
+// ../../../node_modules/@angular/common/fesm2022/location-Dq4mJT-A.mjs
 var _DOM = null;
 function getDOM() {
   return _DOM;
@@ -553,7 +559,7 @@ function _stripOrigin(baseHref) {
   return baseHref;
 }
 
-// ../node_modules/@angular/common/fesm2022/common_module-Dx7dWex5.mjs
+// ../../../node_modules/@angular/common/fesm2022/common_module-Dx7dWex5.mjs
 var HashLocationStrategy = class _HashLocationStrategy extends LocationStrategy {
   _platformLocation;
   _baseHref = "";
@@ -3657,7 +3663,7 @@ var CommonModule = class _CommonModule {
   }], null, null);
 })();
 
-// ../node_modules/@angular/common/fesm2022/platform_navigation-B45Jeakb.mjs
+// ../../../node_modules/@angular/common/fesm2022/platform_navigation-B45Jeakb.mjs
 var PlatformNavigation = class _PlatformNavigation {
   static ɵfac = function PlatformNavigation_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _PlatformNavigation)();
@@ -3678,7 +3684,7 @@ var PlatformNavigation = class _PlatformNavigation {
   }], null, null);
 })();
 
-// ../node_modules/@angular/common/fesm2022/common.mjs
+// ../../../node_modules/@angular/common/fesm2022/common.mjs
 function registerLocaleData2(data, localeId, extraData) {
   return registerLocaleData(data, localeId, extraData);
 }
@@ -5118,4 +5124,8 @@ export {
    * License: MIT
    *)
 */
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-XM7BB76I.js
 //# sourceMappingURL=chunk-XM7BB76I.js.map
+========
+//# sourceMappingURL=chunk-ZXCMYHVN.js.map
+>>>>>>>> 17568e1ac87dcc8c12ff24c3d10271c8ba03ee75:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-ZXCMYHVN.js
