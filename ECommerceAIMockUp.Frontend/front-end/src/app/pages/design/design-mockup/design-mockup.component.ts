@@ -12,6 +12,8 @@ import * as fabric from 'fabric';
 import { DesignDetails } from '../../../core/models/design-details.model';
 import { DesignService } from '../../../core/services/design.service';
 import { firstValueFrom } from 'rxjs';
+import { CartService } from '../../../core/services/cart.service'; // Import CartService if needed, but not used in this component
+
 // 
 @Component({
   selector: 'app-design-mockup',
@@ -29,6 +31,7 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   private router: Router = inject(Router);
   private designService = inject(DesignService);
   private route = inject(ActivatedRoute);
+  private cartService = inject(CartService); 
 
   canvas!: fabric.Canvas;
   designImageUrl: string | null = null;
@@ -216,10 +219,13 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
     try {
       const response = await firstValueFrom(this.designService.addDesignDetails(this.designDetails));
       const designDetailsId = response.result;
-    } catch (err) {
-      console.error(err);
-      alert('Something went wrong. Please try again.');
-    }
+    const productDetailsId = this.productDetailsId; // capture this earlier
+    await firstValueFrom(this.cartService.addToCart(productDetailsId!, designDetailsId, 1));
+    alert('Design added to cart successfully.');
+  } catch (err) {
+    console.error(err);
+    alert('Something went wrong. Please try again.');
+  }
   }
 
 

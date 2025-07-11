@@ -19,5 +19,9 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/design/route').then(m => m.DESIGN_ROUTES),
     title: 'Design'
   },
+  {
+  path: 'cart',
+  loadComponent: () => import('./pages/cart/cart.component').then(m => m.CartComponent)
+},
   { path: '**', redirectTo: 'auth/login' }
 ];

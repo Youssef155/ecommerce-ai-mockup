@@ -1,0 +1,18 @@
+<section *ngIf="isLoading">Loading...</section>
+
+<section *ngIf="!isLoading && items.length === 0">
+  <p>Your cart is empty.</p>
+</section>
+
+<section *ngFor="let item of items">
+  <div class="cart-item">
+    <strong>{{ item.productName }}</strong> <br />
+    Quantity: {{ item.quantity }}
+    <button (click)="decrease(item.productDetailsId)">-</button>
+    <button (click)="increase(item.productDetailsId)">+</button>
+  </div>
+</section>
+
+<div *ngIf="items.length > 0">
+  <button (click)="checkout()">Proceed to Checkout</button>
+</div>
