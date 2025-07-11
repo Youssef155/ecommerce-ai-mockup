@@ -11,6 +11,6 @@ public interface ICartRepository
     Task AddItem (OrderDTO item,string userId);
     Task Remove(string userId, int orderId, int productId, int designId);
     Task UpdateQuantity(string userId,int ItemId, int quantity);
-    Task AddOrderItem(OrderItemDTO item);
+    //Task AddOrderItem(OrderItemDTO item);
 
 }

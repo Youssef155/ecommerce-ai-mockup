@@ -36,6 +36,9 @@ export class DesignMockupComponent implements OnInit, AfterViewInit {
   productImageUrl: string | null = null;
   productDetailsId: number | null = null;
   quantity: number = 1;
+
+  productName: string = "Unknown Product";
+  unitPrice: number = 0;
 constructor(
   // ... existing injections
   private cartService: CartService,
@@ -72,6 +75,9 @@ constructor(
       this.designDetails.designId = params['designId'] ? +params['designId'] : 0;
       this.productDetailsId = params['productDetailsId'] ? +params['productDetailsId'] : 0;
       this.quantity = params['quantity'] ? +params['quantity'] : 1;
+
+      this.productName = params['productName'] || "Unknown Product";
+      this.unitPrice = params['unitPrice'] ? +params['unitPrice'] : 0;
     });
   }
   ngAfterViewInit(): void {
@@ -218,41 +224,47 @@ constructor(
     }
   }
 
-  async onAddToCart() {
-       const response = await firstValueFrom(
-      this.designService.addDesignDetails(this.designDetails)
-    );
-    console.log(response);
-    
-    // Get designDetailsId from response
-    const designDetailsId = response.result;
+ async onAddToCart() {
+  if (!this.productDetailsId) {
+    alert('Product details ID is missing');
+    return;
+  }
+
   try {
     // Save design details first
- 
+    const response = await firstValueFrom(
+      this.designService.addDesignDetails(this.designDetails)
+    );
+    const designDetailsId = response.result;
     
     if (!designDetailsId) {
       throw new Error('Design details ID not found in response');
-    }    
-    // Add to cart
-    if (this.productDetailsId) {
-      this.cartService.addToCart(
-        this.productDetailsId,
-        designDetailsId,
-        this.quantity
-      ).subscribe({
-        next: () => this.router.navigate(['/cart']),
-        error: (err) => {
-          console.error('Add to cart failed', err);
-          alert('Failed to add to cart. Please try again.');
-        }
-      });
-    } else {
-      throw new Error('Product details ID is missing');
     }
+
+    // Get product details from route or service
+    const productName = "Product Name"; // You need to get this from your service
+    const unitPrice = 29.99; // You need to get this from your service
+    const imgUrl = this.productImageUrl || ""; // Product image
+    const designImgUrl = this.designImageUrl || ""; // Design image
+
+    // Add to cart with all required properties
+  await firstValueFrom(
+    this.cartService.addToCart(
+      this.productDetailsId,
+      designDetailsId,
+      this.quantity,
+      this.productName,
+      this.unitPrice,
+      this.productImageUrl || "",
+      this.designImageUrl || ""
+    )
+  );
+
+    // Navigate to cart
+    this.router.navigate(['/cart']);
   } catch (err) {
-     console.log(this.productDetailsId,designDetailsId),
-    console.error(err);
-    alert('Something went wrong. Please try again.');
+    console.error('Add to cart failed', err);
+    alert('Failed to add to cart. Please try again.');
   }
 }
 

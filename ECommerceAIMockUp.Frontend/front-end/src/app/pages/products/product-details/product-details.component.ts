@@ -92,15 +92,33 @@ export class ProductDetailsComponent implements OnInit {
   }
 
 
+  // goToDesign() {
+  //   if (!this.product || !this.productDetails) return;
+  //   const productDetailsId = this.productDetails.productDetailsId;
+  //   const productImageUrl = 'https://localhost:7256' + this.product.image;
+  //   this.router.navigate(['/design'], {
+  //     queryParams: {
+  //       productDetailsId,
+  //       productImageUrl
+  //     }
+  //   });
+  // }
+
   goToDesign() {
-    if (!this.product || !this.productDetails) return;
-    const productDetailsId = this.productDetails.productDetailsId;
-    const productImageUrl = 'https://localhost:7256' + this.product.image;
-    this.router.navigate(['/design'], {
-      queryParams: {
-        productDetailsId,
-        productImageUrl
-      }
-    });
-  }
+  if (!this.product || !this.productDetails) return;
+  
+  const productDetailsId = this.productDetails.productDetailsId;
+  const productImageUrl = 'https://localhost:7256' + this.product.image;
+  const productName = this.product.name;
+  const unitPrice = this.productDetails.Price;
+
+  this.router.navigate(['/design'], {
+    queryParams: {
+      productDetailsId,
+      productImageUrl,
+      productName,
+      unitPrice
+    }
+  });
+}
 }

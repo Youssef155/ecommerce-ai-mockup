@@ -29,7 +29,7 @@ namespace ECommerceAIMockUp.API.Controllers
             }
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderItem>>> GetAll()
+        public async Task<ActionResult<IEnumerable<OrderItemDTO>>> GetAll()
         {
             if (UserId == null)
             {
@@ -63,19 +63,19 @@ namespace ECommerceAIMockUp.API.Controllers
                 return Unauthorized();
             }
             await cartService.AddItem(order,UserId);
-            return CreatedAtAction(nameof(GetAll),null);
+            return Created();
         }
-        [HttpPost("OrderItem")]
-        public async Task<IActionResult> AddOrderItem([FromBody] OrderItemDTO order)
-        {
-            //var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (UserId == null)
-            {
-                return Unauthorized();
-            }
-            await cartService.AddOrderItem(order);
-            return CreatedAtAction(nameof(GetAll), null);
-        }
+        //[HttpPost("OrderItem")]
+        //public async Task<IActionResult> AddOrderItem([FromBody] OrderItemDTO order)
+        //{
+        //    //var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    if (UserId == null)
+        //    {
+        //        return Unauthorized();
+        //    }
+        //    await cartService.AddOrderItem(order);
+        //    return CreatedAtAction(nameof(GetAll), null);
+        //}
 
         [HttpDelete("{orderId}/{productId}/{designId}")]
         public async Task<IActionResult> DeleteItem(

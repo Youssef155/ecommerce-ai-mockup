@@ -29,6 +29,7 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
            .ThenInclude(p=>p.Product)
     .Include(o => o.OrderItems)
         .ThenInclude(i => i.DesignDetails)
+            .ThenInclude(d=>d.Design)
     .FirstOrDefaultAsync();
 
 
@@ -52,9 +53,12 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
             ProductDetailsId = i.ProductDetailsId,
             Quantity = i.Quantity,
             OrderId = i.OrderId,
-            OrderTotal = cart.OrderTotal,
+            //OrderTotal = cart.OrderTotal,
             UnitPrice = i.ProductDetails.Product.Price,
-            LineTotal = i.Quantity * i.ProductDetails.Product.Price
+            LineTotal = i.Quantity * i.ProductDetails.Product.Price,
+            ImgUrl = i.ProductDetails?.ImgUrl,
+            DesignImgUrl = i.DesignDetails?.Design?.ImageUrl,
+            ProductName = i.ProductDetails?.Product?.Name
         }).ToList();
 
         return itemsDto;
@@ -79,7 +83,7 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
         return item;
     }
 
-    public async Task AddItem(OrderDTO item,string UserId)
+    public async Task AddItem(OrderDTO CartDto,string UserId)
     {
         var cart = await GetCartAsync(UserId);
         if(cart == null)
@@ -90,13 +94,13 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
                 OrderItems = new List<OrderItem>(),
                 OrderDate = DateTime.Now,
                 AppUserId = UserId,
-                PhoneNumber = item.PhoneNumber,
+                PhoneNumber = CartDto.PhoneNumber,
                 ShippingAddress = new Address()
                 {
-                    City = item.City,
-                    Governorate = item.Governorate,
-                    Street = item.Street,
-                    Zip = item.Zip
+                    City = CartDto.City,
+                    Governorate = CartDto.Governorate,
+                    Street = CartDto.Street,
+                    Zip = CartDto.Zip
                 }
             };
             await orderRepository.CreateAsync(cart);
@@ -106,13 +110,18 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
         cart.OrderDate = DateTime.Now;
         cart.AppUserId = UserId;
 
-        var orderitem = new OrderItem
+   
+        foreach (var item in CartDto.OrderItems)
         {
-            DesignDetailsId = item.DesignDetailsId,
-            ProductDetailsId = item.ProductDetailsId,
-            OrderId = cart.Id,
-        };
-        cart.OrderItems.Add(orderitem);
+            var orderitem = new OrderItem
+            {
+                DesignDetailsId = item.DesignDetailsId,
+                ProductDetailsId = item.ProductDetailsId,
+                OrderId = cart.Id,
+                Quantity = item.Quantity
+            };
+            cart.OrderItems.Add(orderitem);
+        }
         await orderRepository.SaveChangesAsync();
     }
 
@@ -146,17 +155,17 @@ public class CartRepository(IBaseRepository<Order> orderRepository, IBaseReposit
         //save changes
     }
 
-    public async Task AddOrderItem(OrderItemDTO item)
-    {
-        var orderItem = new OrderItem()
-        {
-            DesignDetailsId = item.DesignDetailsId,
-            Quantity = item.Quantity,
-            ProductDetailsId = item.ProductDetailsId,
-            OrderId = item.OrderId,
-        };
+    //public async Task AddOrderItem(OrderItemDTO item)
+    //{
+    //    var orderItem = new OrderItem()
+    //    {
+    //        DesignDetailsId = item.DesignDetailsId,
+    //        Quantity = item.Quantity,
+    //        ProductDetailsId = item.ProductDetailsId,
+    //        OrderId = item.OrderId,
+    //    };
 
-        await orderItemRepo.CreateAsync(orderItem);
-        await orderItemRepo.SaveChangesAsync();
-    }
+    //    await orderItemRepo.CreateAsync(orderItem);
+    //    await orderItemRepo.SaveChangesAsync();
+    //}
 }
