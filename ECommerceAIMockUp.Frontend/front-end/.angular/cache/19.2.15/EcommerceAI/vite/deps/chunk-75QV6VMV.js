@@ -1,7 +1,11 @@
 import {
   DOCUMENT,
   isPlatformBrowser
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-QT6YAUMM.js
+} from "./chunk-CVCILG5C.js";
+========
 } from "./chunk-25CZ5YW6.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-75QV6VMV.js
 import {
   ApplicationRef,
   Attribute,
@@ -60,6 +64,15 @@ import {
   ɵɵinject,
   ɵɵinjectAttribute,
   ɵɵstyleProp
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-QT6YAUMM.js
+} from "./chunk-BHISX6PZ.js";
+import {
+  Subject,
+  __async,
+  __spreadProps,
+  __spreadValues
+} from "./chunk-7WI257C5.js";
+========
 } from "./chunk-NLDEQDVI.js";
 import {
   Subject
@@ -69,6 +82,7 @@ import {
   __spreadProps,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-75QV6VMV.js
 
 // ../node_modules/@angular/common/fesm2022/location-Dq4mJT-A.mjs
 var _DOM = null;
@@ -5122,4 +5136,8 @@ export {
    * License: MIT
    *)
 */
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-QT6YAUMM.js
+//# sourceMappingURL=chunk-QT6YAUMM.js.map
+========
 //# sourceMappingURL=chunk-75QV6VMV.js.map
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-75QV6VMV.js

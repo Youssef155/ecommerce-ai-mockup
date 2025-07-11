@@ -14,10 +14,11 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             _category = db.Set<Category>();
         }
 
-        public async Task<int> GetByNameAsync(string CategoryName)
+        public async Task<int?> GetByNameAsync(string CategoryName)
         {
             var CategorySelect = await _category.FirstOrDefaultAsync(c => c.Name.ToLower() == CategoryName.ToLower());
-            return CategorySelect.Id;
+            return CategorySelect?.Id;
         }
     }
 }
+

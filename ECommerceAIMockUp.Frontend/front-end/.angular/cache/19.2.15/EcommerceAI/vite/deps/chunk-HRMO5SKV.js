@@ -1,19 +1,30 @@
 import {
+  withHttpTransferCache
+} from "./chunk-6UFK4OUG.js";
+import {
   CommonModule,
   DomAdapter,
   getDOM,
   setRootDomAdapter
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RLLQUG6T.js
+} from "./chunk-QT6YAUMM.js";
+========
 } from "./chunk-75QV6VMV.js";
 import {
   withHttpTransferCache
 } from "./chunk-AR5GT2TD.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-HRMO5SKV.js
 import {
   DOCUMENT,
   PLATFORM_BROWSER_ID,
   XhrFactory,
   isPlatformServer,
   parseCookieValue
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RLLQUG6T.js
+} from "./chunk-CVCILG5C.js";
+========
 } from "./chunk-25CZ5YW6.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-HRMO5SKV.js
 import {
   APP_ID,
   ApplicationModule,
@@ -72,11 +83,19 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RLLQUG6T.js
+} from "./chunk-BHISX6PZ.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-7WI257C5.js";
+========
 } from "./chunk-NLDEQDVI.js";
 import {
   __spreadProps,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-HRMO5SKV.js
 
 // ../node_modules/@angular/platform-browser/fesm2022/dom_renderer-DGKzginR.mjs
 var EVENT_MANAGER_PLUGINS = new InjectionToken(ngDevMode ? "EventManagerPlugins" : "");
@@ -2015,4 +2034,8 @@ export {
    * License: MIT
    *)
 */
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-RLLQUG6T.js
+//# sourceMappingURL=chunk-RLLQUG6T.js.map
+========
 //# sourceMappingURL=chunk-HRMO5SKV.js.map
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-HRMO5SKV.js

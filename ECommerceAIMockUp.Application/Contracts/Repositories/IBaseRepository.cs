@@ -12,5 +12,6 @@ namespace ECommerceAIMockUp.Application.Contracts.Repositories
         Task SaveChangesAsync();
 
         IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes);
+        Task<int> SaveAsync();
     }
 }

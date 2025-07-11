@@ -2,6 +2,13 @@ import {
   BehaviorSubject,
   Subject,
   Subscription,
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-BHISX6PZ.js
+  __async,
+  __spreadProps,
+  __spreadValues,
+  map
+} from "./chunk-7WI257C5.js";
+========
   map
 } from "./chunk-3TD53JL4.js";
 import {
@@ -9,6 +16,7 @@ import {
   __spreadProps,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-NLDEQDVI.js
 
 // ../node_modules/@angular/core/fesm2022/untracked-BKcld_ew.mjs
 function defaultEquals(a, b) {
@@ -27027,4 +27035,8 @@ export {
    * found in the LICENSE file at https://angular.dev/license
    *)
 */
+<<<<<<<< HEAD:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-BHISX6PZ.js
+//# sourceMappingURL=chunk-BHISX6PZ.js.map
+========
 //# sourceMappingURL=chunk-NLDEQDVI.js.map
+>>>>>>>> master:ECommerceAIMockUp.Frontend/front-end/.angular/cache/19.2.15/EcommerceAI/vite/deps/chunk-NLDEQDVI.js
