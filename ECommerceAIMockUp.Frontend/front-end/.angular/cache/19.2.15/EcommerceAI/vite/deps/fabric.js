@@ -2,7 +2,7 @@ import {
   __async
 } from "./chunk-WDMUDEB6.js";
 
-// ../node_modules/fabric/dist/index.min.mjs
+// node_modules/fabric/dist/index.min.mjs
 function t(t2, e3, s2) {
   return (e3 = function(t3) {
     var e4 = function(t4, e5) {

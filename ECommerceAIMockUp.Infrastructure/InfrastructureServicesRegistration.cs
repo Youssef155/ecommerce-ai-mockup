@@ -1,12 +1,14 @@
 ﻿using ECommerceAIMockUp.Application.Contracts.Authentication;
 using ECommerceAIMockUp.Application.Contracts.Repositories;
 using ECommerceAIMockUp.Application.Services.Interfaces.Authentication;
+using ECommerceAIMockUp.Application.Services.Interfaces.Cart_Service;
 using ECommerceAIMockUp.Application.Services.Interfaces.Caching;
 using ECommerceAIMockUp.Application.Services.Interfaces.FileServices;
 using ECommerceAIMockUp.Application.Settings;
 using ECommerceAIMockUp.Domain;
 using ECommerceAIMockUp.Infrastructure.DatabaseContext;
 using ECommerceAIMockUp.Infrastructure.Repositories;
+using ECommerceAIMockUp.Infrastructure.Services;
 using ECommerceAIMockUp.Infrastructure.Services.Authentication;
 using ECommerceAIMockUp.Infrastructure.Services.Caching;
 using ECommerceAIMockUp.Infrastructure.Services.FileServices;
@@ -85,7 +87,8 @@ namespace ECommerceAIMockUp.Infrastructure
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IRedisService, RedisService>();
 
             services.AddScoped<IProductRepository, ProductRepository>();

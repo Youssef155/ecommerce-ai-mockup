@@ -9,11 +9,12 @@ import { SizeSelectorComponent } from '../size-selector/size-selector.component'
 import { ColorSelectorComponent } from '../color-selector/color-selector.component'; 
 import { Router } from '@angular/router';
 import { ProductDetails } from '../../../core/models/Products/product-details';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, SizeSelectorComponent, ColorSelectorComponent],
+  imports: [CommonModule, CurrencyPipe, SizeSelectorComponent, ColorSelectorComponent, FormsModule],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css']
 })
@@ -23,6 +24,7 @@ export class ProductDetailsComponent implements OnInit {
   selectedSize: string | null = null;
   selectedColor: string | null = null;
   availableColors: string[] = [];
+  quantity: number = 1;
   isLoading = true;
   error: string | null = null;
 
@@ -89,20 +91,34 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  addToCart() {
-    if (!this.product || !this.selectedSize || !this.selectedColor) return;
-    alert(`Added to cart: ${this.product.name} - Size: ${this.selectedSize}, Color: ${this.selectedColor}`);
-  }
+
+  // goToDesign() {
+  //   if (!this.product || !this.productDetails) return;
+  //   const productDetailsId = this.productDetails.productDetailsId;
+  //   const productImageUrl = 'https://localhost:7256' + this.product.image;
+  //   this.router.navigate(['/design'], {
+  //     queryParams: {
+  //       productDetailsId,
+  //       productImageUrl
+  //     }
+  //   });
+  // }
 
   goToDesign() {
-    if (!this.product || !this.productDetails) return;
-    const productDetailsId = this.productDetails.productDetailsId;
-    const productImageUrl = 'https://localhost:7256' + this.product.image;
-    this.router.navigate(['/design'], {
-      queryParams: {
-        productDetailsId,
-        productImageUrl
-      }
-    });
-  }
+  if (!this.product || !this.productDetails) return;
+  
+  const productDetailsId = this.productDetails.productDetailsId;
+  const productImageUrl = 'https://localhost:7256' + this.product.image;
+  const productName = this.product.name;
+  const unitPrice = this.productDetails.Price;
+
+  this.router.navigate(['/design'], {
+    queryParams: {
+      productDetailsId,
+      productImageUrl,
+      productName,
+      unitPrice
+    }
+  });
+}
 }

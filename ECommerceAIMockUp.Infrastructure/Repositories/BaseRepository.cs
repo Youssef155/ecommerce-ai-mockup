@@ -30,7 +30,7 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
         public async Task<T> CreateAsync(T entity)
         {
             await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -38,7 +38,10 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
         {
             var entity = await _dbSet.FindAsync(id);
             if (entity != null)
+            {
                 _context.Remove(entity);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<T>> GetAllAsync(bool tracking, params Expression<Func<T, object>>[] includes)
@@ -52,6 +55,19 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
                 query = AddIncludes(includes);
 
             return await query.ToListAsync();
+        }
+
+        public IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (!tracking)
+                query = query.AsNoTracking();
+
+            if (includes != null && includes.Any())
+                query = AddIncludes(includes);
+
+            return query;
         }
 
         public async Task<T> GetByIdAsunc(int id, bool tracking, params Expression<Func<T, object>>[] includes)
@@ -70,25 +86,26 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
 
-        public T Update(T entity)
+        public async Task<T> Update(T entity)
         {
             _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
             return entity;
         }
 
-        public IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes)
-        {
-            IQueryable<T> query = _dbSet;
+        //public IQueryable<T> GetAllQueryable(bool tracking, params Expression<Func<T, object>>[] includes)
+        //{
+        //    IQueryable<T> query = _dbSet;
 
-            if (!tracking)
-                query = query.AsNoTracking();
+        //    if (!tracking)
+        //        query = query.AsNoTracking();
 
-            if (includes != null && includes.Any())
-                query = AddIncludes(includes);
+        //    if (includes != null && includes.Any())
+        //        query = AddIncludes(includes);
 
-            return query;
+        //    return query;
 
-        }
+        //}
 
         public async Task SaveChangesAsync()
         {
@@ -101,3 +118,4 @@ namespace ECommerceAIMockUp.Infrastructure.Repositories
 
     }
 }
+

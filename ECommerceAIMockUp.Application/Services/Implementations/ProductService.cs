@@ -32,12 +32,12 @@ namespace ECommerceAIMockUp.Application.Services.Implementations
 
         public async Task<Response<PaginatedResult<GetAllProductsDto>>> GetAllProductsService(int pageNumber = 1, int pageSize = 10)
         {
-            var cachedKey = $"product_page: {pageNumber} product_size: {pageSize}";
+            //var cachedKey = $"product_page: {pageNumber} product_size: {pageSize}";
 
-            var cachedData = _redisService.GetData<PaginatedResult<GetAllProductsDto>>(cachedKey);
+            //var cachedData = _redisService.GetData<PaginatedResult<GetAllProductsDto>>(cachedKey);
 
-            if (cachedData != null)
-                return new Response<PaginatedResult<GetAllProductsDto>>(data: cachedData, HttpStatusCode.OK, isSucceeded: true);
+            //if (cachedData != null)
+            //    return new Response<PaginatedResult<GetAllProductsDto>>(data: cachedData, HttpStatusCode.OK, isSucceeded: true);
 
 
             var productResult = await _productRepository.GetAllProductsAysnc(pageNumber, pageSize);

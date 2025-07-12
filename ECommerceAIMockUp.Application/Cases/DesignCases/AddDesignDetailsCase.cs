@@ -32,15 +32,15 @@ namespace ECommerceAIMockUp.Application.Cases.DesignCases
                 Rotation = designDetailsDTO.Rotation,
                 Position = designDetailsDTO.Position
             };
-            try
-            {
+            //try
+            //{
                 designDetails = await _designDetailsRepo.CreateAsync(designDetails);
                 await _designDetailsRepo.SaveChangesAsync();
-            }
-            catch
-            {
-                throw new Exception("can not add to database");
-            }
+            //}
+            //catch
+            //{
+                //throw new Exception("can not add to database");
+            //}
             return new Response<int> { IsSucceeded = true, Data = designDetails.Id };
         }
     }

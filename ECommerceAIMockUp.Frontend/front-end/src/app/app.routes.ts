@@ -16,6 +16,7 @@ export const routes: Routes = [
         .then(c => c.RegisterComponent), title: 'Register', data: { hideFooter: true, hideNavbar: true } }
     ]
   },
+  {path: 'cart', loadComponent: () => import('./pages/cart/cart.component').then(c => c.CartComponent), title: 'Cart'},
   { 
     path: 'design',
     loadChildren: () => import('./pages/design/route').then(m => m.DESIGN_ROUTES),
